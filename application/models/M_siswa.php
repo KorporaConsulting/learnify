@@ -4,12 +4,13 @@ class M_siswa extends CI_Model
 {
     public function tampil_data()
     {
-        return $this->db->get('siswa');
+        $query = $this->db->get_where('user', array('role' => 3));
+        return $query;
     }
 
     public function detail_siswa($id = null)
     {
-        $query = $this->db->get_where('siswa', array('id' => $id))->row();
+        $query = $this->db->get_where('user', array('id_user' => $id))->row();
         return $query;
     }
 

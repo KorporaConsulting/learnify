@@ -75,10 +75,10 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'learnify',
+    'hostname' => '151.106.119.126',
+    'username' => 'korpora2018_demoakun',
+    'password' => 'akundemodb',
+    'database' => 'korpora2018_demo_new_su',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,

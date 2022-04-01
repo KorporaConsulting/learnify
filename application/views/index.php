@@ -5,8 +5,8 @@
         </div>
         <div class="container">
             <div class="banner_content text-center">
-                <h3 data-aos="fade-up" data-aos-duration="1600">Belajar Dimana Saja & Kapan Saja <br /> Mudah Dengan Learnify</h3>
-                <p data-aos="fade-up" data-aos-duration="1900">Dengan Learnify kemudahan kegiatan belajar mengajar dapat terpenuhi. Para guru dan siswa dapat
+                <h3 data-aos="fade-up" style="opacity: 1.0;" data-aos-duration="1600">Belajar Dimana Saja & Kapan Saja <br /> Mudah Dengan Learnify</h3>
+                <p data-aos="fade-up"  data-aos-duration="1900">Dengan Learnify kemudahan kegiatan belajar mengajar dapat terpenuhi. Para guru dan siswa dapat
                     belajar meski banyak halangan atau rintangan. Nikmati Pembelajaran terstruktur dan efektif menggunakan Learnify serta kemudahan belajar dengan menggunakan aplikasi kami. </p>
                 <a data-aos="fade-up" data-aos-duration="2000" class="main_btn" href="<?= base_url('user/registration') ?>#registration">Bergabung Sekarang <span class="lnr lnr-arrow-right"></span></a>
             </div>
@@ -253,7 +253,7 @@
 <!--================End Team Area =================-->
 
 <!--================Impress Area =================-->
-<section class="impress_area p_120">
+<!-- <section class="impress_area p_120">
     <div class="container">
         <div class="impress_inner text-center">
             <h2 data-aos="fade-up" data-aos-duration="1800">LOGIN SEBAGAI GURU DAN UPLOAD MATERI & VIDEO SEKARANG</h2>
@@ -262,5 +262,5 @@
             <a data-aos="fade-up" data-aos-duration="2200" class="main_btn" href="<?= base_url('welcome/guru') ?>">Login Sebagai Guru <span class="lnr lnr-arrow-right text-black"></span></a>
         </div>
     </div>
-</section>
+</section> -->
 <!--================End Impress Area =================-->

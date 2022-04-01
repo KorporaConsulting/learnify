@@ -16,15 +16,19 @@ class Admin extends CI_Controller
     public function index()
     {
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
+
+        // $this->load->view('admin/template_admin/header');
+        // $this->load->view('admin/template_admin/sidebar');
         $this->load->view('admin/index');
+        // $this->load->view('admin/template_admin/footer');
     }
 
     public function about_developer()
     {
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $this->load->view('admin/about_developer');
     }
@@ -32,19 +36,59 @@ class Admin extends CI_Controller
     public function about_learnify()
     {
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $this->load->view('admin/about_learnify');
     }
 
     // Management Siswa
+    public function add_new_siswa()
+    {
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
+            'is_unique' => 'Email ini telah digunakan!',
+            'required' => 'Harap isi kolom email.',
+            'valid_email' => 'Masukan email yang valid.',
+        ]);
+
+        $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[4]', [
+            'required' => 'Harap isi kolom nAMA.',
+            'min_length' => 'Nama terlalu pendek.',
+        ]);
+
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+            'required' => 'Harap isi kolom Password.',
+            'matches' => 'Password tidak sama!',
+            'min_length' => 'Password terlalu pendek',
+        ]);
+        $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password]', [
+            'matches' => 'Password tidak sama!',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('admin/add_siswa');
+        } else {
+            $data = [
+                'nis' => htmlspecialchars($this->input->post('nis', true)),
+                'nama' => htmlspecialchars($this->input->post('nama', true)),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'image' => 'null.svg',
+                'role' => 3,
+            ];
+
+            $this->db->insert('user', $data);
+
+            $this->session->set_flashdata('success-reg', 'Berhasil!');
+            redirect(base_url('admin/data_siswa'));
+        }
+    }
 
     public function data_siswa()
     {
         $this->load->model('m_siswa');
 
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/data_siswa', $data);
@@ -53,7 +97,7 @@ class Admin extends CI_Controller
     public function detail_siswa($id)
     {
         $this->load->model('m_siswa');
-        $where = array('id' => $id);
+        $where = array('id_user' => $id);
         $detail = $this->m_siswa->detail_siswa($id);
         $data['detail'] = $detail;
         $this->load->view('admin/detail_siswa', $data);
@@ -65,6 +109,11 @@ class Admin extends CI_Controller
         $where = array('id' => $id);
         $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
         $this->load->view('admin/update_siswa', $data);
+    }
+
+    public function add_siswa()
+    {
+        $this->load->view('admin/add_siswa');
     }
 
     public function user_edit()
@@ -122,7 +171,7 @@ class Admin extends CI_Controller
     {
         $this->load->model('m_guru');
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_guru->tampil_data()->result();
         $this->load->view('admin/data_guru', $data);
@@ -262,7 +311,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
 
         $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_materi->tampil_data()->result();
         $this->load->view('admin/data_materi', $data);
