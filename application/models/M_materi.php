@@ -2,9 +2,13 @@
 
 class M_materi extends CI_Model
 {
-    public function tampil_data()
+    public function tampil_data_mapel()
     {
-        return $this->db->get('materi');
+        $this->db->select('*');
+        $this->db->from('guru');
+        $this->db->join('mapel', 'mapel.id_mapel = guru.id_guru');
+        return $query = $this->db->get();
+        // return $this->db->get('mapel');
     }
 
     public function belajar($id = null)
