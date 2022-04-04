@@ -6,6 +6,7 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('m_siswa');
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
@@ -44,6 +45,11 @@ class Admin extends CI_Controller
     // Management Siswa
     public function add_new_siswa()
     {
+        $this->form_validation->set_rules('nis', 'NIS', 'required|trim|is_unique[user.nis]', [
+            'is_unique' => 'NIS ini telah digunakan!',
+            'required' => 'Harap isi kolom NIS.',
+        ]);
+
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'Email ini telah digunakan!',
             'required' => 'Harap isi kolom email.',
@@ -51,8 +57,20 @@ class Admin extends CI_Controller
         ]);
 
         $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[4]', [
-            'required' => 'Harap isi kolom nAMA.',
+            'required' => 'Harap isi kolom NAMA.',
             'min_length' => 'Nama terlalu pendek.',
+        ]);
+
+        $this->form_validation->set_rules('jk', 'JK', 'required|trim', [
+            'required' => 'Harap isi kolom Jenis Kelamin.',
+        ]);
+
+        $this->form_validation->set_rules('ttl', 'TTL', 'required|trim', [
+            'required' => 'Harap isi kolom Tanggal lahir.',
+        ]);
+
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim', [
+            'required' => 'Harap isi kolom Alamat.',
         ]);
 
         $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
@@ -65,21 +83,30 @@ class Admin extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('admin/add_siswa');
+            $this->load->view('admin/siswa/add_siswa');
         } else {
+            $jk = htmlspecialchars($this->input->post('jk', true));
+            if ($jk == 'Laki-laki') {
+                $image = 'null.svg';
+            } else {
+                $image = 'nill.svg';
+            }
             $data = [
                 'nis' => htmlspecialchars($this->input->post('nis', true)),
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'image' => 'null.svg',
+                'image' => $image,
+                'jk' => htmlspecialchars($this->input->post('jk', true)),
+                'ttl' => htmlspecialchars($this->input->post('ttl', true)),
+                'alamat' => htmlspecialchars($this->input->post('alamat', true)),
                 'role' => 3,
             ];
 
             $this->db->insert('user', $data);
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
-            redirect(base_url('admin/data_siswa'));
+            redirect(base_url('admin/siswa/data_siswa'));
         }
     }
 
@@ -91,7 +118,7 @@ class Admin extends CI_Controller
         $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_siswa->tampil_data()->result();
-        $this->load->view('admin/data_siswa', $data);
+        $this->load->view('admin/siswa/data_siswa', $data);
     }
 
     public function detail_siswa($id)
@@ -100,58 +127,41 @@ class Admin extends CI_Controller
         $where = array('id_user' => $id);
         $detail = $this->m_siswa->detail_siswa($id);
         $data['detail'] = $detail;
-        $this->load->view('admin/detail_siswa', $data);
+        $this->load->view('admin/siswa/detail_siswa', $data);
     }
 
     public function update_siswa($id)
     {
         $this->load->model('m_siswa');
-        $where = array('id' => $id);
-        $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
-        $this->load->view('admin/update_siswa', $data);
+        $where = array('id_user' => $id);
+        $data['user'] = $this->m_siswa->update_siswa($where, 'user')->result();
+        $this->load->view('admin/siswa/update_siswa', $data);
     }
 
     public function add_siswa()
     {
-        $this->load->view('admin/add_siswa');
+        $this->load->view('admin/siswa/add_siswa');
     }
 
     public function user_edit()
     {
-        $this->load->model('m_siswa');
-
-        $id = $this->input->post('id');
-        $nama = $this->input->post('nama');
-        $email = $this->input->post('email');
-        $gambar = $_FILES['image']['name'];
+        // var_dump($_POST);
+        // die;
+        $id = $this->input->post('id_user');
 
         $data = array(
-            'nama' => $nama,
-            'email' => $email,
+            'nis' => htmlspecialchars($this->input->post('nis', true)),
+            'nama' => htmlspecialchars($this->input->post('nama', true)),
+            'jk' => htmlspecialchars($this->input->post('jk', true)),
+            'ttl' => htmlspecialchars($this->input->post('ttl', true)),
+            'alamat' => htmlspecialchars($this->input->post('alamat', true)),
         );
-
-        $config['allowed_types'] = 'jpg|png|gif|jfif';
-        $config['max_size'] = '4096';
-        $config['upload_path'] = './assets/profile_picture';
-
-        $this->load->library('upload', $config);
-        //berhasil
-        if ($this->upload->do_upload('image')) {
-            $gambarLama = $data['user']['image'];
-            if ($gambarLama != 'default.jpg') {
-                unlink(FCPATH . '/assets/profile_picture/' . $gambarLama);
-            }
-            $gambarBaru = $this->upload->data('file_name');
-            $this->db->set('image', $gambarBaru);
-        } else {
-            echo $this->upload->display_errors();
-        }
 
         $where = array(
-            'id' => $id,
+            'id_user' => $id,
         );
 
-        $this->m_siswa->update_data($where, $data, 'siswa');
+        $this->m_siswa->update_data($where, $data, 'user');
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_siswa');
     }
@@ -159,8 +169,8 @@ class Admin extends CI_Controller
     public function delete_siswa($id)
     {
         $this->load->model('m_siswa');
-        $where = array('id' => $id);
-        $this->m_siswa->delete_siswa($where, 'siswa');
+        $where = array('id_user' => $id);
+        $this->m_siswa->delete_siswa($where, 'user');
         $this->session->set_flashdata('user-delete', 'berhasil');
         redirect('admin/data_siswa');
     }

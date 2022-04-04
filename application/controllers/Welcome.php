@@ -4,11 +4,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Welcome extends CI_Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        // load Session Library
+        $this->load->library('session');
+
+        // load url helper
+        $this->load->helper('url');
+    }
     public function index()
     {
-      $this->load->view('template/nav');
-      $this->load->view('index');
-      $this->load->view('template/footer');
+        $this->load->view('template/nav');
+        $this->load->view('index');
+        $this->load->view('template/footer');
     }
 
     public function validateLogin()
@@ -101,6 +111,7 @@ class Welcome extends CI_Controller
 
                     'email' => $user['email'],
                     'nama' => $user['username'],
+                    'image' => $user['image'],
 
                 ];
                 $this->session->set_userdata($data);
@@ -224,5 +235,4 @@ class Welcome extends CI_Controller
     {
         $this->load->view('template/email-template');
     }
-
 }
