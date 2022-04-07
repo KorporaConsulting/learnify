@@ -19,7 +19,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <h4>Siswa</h4>
                         </div>
                         <div class="card-body">
-                            <?php echo $this->db->count_all('siswa'); ?>
+                            <?php echo $this->db->count_all('user'); ?>
                         </div>
                     </div>
                 </div>

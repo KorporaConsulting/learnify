@@ -6,3 +6,8 @@
  */
 
 /*# sourceMappingURL=custom.css.map */
+
+.card .card-header {
+    background-color: transparent;
+    border-color: #193c7f;
+}

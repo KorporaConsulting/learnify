@@ -7,10 +7,13 @@ class M_guru extends CI_Model
         return $this->db->get('guru');
     }
 
-    public function detail_guru($nip = null)
+    public function detail_guru($id = null)
     {
-        $query = $this->db->get_where('guru', array('nip' => $nip))->row();
-        return $query;
+        $this->db->select('*');
+        $this->db->from('guru');
+        $this->db->join('mapel', 'mapel.id_guru = guru.id_guru');
+        $this->db->where('mapel.id_guru', $id);
+        return  $this->db->get();
     }
 
     public function delete_guru($where, $table)

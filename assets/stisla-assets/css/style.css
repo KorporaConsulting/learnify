@@ -793,6 +793,7 @@ select.form-control:not([size]):not([multiple]) {
 .card .card-body {
 	padding-top: 20px;
 	padding-bottom: 20px;
+
 }
 
 .card .card-body .section-title {
