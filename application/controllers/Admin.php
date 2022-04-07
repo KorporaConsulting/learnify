@@ -313,7 +313,7 @@ class Admin extends CI_Controller
 
     public function insert_mapel()
     {
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[1]', [
+        $this->form_validation->set_rules('nama_mapel', 'Nama', 'required|trim|min_length[1]', [
             'required' => 'Harap isi kolom Nama.',
             'min_length' => 'Nama course terlalu pendek.',
         ]);
@@ -358,7 +358,7 @@ class Admin extends CI_Controller
 
                 $gambar = $gbr['file_name'];
                 $data = [
-                    'nama' => htmlspecialchars($this->input->post('nama', true)),
+                    'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -391,7 +391,7 @@ class Admin extends CI_Controller
     }
     public function mapel_edit()
     {
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[1]', [
+        $this->form_validation->set_rules('nama_mapel', 'Nama', 'required|trim|min_length[1]', [
             'required' => 'Harap isi kolom Nama.',
             'min_length' => 'Nama course terlalu pendek.',
         ]);
@@ -415,7 +415,7 @@ class Admin extends CI_Controller
             if (empty($_FILES['image']['name'])) {
                 $id_mapel = $this->input->post('id_mapel');
                 $data = [
-                    'nama' => htmlspecialchars($this->input->post('nama', true)),
+                    'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -450,7 +450,7 @@ class Admin extends CI_Controller
                     $id_mapel = $this->input->post('id_mapel');
                     $gambar = $gbr['file_name'];
                     $data = [
-                        'nama' => htmlspecialchars($this->input->post('nama', true)),
+                        'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
