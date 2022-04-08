@@ -819,5 +819,9 @@ class Admin extends CI_Controller
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
         redirect(base_url('admin/data_enroll/'));
+    public function detail_soal ($id_soal)
+    {
+        $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
+        $this->load->view('admin/soal/detail_soal', $data);
     }
 }
