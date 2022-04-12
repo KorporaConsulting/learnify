@@ -820,6 +820,9 @@ class Admin extends CI_Controller
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
         redirect(base_url('admin/data_enroll/'));
+
+    }
+
     public function detail_soal ($id_soal)
     {
         $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
@@ -832,19 +835,21 @@ class Admin extends CI_Controller
         $config['upload_path'] = './assets/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['encrypt_name'] = true;
-        $config['max_size']     = '204';
-
-
+        $config['max_size']     = '2048';
 
         $this->load->library('upload', $config);
         
-        if ( ! $this->upload->do_upload('file'))
-        {
-                $error = array('error' => $this->upload->display_errors());
+        $this->session->set_flashdata('tab', $this->input->post('tab'));
+        $this->session->set_flashdata('nav-link', $this->input->post('nav-link'));
 
-                $this->session->set_flashdata('modal', $this->input->post('modal'));
-                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
-
+        if($_FILES['file']['error'] != 4){
+            if ( ! $this->upload->do_upload('file'))
+            {
+                    $error = array('error' => $this->upload->display_errors());
+    
+                    $this->session->set_flashdata('modal', $this->input->post('modal'));
+                    $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+            }          
         }
         else
         {
@@ -859,8 +864,8 @@ class Admin extends CI_Controller
                     'jawaban' => $this->input->post('jawaban')
                 ]);
 
-            }
-            
+        }
+
         redirect('admin/isi_materi/' . $this->input->post('id_materi'));
     }
 
@@ -869,7 +874,65 @@ class Admin extends CI_Controller
         $this->db->where('id_soal', $id_soal)->delete('tb_soal');
 
         $this->session->set_flashdata('success', 'Berhasil menghapus soal');
+
+        $this->session->set_flashdata('tab', 'contact3');
+        $this->session->set_flashdata('nav-link', 'contact-tab3');
         
         redirect('admin/isi_materi/' . $id_materi);
+    }
+
+    public function edit_soal($id_soal)
+    {
+        $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
+
+        $this->load->view('admin/soal/edit_soal', $data);
+    }
+
+    public function update_soal($id_soal)
+    {
+        $config['upload_path'] = './assets/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $config['encrypt_name'] = true;
+        $config['max_size']     = '2048';
+
+
+        $data = [
+            'soal' => $this->input->post('soal'),
+            'jawaban' => $this->input->post('jawaban'),
+            'opsi_a' => $this->input->post('opsi_a'),
+            'opsi_b' => $this->input->post('opsi_b'),
+            'opsi_c' => $this->input->post('opsi_c'),
+            'opsi_d' => $this->input->post('opsi_d'),
+        ];
+
+        if($_FILES['file']['error'] != 4){
+            if ( ! $this->upload->do_upload('file'))
+            {
+                    $error = array('error' => $this->upload->display_errors());
+    
+                    $this->session->set_flashdata('modal', $this->input->post('modal'));
+                    $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+            }          
+        }
+        else
+        {
+                $data = array('upload_data' => $this->upload->data());
+                $this->db->insert('tb_soal', [
+                    'id_materi' => $this->input->post('id_materi'),
+                    'soal' => $this->input->post('soal'),
+                    'opsi_a' => $this->input->post('opsi_a'),
+                    'opsi_b' => $this->input->post('opsi_b'),
+                    'opsi_c' => $this->input->post('opsi_c'),
+                    'opsi_d' => $this->input->post('opsi_d'),
+                    'jawaban' => $this->input->post('jawaban')
+                ]);
+
+        }
+
+
+        $this->db->where('id_soal', $id_soal)->update('tb_soal', $data);
+
+        // redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+
     }
 }

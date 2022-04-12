@@ -125,7 +125,7 @@ $this->load->view('admin/template_admin/sidebar');
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <a href="<?php echo site_url('admin/update_soal/' . $u->id_soal); ?>" class="btn btn-info">Update ⭢</a>
+                                                    <a href="<?php echo site_url('admin/edit_soal/' . $u->id_soal); ?>" class="btn btn-info">Update ⭢</a>
 
                                                     <a onclick="deletesoal(<?= $u->id_soal ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                 </td>
@@ -306,6 +306,8 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="modal-body">
                 <form action="<?= base_url('admin/tambah_soal') ?>" enctype="multipart/form-data" method="post">
                     <input type="hidden" name="modal" value="quiz">
+                    <input type="hidden" name="tab" value="contact3">
+                    <input type="hidden" name="nav-link" value="contact-tab3">
                     <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>" required>
                     <!-- <div class="form-group">
                         <label for="nama_file">Judul Modul/File</label>
@@ -539,5 +541,16 @@ $this->load->view('admin/template_admin/footer');
 <?php if($this->session->flashdata('modal')) : ?>
     <script>
         $('#<?= $this->session->flashdata('modal') ?>').modal('show')
+    </script>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('tab')) : ?>
+    <script>
+        $(function(){
+            $('.tab-pane').removeClass('show active');
+            $('.nav-link').removeClass('active');
+            $('#<?= $this->session->flashdata('tab') ?>').addClass('active show');
+            $('#<?= $this->session->flashdata('nav-link') ?>').addClass('active');
+        });
     </script>
 <?php endif; ?>
