@@ -51,7 +51,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
 
                                         <td>
-                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image; ?>">
+                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_user; ?>">
                                         </td>
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/detail_siswa/' . $u->id_user); ?>" class="btn btn-success">Detail ⭢</a>

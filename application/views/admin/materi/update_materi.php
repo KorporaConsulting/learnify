@@ -48,7 +48,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <?php foreach ($mapel as $m) { ?>
                                 <option <?php if ($m->id_mapel == $user->id_mapel) {
                                             echo 'selected="selected"';
-                                        } ?> value="<?php echo $m->id_mapel ?>"><?= $m->nama ?></option>
+                                        } ?> value="<?php echo $m->id_mapel ?>"><?= $m->nama_mapel ?></option>
                             <?php } ?>
                         </select>
                         <?= form_error('mapel', '<small class="text-danger">', '</small>'); ?>

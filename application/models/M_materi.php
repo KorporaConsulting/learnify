@@ -124,4 +124,13 @@ class M_materi extends CI_Model
         $this->db->where($where);
         $this->db->update($table, $data);
     }
+    public function check_enroll($id_mapel, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
 }

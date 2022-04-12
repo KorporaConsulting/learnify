@@ -73,7 +73,17 @@ $this->load->view('admin/template_admin/sidebar');
 </div>
 </div>
 <!-- End Main Content -->
-
+<?php if ($this->session->flashdata('valid_enroll')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Data telah tersedia',
+            text: 'Silahkan coba lagi!',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    </script>
+<?php endif; ?>
 
 <?php
 $this->load->view('admin/template_admin/footer');
