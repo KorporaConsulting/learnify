@@ -91,7 +91,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                                <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".quiz">Tambah Soal ⭢</button>
+                                <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Soal ⭢</button>
                                 <table id="example" class="table align-items-center table-flush mt-5">
                                     <thead class="thead-light">
                                         <tr class="text-center">
@@ -127,7 +127,7 @@ $this->load->view('admin/template_admin/sidebar');
                                                 <td class="text-center">
                                                     <a href="<?php echo site_url('admin/update_soal/' . $u->id_soal); ?>" class="btn btn-info">Update ⭢</a>
 
-                                                    <a onclick="deletesoal(<?= $u->id_soal ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                    <a onclick="deletesoal(<?= $u->id_soal ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                 </td>
 
                                             </tr>
@@ -260,6 +260,7 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="modal-body">
                 <form action="<?= base_url('admin/insert_file') ?>" enctype="multipart/form-data" method="post">
                     <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>">
+                    <input type="hidden" name="modal" value="quiz">
                     <div class="form-group">
                         <label for="nama_file">Judul Modul/File</label>
                         <input required id="nama_file" type="text" class="form-control" value="<?php echo set_value('nama_file') ?>" name="nama_file">
@@ -293,39 +294,96 @@ $this->load->view('admin/template_admin/sidebar');
     </div>
 </div>
 <!-- Modal Modul -->
-<div class="modal fade quiz" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="quiz">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Tambah Modul/File</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Tambah Soal</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('admin/insert_file') ?>" enctype="multipart/form-data" method="post">
-                    <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>">
-                    <div class="form-group">
+                <form action="<?= base_url('admin/tambah_soal') ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="modal" value="quiz">
+                    <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>" required>
+                    <!-- <div class="form-group">
                         <label for="nama_file">Judul Modul/File</label>
                         <input required id="nama_file" type="text" class="form-control" value="<?php echo set_value('nama_file') ?>" name="nama_file">
                         <?= form_error('nama_file', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="soal">Soal</label>
+                        <textarea name="soal" id="soal" class="form-control" cols="30" rows="10" required></textarea>
                     </div>
                     <div class="form-group">
+                        <label for="file">File</label>
+                        <input type="file" class="form-control-file" name="file" id="file" require>
+                        <?php if($this->session->flashdata('fileValidate')) : ?>
+                            <small class="text-danger"><?= $this->session->flashdata('fileValidate') ?></small>
+                        <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="opsi_a">Opsi A</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">A</div>
+                            </div>
+                            <input type="text" name="opsi_a" class="form-control" id="opsi_a" placeholder="Input Opsi B" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="opsi_b">Opsi B</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">B</div>
+                            </div>
+                            <input type="text" name="opsi_b" class="form-control" id="opsi_b" placeholder="Input Opsi B" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="opsi_c">Opsi C</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">C</div>
+                            </div>
+                            <input type="text" name="opsi_c" class="form-control" id="opsi_c" placeholder="Input Opsi C" require>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="opsi_d">Opsi D</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">D</div>
+                            </div>
+                            <input type="text" name="opsi_d" class="form-control" id="opsi_d" placeholder="Input Opsi D" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="jawaban">Jawaban</label>
+                        <select name="jawaban" class="form-control" id="jawaban" required>
+                            <option value="a">Opsi A</option>
+                            <option value="b">Opsi B</option>
+                            <option value="c">Opsi C</option>
+                            <option value="d">Opsi D</option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
                         <label>Deskripsi (Optional)</label>
                         <textarea class="form-control" name="desk_file" id="desk_file" cols="30" rows="10"><?php echo set_value('desk_file') ?></textarea>
                         <?= form_error('desk_file', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
-                    </div>
-                    <div class="form-group">
+                    </div> -->
+                    <!-- <div class="form-group">
                         <label for="link">Link Modul/File</label>
                         <input required id="link" type="text" class="form-control" value="<?php echo set_value('link') ?>" name="link">
                         <?= form_error('link', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-success btn-lg btn-block">
                             Submit ⭢
@@ -337,6 +395,7 @@ $this->load->view('admin/template_admin/sidebar');
         </div>
     </div>
 </div>
+
 
 <!-- Start Sweetalert -->
 <?php if ($this->session->flashdata('success-video')) : ?>
@@ -477,3 +536,8 @@ $this->load->view('admin/template_admin/sidebar');
 <?php
 $this->load->view('admin/template_admin/footer');
 ?>
+<?php if($this->session->flashdata('modal')) : ?>
+    <script>
+        $('#<?= $this->session->flashdata('modal') ?>').modal('show')
+    </script>
+<?php endif; ?>

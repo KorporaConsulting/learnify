@@ -608,6 +608,7 @@ class Admin extends CI_Controller
         $data['file'] = $this->m_materi->where_tampil_file($id)->result();
         $data['quiz'] = $this->m_materi->where_tampil_quiz($id)->result();
         $this->load->view('admin/materi/isi_materi', $data);
+        
     }
 
     public function upload_video()
@@ -781,5 +782,52 @@ class Admin extends CI_Controller
     {
         $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
         $this->load->view('admin/soal/detail_soal', $data);
+    }
+
+    public function tambah_soal ()
+    {   
+        
+        $config['upload_path'] = './assets/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $config['encrypt_name'] = true;
+        $config['max_size']     = '204';
+
+
+
+        $this->load->library('upload', $config);
+        
+        if ( ! $this->upload->do_upload('file'))
+        {
+                $error = array('error' => $this->upload->display_errors());
+
+                $this->session->set_flashdata('modal', $this->input->post('modal'));
+                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+
+        }
+        else
+        {
+                $data = array('upload_data' => $this->upload->data());
+                $this->db->insert('tb_soal', [
+                    'id_materi' => $this->input->post('id_materi'),
+                    'soal' => $this->input->post('soal'),
+                    'opsi_a' => $this->input->post('opsi_a'),
+                    'opsi_b' => $this->input->post('opsi_b'),
+                    'opsi_c' => $this->input->post('opsi_c'),
+                    'opsi_d' => $this->input->post('opsi_d'),
+                    'jawaban' => $this->input->post('jawaban')
+                ]);
+
+            }
+            
+        redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+    }
+
+    public function delete_soal($id_soal, $id_materi)
+    {
+        $this->db->where('id_soal', $id_soal)->delete('tb_soal');
+
+        $this->session->set_flashdata('success', 'Berhasil menghapus soal');
+        
+        redirect('admin/isi_materi/' . $id_materi);
     }
 }

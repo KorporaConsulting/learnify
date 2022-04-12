@@ -11,7 +11,11 @@
  <!-- End Main Content -->
 
  <!-- General JS Scripts -->
-
+    <?php if($this->session->flashdata('success')): ?>
+        <script>
+            Swal.fire('Berhasil', '<?= $this->session->flashdata('success') ?>', 'success');
+        </script>
+    <?php endif; ?>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
  </script>
  <script>

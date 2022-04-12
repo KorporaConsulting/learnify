@@ -13,10 +13,18 @@ $this->load->view('admin/template_admin/sidebar');
             </div>
             <div class="mb-4" id="opsi">
                 <h5>Opsi</h5>
-                A. <?= $soal->opsi_a ?>
-                B. <?= $soal->opsi_b ?>
-                C. <?= $soal->opsi_c ?>
-                D. <?= $soal->opsi_d ?>
+                <div class="mb-2">
+                    A. <?= $soal->opsi_a ?>
+                </div>
+                <div class="mb-2">
+                    B. <?= $soal->opsi_b ?>
+                </div>
+                <div class="mb-2">
+                    C. <?= $soal->opsi_c ?>
+                </div>
+                <div class="mb-2">
+                    D. <?= $soal->opsi_d ?>
+                </div>
             </div>
             <div class="mb-4" id="jawaban">
                 <h5>Jawaban <?= $soal->jawaban ?></h5>
@@ -107,6 +115,8 @@ $this->load->view('admin/template_admin/sidebar');
         })
     </script>
 <?php endif; ?>
+
+
 
 <!-- End Sweetalert -->
 
