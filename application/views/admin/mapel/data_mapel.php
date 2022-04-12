@@ -24,7 +24,7 @@ $this->load->view('admin/template_admin/sidebar');
                                     <th scope="col">No</th>
                                     <th scope="col">Nama Course</th>
                                     <th scope="col">Nama Mentor</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Semester</th>
                                     <th scope="col">Materi</th>
                                     <th scope="col">Option</th>
                                 </tr>

@@ -7,11 +7,11 @@ $this->load->view('admin/template_admin/sidebar');
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title" style="color: black;">Management Course Sales University</h2>
+                <h2 class="card-title" style="color: black;">Management Enroll User</h2>
                 <hr>
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
-                <a href="<?= base_url('admin/add_mapel') ?>" class="btn btn-success">Tambah
-                    Data Course ⭢ </a>
+                <a href="<?= base_url('admin/add_enroll') ?>" class="btn btn-success">Tambah
+                    Enroll User ⭢ </a>
             </div>
         </div>
         <div class="row">
@@ -23,9 +23,8 @@ $this->load->view('admin/template_admin/sidebar');
                                 <tr class="text-center">
                                     <th scope="col">No</th>
                                     <th scope="col">Nama Course</th>
-                                    <th scope="col">Nama Mentor</th>
+                                    <th scope="col">Nama User</th>
                                     <th scope="col">Semester</th>
-                                    <th scope="col">Materi</th>
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
@@ -36,30 +35,23 @@ $this->load->view('admin/template_admin/sidebar');
                                 foreach ($user as $u) {
                                 ?>
                                     <tr class="text-center">
-
                                         <th scope="row">
                                             <?php echo $no++ ?>
                                         </th>
 
                                         <td>
-                                            <?php echo $u->nama_mapel ?>
+                                            <b><?php echo $u->nama_mapel ?></b>
                                         </td>
 
                                         <td>
-                                            <?php echo $u->nama_guru ?>
+                                            <b><?php echo $u->nama ?></b>
                                         </td>
                                         <td>
                                             <?php echo $u->semester ?>
                                         </td>
                                         <td class="text-center">
-                                            <a href="<?php echo site_url('admin/data_materi_course/' . $u->id_mapel); ?>" class="btn btn-success">Materi ⭢</a>
+                                            <a onclick="deleteenroll(<?= $u->id_enroll ?>);" href="javascript:void(0);" class="btn btn-danger">Remove Enroll ✖</a>
                                         </td>
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/update_mapel/' . $u->id_mapel); ?>" class="btn btn-info">Edit ⭢</a>
-
-                                            <a onclick="yourConfirm(<?= $u->id_mapel ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                        </td>
-
                                     </tr>
                                 <?php
                                 }
@@ -90,35 +82,11 @@ $this->load->view('admin/template_admin/sidebar');
     </script>
 <?php endif; ?>
 
-<?php if ($this->session->flashdata('gagal-reg')) : ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Data Course gagal Ditambah!',
-            text: 'Silahkan coba kembali!',
-            showConfirmButton: false,
-            timer: 2500
-        })
-    </script>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('success-edit')) : ?>
+<?php if ($this->session->flashdata('enroll-delete')) : ?>
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Data Course Telah Dirubah!',
-            text: 'Selamat data berubah!',
-            showConfirmButton: false,
-            timer: 2500
-        })
-    </script>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('mapel-delete')) : ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Data Course Telah Dihapus!',
+            title: 'Data Enroll Telah Dihapus!',
             text: 'Selamat data telah Dihapus!',
             showConfirmButton: false,
             timer: 2500
@@ -129,7 +97,7 @@ $this->load->view('admin/template_admin/sidebar');
 <!-- End Sweetalert -->
 
 <script type="text/javascript">
-    function yourConfirm(id) {
+    function deleteenroll(id) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -141,7 +109,7 @@ $this->load->view('admin/template_admin/sidebar');
         }).then((result) => {
             console.log(result)
             if (result.value) {
-                window.location = "<?= base_url('admin/delete_mapel/') ?>" + id;
+                window.location = "<?= base_url('admin/delete_enroll/') ?>" + id;
             }
         })
     }

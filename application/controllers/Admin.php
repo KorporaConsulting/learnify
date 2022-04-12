@@ -9,6 +9,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
         $this->load->model('m_guru');
         $this->load->model('m_siswa');
+        $this->load->model('m_enroll');
 
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
@@ -482,6 +483,7 @@ class Admin extends CI_Controller
     {
         $this->load->model('m_materi');
         $data['user'] = $this->m_materi->tampil_data_materi_course($id)->result();
+        $data['materi'] = $id;
         $this->load->view('admin/materi/data_materi', $data);
     }
 
@@ -778,6 +780,46 @@ class Admin extends CI_Controller
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
 
+    public function data_enroll()
+    {
+        $data['user'] = $this->m_enroll->tampil_data_enroll()->result();
+        $this->load->view('admin/enroll/data_enroll', $data);
+    }
+    public function add_enroll()
+    {
+        $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+        $data['user'] = $this->m_siswa->tampil_data()->result();
+        $this->load->view('admin/enroll/add_enroll', $data);
+    }
+    public function insert_enroll()
+    {
+        $this->form_validation->set_rules('mapel', 'Nama', 'required|trim', [
+            'required' => 'Harap isi kolom Course.',
+        ]);
+        $this->form_validation->set_rules('user', 'Nama', 'required|trim', [
+            'required' => 'Harap isi kolom User.',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+            $data['user'] = $this->m_siswa->tampil_data()->result();
+            $this->load->view('admin/enroll/add_enroll', $data);
+        } else {
+            $data = [
+                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                'id_user' => htmlspecialchars($this->input->post('user', true)),
+            ];
+            $this->db->insert('enroll', $data);
+            $this->session->set_flashdata('success-reg', 'Berhasil!');
+            redirect(base_url('admin/data_enroll'));
+        }
+    }
+    public function delete_enroll($id)
+    {
+        $where = array('id_enroll' => $id);
+        $this->m_enroll->delete_enroll($where, 'enroll');
+        $this->session->set_flashdata('enroll-delete', 'berhasil');
+        redirect(base_url('admin/data_enroll/'));
     public function detail_soal ($id_soal)
     {
         $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
