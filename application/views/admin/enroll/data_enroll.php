@@ -44,7 +44,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
 
                                         <td>
-                                            <b><?php echo $u->nama ?></b>
+                                            <b><?php echo $u->nama ?> </b>
                                         </td>
                                         <td>
                                             <?php echo $u->semester ?>

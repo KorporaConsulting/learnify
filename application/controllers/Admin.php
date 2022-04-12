@@ -10,7 +10,6 @@ class Admin extends CI_Controller
         $this->load->model('m_guru');
         $this->load->model('m_siswa');
         $this->load->model('m_enroll');
-
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
@@ -23,8 +22,6 @@ class Admin extends CI_Controller
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/index', $data);
     }
-
-
 
     // Management Siswa
     public function add_new_siswa()
@@ -83,7 +80,7 @@ class Admin extends CI_Controller
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'no_telp' => htmlspecialchars($this->input->post('no_telp', true)),
-                'image' => $image,
+                'image_user' => $image,
                 'jk' => htmlspecialchars($this->input->post('jk', true)),
                 'ttl' => htmlspecialchars($this->input->post('ttl', true)),
                 'alamat' => htmlspecialchars($this->input->post('alamat', true)),
@@ -790,12 +787,26 @@ class Admin extends CI_Controller
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/enroll/add_enroll', $data);
     }
+
+    public function enroll_check()
+    {
+        $check_enroll = $this->m_materi->check_enroll($this->input->post('mapel', true), $this->input->post('user', true));
+
+        if ($check_enroll > 0) {
+            $this->form_validation->set_message('enroll_check', 'User telah memiliki Course');
+            $this->session->set_flashdata('valid_enroll', 'Gagal!');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
     public function insert_enroll()
     {
-        $this->form_validation->set_rules('mapel', 'Nama', 'required|trim', [
+        $this->form_validation->set_rules('mapel', 'Course', 'required|trim|callback_enroll_check', [
             'required' => 'Harap isi kolom Course.',
         ]);
-        $this->form_validation->set_rules('user', 'Nama', 'required|trim', [
+        $this->form_validation->set_rules('user', 'User', 'required|trim', [
             'required' => 'Harap isi kolom User.',
         ]);
 
@@ -819,7 +830,8 @@ class Admin extends CI_Controller
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
         redirect(base_url('admin/data_enroll/'));
-    public function detail_soal ($id_soal)
+    }
+    public function detail_soal($id_soal)
     {
         $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
         $this->load->view('admin/soal/detail_soal', $data);

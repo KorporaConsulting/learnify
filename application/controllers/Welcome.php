@@ -53,25 +53,23 @@ class Welcome extends CI_Controller
         $email = $this->input->post('email');
         $password = $this->input->post('password');
 
-        $user = $this->db->get_where('siswa', ['email' => $email])->row_array();
+        $user = $this->db->get_where('user', ['email' => $email])->row_array();
 
         if ($user) {
-            //user ada
-            if ($user['is_active'] == 1) {
-                //cek password
-                if (password_verify($password, $user['password'])) {
-                    $data = [
-                        'email' => $user['email'],
-                    ];
+            //cek password
+            if (password_verify($password, $user['password'])) {
+                $data = [
+                    'id_user' => $user['id_user'],
+                    'email' => $user['email'],
+                    'nama' => $user['nama'],
+                    'ttl' => $user['ttl'],
+                    'jk' => $user['jk'],
+                ];
 
-                    $this->session->set_userdata($data);
-                    redirect(base_url('user'));
-                } else {
-                    $this->session->set_flashdata('fail-pass', 'Gagal!');
-                    redirect(base_url('welcome'));
-                }
+                $this->session->set_userdata($data);
+                redirect(base_url('user'));
             } else {
-                $this->session->set_flashdata('fail-email', 'Gagal!');
+                $this->session->set_flashdata('fail-pass', 'Gagal!');
                 redirect(base_url('welcome'));
             }
         } else {
@@ -154,20 +152,20 @@ class Welcome extends CI_Controller
         $email = $this->input->get('email');
         $token = $this->input->get('token');
 
-        $user = $this->db->get_where('siswa', ['email' => $email])->row_array();
+        $user = $this->db->get_where('user', ['email' => $email])->row_array();
         if ($user) {
             $user_token = $this->db->get_where('token', ['token => $token'])->row_array();
             if ($user_token) {
                 if (time() - $user_token['date_created'] < (600 * 600 * 24)) {
                     $this->db->set('is_active', 1);
                     $this->db->where('email', $email);
-                    $this->db->update('siswa');
+                    $this->db->update('user');
 
                     $this->db->delete('token', ['email' => $email]);
                     $this->session->set_flashdata('success-verify', 'Bserhasil!');
                     redirect(base_url('welcome'));
                 } else {
-                    $this->db->delete('siswa', ['email' => $email]);
+                    $this->db->delete('user', ['email' => $email]);
                     $this->db->delete('token', ['email' => $email]);
 
                     $this->session->set_flashdata('fail-token-expired', 'gagal');

@@ -8,6 +8,56 @@ class M_siswa extends CI_Model
         return $query;
     }
 
+    public function tampil_data_semester($semester, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('mapel', 'mapel.id_mapel = enroll.id_mapel');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->where('mapel.semester', $semester);
+        $this->db->where('user.id_user', $id_user);
+        return  $this->db->get();
+    }
+
+    public function tampil_data_materi($id_mapel, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('mapel', 'mapel.id_mapel = enroll.id_mapel');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->where('mapel.id_mapel', $id_mapel);
+        $this->db->where('user.id_user', $id_user);
+        return  $this->db->get();
+    }
+
+    public function tampil_data_isi_materi($id_materi, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('mapel', 'mapel.id_mapel = enroll.id_mapel');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->where('materi.id_materi', $id_materi);
+        $this->db->where('user.id_user', $id_user);
+        return  $this->db->get();
+    }
+
+    public function tampil_data_course($id)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->where('id_mapel', $id);
+        return  $this->db->get();
+    }
+    public function get_nama_materi($id)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('id_materi', $id);
+        return  $this->db->get();
+    }
+
     public function detail_siswa($id = null)
     {
         $query = $this->db->get_where('user', array('id_user' => $id))->row();

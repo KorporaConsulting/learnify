@@ -7,44 +7,47 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
-        // $this->session->set_flashdata('not-login', 'Gagal!');
-        // if (!$this->session->userdata('email')) {
-        //     redirect('welcome');
+        $this->load->model('m_siswa');
+        $this->load->model('m_materi');
+
+        if (!$this->session->userdata('id_user')) {
+            $this->session->set_flashdata('not-login', 'Gagal!');
+            redirect('welcome');
+        }
     }
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
 
         $this->load->view('user/index');
         $this->load->view('template/footer');
     }
 
-    public function kelas10()
+    public function semester($semester)
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $this->load->view('user/kelas10');
+        $id_user = $this->session->userdata('id_user');
+        $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
+        $this->load->view('user/course', $data);
         $this->load->view('template/footer');
     }
 
-    public function kelas11()
+    public function course($id_mapel)
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $this->load->view('user/kelas11');
+        $id_user = $this->session->userdata('id_user');
+        $data['materi'] = $this->m_siswa->tampil_data_materi($id_mapel, $id_user)->result();
+        $data['mapel'] = $this->m_siswa->tampil_data_course($id_mapel)->row();
+        $this->load->view('user/materi', $data);
         $this->load->view('template/footer');
     }
 
-    public function kelas12()
+    public function materi($id_materi)
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $this->load->view('user/kelas12');
+        $id_user = $this->session->userdata('id_user');
+        $data['isi_materi'] = $this->m_siswa->tampil_data_isi_materi($id_materi, $id_user)->result();
+        $data['materi'] = $this->m_siswa->get_nama_materi($id_materi)->row();
+        $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');
     }
 
@@ -60,7 +63,7 @@ class User extends CI_Controller
             'required' => 'Harap isi kolom username.',
             'min_length' => 'Nama terlalu pendek.',
         ]);
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[siswa.email]', [
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'Email ini telah digunakan!',
             'required' => 'Harap isi kolom email.',
             'valid_email' => 'Masukan email yang valid.',
@@ -98,7 +101,7 @@ class User extends CI_Controller
             //     'date_created' => time(),
             // ];
 
-            $this->db->insert('siswa', $data);
+            $this->db->insert('user', $data);
             // $this->db->insert('token', $user_token);
 
             // $this->_sendEmail($token, 'verify');
@@ -133,7 +136,7 @@ class User extends CI_Controller
 
         if ($type == 'verify') {
             $link =
-            $this->email->subject('Verifikasi Akun');
+                $this->email->subject('Verifikasi Akun');
             $body = $this->load->view('template/email-template.php', $data, true);
             $this->email->message($body);
         } else {
@@ -146,5 +149,4 @@ class User extends CI_Controller
             die();
         }
     }
-
 }

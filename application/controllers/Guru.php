@@ -7,6 +7,7 @@ class Guru extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->model('');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
             redirect('welcome/guru');
@@ -16,7 +17,7 @@ class Guru extends CI_Controller
     public function index()
     {
         $data['user'] = $this->db->get_where('guru', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $this->session->userdata('email')])->row_array();
 
         $this->load->view('guru/index');
     }
@@ -28,7 +29,7 @@ class Guru extends CI_Controller
             'min_length' => 'deskripsi terlalu pendek.',
         ]);
         if ($this->form_validation->run() == false) {
-            $this->load->view('guru/add_materi');
+            $this->load->view('guru/mapel/add_materi');
         } else {
             $upload_video = $_FILES['video'];
 
