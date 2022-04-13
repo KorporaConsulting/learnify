@@ -377,7 +377,31 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
 
         $data['user'] = $this->m_materi->tampil_data_mapel()->result();
+
         $this->load->view('admin/mapel/data_mapel', $data);
+    }
+    public function sort_mapel()
+    {
+        $this->load->model('m_materi');
+
+        $data['user'] = $this->m_materi->tampil_sort_mapel()->result();
+
+        $this->load->view('admin/mapel/sort_mapel', $data);
+    }
+
+    public function update_sort_mapel()
+    {
+        
+
+        $this->db->where_in('id_mapel', $this->input->post('data'));
+        $this->db->delete('mapel');
+
+        $this->db->insert_batch('mapel', $this->input->post('data_key'));
+        $this->session->set_flashdata('success', 'Berhasil mengurutkan mapel');
+
+        echo json_encode([
+            'success' => true
+        ]);
     }
 
     public function update_mapel($id)
@@ -901,20 +925,12 @@ class Admin extends CI_Controller
 
     public function update_soal($id_soal)
     {
-        $config['upload_path'] = './assets/';
+        $config['upload_path'] = './assets/img';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['encrypt_name'] = true;
         $config['max_size']     = '2048';
 
-
-        $data = [
-            'soal' => $this->input->post('soal'),
-            'jawaban' => $this->input->post('jawaban'),
-            'opsi_a' => $this->input->post('opsi_a'),
-            'opsi_b' => $this->input->post('opsi_b'),
-            'opsi_c' => $this->input->post('opsi_c'),
-            'opsi_d' => $this->input->post('opsi_d'),
-        ];
+        $this->load->library('upload', $config);
 
         if($_FILES['file']['error'] != 4){
             if ( ! $this->upload->do_upload('file'))
@@ -923,27 +939,36 @@ class Admin extends CI_Controller
     
                     $this->session->set_flashdata('modal', $this->input->post('modal'));
                     $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+
+                    redirect('admin/isi_materi/' . $this->input->post('id_materi'));
             }          
-        }
-        else
-        {
-                $data = array('upload_data' => $this->upload->data());
-                $this->db->insert('tb_soal', [
-                    'id_materi' => $this->input->post('id_materi'),
-                    'soal' => $this->input->post('soal'),
-                    'opsi_a' => $this->input->post('opsi_a'),
-                    'opsi_b' => $this->input->post('opsi_b'),
-                    'opsi_c' => $this->input->post('opsi_c'),
-                    'opsi_d' => $this->input->post('opsi_d'),
-                    'jawaban' => $this->input->post('jawaban')
-                ]);
 
+            $data = $this->upload->data();
+
+            $filename = $data['file_name'];
+
+        }else{
+            $filename = $this->input->post('oldFile');
         }
 
+        $data = [
+            'soal' => $this->input->post('soal'),
+            'jawaban' => $this->input->post('jawaban'),
+            'opsi_a' => $this->input->post('opsi_a'),
+            'opsi_b' => $this->input->post('opsi_b'),
+            'opsi_c' => $this->input->post('opsi_c'),
+            'opsi_d' => $this->input->post('opsi_d'),
+            'file' => $filename
+        ];
 
         $this->db->where('id_soal', $id_soal)->update('tb_soal', $data);
 
-        // redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+        $this->session->set_flashdata('tab', 'contact3');
+        $this->session->set_flashdata('nav-link', 'contact-tab3');
+
+        $this->session->set_flashdata('success', 'Berhasil mengupdate soal');
+
+        redirect('admin/isi_materi/' . $this->input->post('id_materi'));
 
     }
 }

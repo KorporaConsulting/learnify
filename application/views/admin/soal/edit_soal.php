@@ -9,15 +9,21 @@ $this->load->view('admin/template_admin/sidebar');
         <div class="card-body">
             <form action="<?= base_url('admin/update_soal/' . $soal->id_soal) ?>" enctype="multipart/form-data" method="post">
                 <input type="hidden" name="oldFile" value="<?= $soal->file ?? '' ?>">
+                <input type="hidden" name="id_materi" value="<?= $soal->id_materi ?? '' ?>">
                 <div class="form-group">
                     <label for="soal">Soal</label>
                     <textarea name="soal" id="soal" class="form-control" cols="30" rows="10" required><?= $soal->soal ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="file">File</label>
-                    <input type="file" class="form-control-file" name="file" id="file" require>
+                    <input type="file" class="form-control-file mb-2" name="file" id="file" require>
                     <?php if($this->session->flashdata('fileValidate')) : ?>
                         <small class="text-danger"><?= $this->session->flashdata('fileValidate') ?></small>
+                    <?php endif; ?>
+                    <?php if($soal->file): ?>
+                        <div class="row">
+                            <img src="<?= base_url('assets/img/' .  $soal->file ) ?>" alt="" class="img-fluid col-3">
+                        </div>
                     <?php endif; ?>
                 </div>
                 <div class="form-group">
@@ -26,7 +32,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="input-group-prepend">
                         <div class="input-group-text">A</div>
                         </div>
-                        <input type="text" name="opsi_a" class="form-control" id="opsi_a" value="<?= $soal->opsi_a ?>" placeholder="Input Opsi B" required>
+                        <input type="text" name="opsi_a" class="form-control" id="opsi_a" value="<?= $soal->opsi_a ?>" placeholder="Input Opsi A" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -44,7 +50,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="input-group-prepend">
                         <div class="input-group-text">C</div>
                         </div>
-                        <input type="text" name="opsi_c" class="form-control" id="opsi_c" value="<?= $soal->opsi_b ?>" placeholder="Input Opsi C" require>
+                        <input type="text" name="opsi_c" class="form-control" id="opsi_c" value="<?= $soal->opsi_c ?>" placeholder="Input Opsi C" require>
                     </div>
                 </div>
                 <div class="form-group">
@@ -53,7 +59,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="input-group-prepend">
                         <div class="input-group-text">D</div>
                         </div>
-                        <input type="text" name="opsi_d" class="form-control" id="opsi_d" value="<?= $soal->opsi_c ?>" placeholder="Input Opsi D" required>
+                        <input type="text" name="opsi_d" class="form-control" id="opsi_d" value="<?= $soal->opsi_d ?>" placeholder="Input Opsi D" required>
                     </div>
                 </div>
                 <div class="form-group">

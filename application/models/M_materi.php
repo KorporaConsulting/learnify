@@ -7,6 +7,16 @@ class M_materi extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        
+        return  $this->db->get();
+    }
+    public function tampil_sort_mapel()
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        $this->db->order_by('urutan');
+        
         return  $this->db->get();
     }
     public function tampil_data_materi_course($id)

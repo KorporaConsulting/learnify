@@ -12,6 +12,8 @@ $this->load->view('admin/template_admin/sidebar');
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
                 <a href="<?= base_url('admin/add_mapel') ?>" class="btn btn-success">Tambah
                     Data Course ⭢ </a>
+                <a href="<?= base_url('admin/sort_mapel') ?>" class="btn btn-primary">
+                    Sort Course ⭢ </a>
             </div>
         </div>
         <div class="row">
