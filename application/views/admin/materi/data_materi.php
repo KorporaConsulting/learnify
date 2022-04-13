@@ -13,7 +13,9 @@ $this->load->view('admin/template_admin/sidebar');
                 <?php if ($this->uri->segment(3) == "") { ?>
                     <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah
                         Materi ⭢ </a>
-                <?php  } ?>
+                    <?php  } ?>
+                    <a href="<?= base_url('admin/sort_materi') ?>" class="btn btn-primary">Sort
+                        Materi ⭢ </a>
 
             </div>
         </div>

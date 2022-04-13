@@ -404,6 +404,28 @@ class Admin extends CI_Controller
         ]);
     }
 
+    public function sort_materi()
+    {   
+        $this->load->model('m_materi', 'materi');
+
+        $data['materi'] = $this->materi->tampil_data_materi()->result();
+
+        $this->load->view('admin/materi/sort_materi', $data);
+    }
+
+    public function update_sort_materi()
+    {
+        $this->db->where_in('id_materi', $this->input->post('data'));
+        $this->db->delete('materi');
+
+        $this->db->insert_batch('materi', $this->input->post('data_key'));
+        $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
+
+        echo json_encode([
+            'success' => true
+        ]);
+    }
+
     public function update_mapel($id)
     {
         $this->load->model('m_materi');

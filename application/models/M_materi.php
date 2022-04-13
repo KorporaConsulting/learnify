@@ -34,6 +34,16 @@ class M_materi extends CI_Model
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
         return  $this->db->get();
     }
+
+    public function tampil_sort_materi()
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->order_by('urutan');
+        return  $this->db->get();
+    }
+
     public function where_tampil_materi($id)
     {
         $this->db->select('*');
