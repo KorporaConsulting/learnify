@@ -22,23 +22,17 @@
 
 <!-- Start Class Card -->
 <div class="container">
-    <div class="row mt-4 mb-5 justify-content-center">
-        <div class="col-md-12 ">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Materi</h4>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <?php foreach ($materi as $m) { ?>
-                            <a href="<?= base_url('user/materi/' . $m->id_materi) ?>" class="list-group-item list-group-item-action"><?= $m->nama_materi ?><span class="badge badge-primary badge-pill float-right">belum selesai</span></a>
-                        <?php } ?>
-                    </div>
+    <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+        <div class="row" style="color: black; font-family: 'poppins';">
+            <div class="col-md-12 mt-1">
+                <div class="list-group">
+                    <?php
+                    $no = 1;
+                    foreach ($materi as $m) { ?>
+                        <a href="<?= base_url('user/materi/' . $m->id_materi) ?>" class="list-group-item list-group-item-action text-center"><?= '<b>' . $m->nama_materi . '</b>' ?><span class="badge badge-primary badge-pill float-right">belum selesai</span></a>
+                    <?php } ?>
                 </div>
             </div>
-            <ul class="list-group">
-
-            </ul>
         </div>
     </div>
 </div>
