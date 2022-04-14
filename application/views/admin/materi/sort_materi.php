@@ -13,17 +13,14 @@ $this->load->view('admin/template_admin/sidebar');
                             <div class="card-header"><h3 class="card-title">Sort Mapel</h3></div>
                             <div class="card-body">
                                 <ol id="list" class="list-group mb-4">
-                                    <?php foreach ($user as $u) : ?>
+                                    <?php foreach ($materi as $u) : ?>
                                         <li style="cursor: pointer;" 
-                                        data-id="<?= $u->id_mapel ?>"
-                                        data-nama_mapel="<?= $u->nama_mapel ?>"
-                                        data-desk="<?= $u->desk ?>"
-                                        data-tgl_mulai="<?= $u->tgl_mulai ?>"
-                                        data-tgl_selesai="<?= $u->tgl_selesai ?>"
-                                        data-image="<?= $u->image ?>"
-                                        data-id_guru="<?= $u->id_guru ?>"
-                                        data-semester="<?= $u->semester ?>"
-                                        class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> | Semester <?= $u->semester ?></li>
+                                        data-id_materi="<?= $u->id_materi ?>"
+                                        data-id_mapel="<?= $u->id_mapel ?>"
+                                        data-nama_materi="<?= $u->nama_materi ?>"
+                                        data-desk_materi="<?= $u->desk_materi ?>"
+                                        data-created_at="<?= $u->created_at ?>"
+                                        class="list-group-item"><?= $u->nama_materi ?></li>
                                     <?php endforeach; ?>
                                 </ol>
                                 <button id="sort" type="button" class="btn btn-primary">Update Urutan</button>
@@ -52,24 +49,21 @@ $this->load->view('admin/template_admin/footer');
         const data_key = [];
 
         for (let i = 0; i < $('.list-group-item').length; i++) {
-                data.push($('.list-group-item')[i].dataset.id)
+                data.push($('.list-group-item')[i].dataset.id_materi)
 
 
                 data_key.push({
-                    id_mapel:  $('.list-group-item')[i].dataset.id,
-                    nama_mapel:  $('.list-group-item')[i].dataset.nama_mapel,
-                    desk:  $('.list-group-item')[i].dataset.desk,
-                    id_guru:  $('.list-group-item')[i].dataset.id_guru,
-                    tgl_mulai:  $('.list-group-item')[i].dataset.tgl_mulai,
-                    tgl_selesai:  $('.list-group-item')[i].dataset.tgl_selesai,
-                    urutan: i+1,
-                    image:  $('.list-group-item')[i].dataset.image,
-                    semester:  $('.list-group-item')[i].dataset.semester,
+                    id_mapel:  $('.list-group-item')[i].dataset.id_mapel,
+                    id_materi:  $('.list-group-item')[i].dataset.id_materi,
+                    nama_materi:  $('.list-group-item')[i].dataset.nama_materi,
+                    deks_materi:  $('.list-group-item')[i].dataset.deks_materi,
+                    urutan:  i+1,
+                    created_at:  $('.list-group-item')[i].dataset.created_at,
                 })
             }
         
             $.ajax({
-                url: '<?= site_url('admin/update_sort_mapel') ?>',
+                url: '<?= site_url('admin/update_sort_materi') ?>',
                 method: 'POST',
                 data:{
                     data,
