@@ -11,6 +11,7 @@ class Admin extends CI_Controller
         $this->load->model('m_siswa');
         $this->load->model('m_enroll');
         $this->load->helper('url');
+        $this->load->library('upload');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
             redirect('welcome/admin');
@@ -391,7 +392,7 @@ class Admin extends CI_Controller
 
     public function update_sort_mapel()
     {
-        
+
 
         $this->db->where_in('id_mapel', $this->input->post('data'));
         $this->db->delete('mapel');
@@ -434,6 +435,7 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('gagal-reg', 'gagal!');
             redirect(base_url('admin/update_mapel/' . $id_mapel));
         } else {
+
             if (empty($_FILES['image']['name'])) {
                 $id_mapel = $this->input->post('id_mapel');
                 $data = [
@@ -450,7 +452,7 @@ class Admin extends CI_Controller
                 $this->session->set_flashdata('success-edit', 'Berhasil!');
                 redirect(base_url('admin/data_mapel'));
             } else {
-                $this->load->library('upload');
+
                 $config['upload_path'] = './assets/img/courses'; //path folder
                 $config['allowed_types'] = 'jpg|png|jpeg'; //type yang dapat diakses bisa anda sesuaikan
 
@@ -631,7 +633,6 @@ class Admin extends CI_Controller
         $data['file'] = $this->m_materi->where_tampil_file($id)->result();
         $data['quiz'] = $this->m_materi->where_tampil_quiz($id)->result();
         $this->load->view('admin/materi/isi_materi', $data);
-        
     }
 
     public function upload_video()
@@ -855,50 +856,45 @@ class Admin extends CI_Controller
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
         redirect(base_url('admin/data_enroll/'));
-
     }
 
-    public function detail_soal ($id_soal)
+    public function detail_soal($id_soal)
     {
         $data['soal'] = $this->db->where('id_soal', $id_soal)->get('tb_soal')->row();
         $this->load->view('admin/soal/detail_soal', $data);
     }
 
-    public function tambah_soal ()
-    {   
-        
+    public function tambah_soal()
+    {
+
         $config['upload_path'] = './assets/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['encrypt_name'] = true;
         $config['max_size']     = '2048';
 
         $this->load->library('upload', $config);
-        
+
         $this->session->set_flashdata('tab', $this->input->post('tab'));
         $this->session->set_flashdata('nav-link', $this->input->post('nav-link'));
 
-        if($_FILES['file']['error'] != 4){
-            if ( ! $this->upload->do_upload('file'))
-            {
-                    $error = array('error' => $this->upload->display_errors());
-    
-                    $this->session->set_flashdata('modal', $this->input->post('modal'));
-                    $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
-            }          
-        }
-        else
-        {
-                $data = array('upload_data' => $this->upload->data());
-                $this->db->insert('tb_soal', [
-                    'id_materi' => $this->input->post('id_materi'),
-                    'soal' => $this->input->post('soal'),
-                    'opsi_a' => $this->input->post('opsi_a'),
-                    'opsi_b' => $this->input->post('opsi_b'),
-                    'opsi_c' => $this->input->post('opsi_c'),
-                    'opsi_d' => $this->input->post('opsi_d'),
-                    'jawaban' => $this->input->post('jawaban')
-                ]);
+        if ($_FILES['file']['error'] != 4) {
+            if (!$this->upload->do_upload('file')) {
+                $error = array('error' => $this->upload->display_errors());
 
+                $this->session->set_flashdata('modal', $this->input->post('modal'));
+                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+            }
+        } else {
+            $data = array('upload_data' => $this->upload->data());
+            $this->db->insert('tb_soal', [
+                'id_materi' => $this->input->post('id_materi'),
+                'soal' => $this->input->post('soal'),
+                'opsi_a' => $this->input->post('opsi_a'),
+                'opsi_b' => $this->input->post('opsi_b'),
+                'opsi_c' => $this->input->post('opsi_c'),
+                'opsi_d' => $this->input->post('opsi_d'),
+                'jawaban' => $this->input->post('jawaban')
+            ]);
         }
 
         redirect('admin/isi_materi/' . $this->input->post('id_materi'));
@@ -912,7 +908,7 @@ class Admin extends CI_Controller
 
         $this->session->set_flashdata('tab', 'contact3');
         $this->session->set_flashdata('nav-link', 'contact-tab3');
-        
+
         redirect('admin/isi_materi/' . $id_materi);
     }
 
@@ -932,22 +928,20 @@ class Admin extends CI_Controller
 
         $this->load->library('upload', $config);
 
-        if($_FILES['file']['error'] != 4){
-            if ( ! $this->upload->do_upload('file'))
-            {
-                    $error = array('error' => $this->upload->display_errors());
-    
-                    $this->session->set_flashdata('modal', $this->input->post('modal'));
-                    $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+        if ($_FILES['file']['error'] != 4) {
+            if (!$this->upload->do_upload('file')) {
+                $error = array('error' => $this->upload->display_errors());
 
-                    redirect('admin/isi_materi/' . $this->input->post('id_materi'));
-            }          
+                $this->session->set_flashdata('modal', $this->input->post('modal'));
+                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
+
+                redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+            }
 
             $data = $this->upload->data();
 
             $filename = $data['file_name'];
-
-        }else{
+        } else {
             $filename = $this->input->post('oldFile');
         }
 
@@ -969,6 +963,5 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Berhasil mengupdate soal');
 
         redirect('admin/isi_materi/' . $this->input->post('id_materi'));
-
     }
 }
