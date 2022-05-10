@@ -80,21 +80,14 @@ $this->load->view('admin/template_admin/sidebar');
 
                 <div class="form-group">
                     <label class="form-label">Semester</label>
-                    <div class="section-title">Terpilih</div>
-                    <div class="selectgroup w-100">
-                        <label class="selectgroup-item">
-                            <input type="radio" name="semester" value="1" <?php
-                                                                            echo set_value('semester', $user->semester) == 1 ? "checked" : "";
-                                                                            ?> class="selectgroup-input">
-                            <span class="selectgroup-button">1 (SATU)</span>
-                        </label>
-                        <label class="selectgroup-item">
-                            <input type="radio" name="semester" value="2" <?php
-                                                                            echo set_value('semester', $user->semester) == 2 ? "checked" : "";
-                                                                            ?> class="selectgroup-input">
-                            <span class="selectgroup-button">2 (DUA)</span>
-                        </label>
-                    </div>
+                    <select class="form-control select2" name="semester">
+                        <option disabled selected>Pilih Semester</option>
+                        <?php foreach ($semester as $m) { ?>
+                            <option <?php if ($m->id_semester == $user->id_semester) {
+                                        echo 'selected="selected"';
+                                    } ?> value="<?php echo $m->id_semester ?>"><?= $m->semester ?></option>
+                        <?php } ?>
+                    </select>
                     <?= form_error('semester', '<small class="text-danger">', '</small>'); ?>
                     <div class="invalid-feedback">
                     </div>

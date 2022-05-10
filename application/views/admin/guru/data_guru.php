@@ -51,7 +51,7 @@ $this->load->view('admin/template_admin/sidebar');
 
 
                                         <td>
-                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image; ?>">
+                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_guru; ?>">
                                         </td>
 
                                         <td class="text-center">

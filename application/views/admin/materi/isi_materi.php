@@ -34,8 +34,9 @@ $this->load->view('admin/template_admin/sidebar');
                         </ul>
                         <div class="tab-content" id="myTabContent2">
                             <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
-                                <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
-
+                                <?php if ($file_row == null && $quiz_row == null) { ?>
+                                    <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
+                                <?php } ?>
                                 <div class="row mt-5">
                                     <div class="col-12 col-sm-6 col-lg-12">
                                         <h4>List Video</h4>
@@ -64,7 +65,9 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
-                                <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
+                                <?php if ($video_row == null && $quiz_row == null) { ?>
+                                    <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
+                                <?php } ?>
                                 <div class="row mt-5">
                                     <div class="col-12 col-sm-6 col-lg-12">
                                         <h4>List Modul/File</h4>
@@ -91,7 +94,9 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                                <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Soal ⭢</button>
+                                <?php if ($file_row == null && $video_row == null) { ?>
+                                    <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Soal ⭢</button>
+                                <?php } ?>
                                 <table id="example" class="table align-items-center table-flush mt-5">
                                     <thead class="thead-light">
                                         <tr class="text-center">
@@ -323,7 +328,7 @@ $this->load->view('admin/template_admin/sidebar');
                     <div class="form-group">
                         <label for="file">File</label>
                         <input type="file" class="form-control-file" name="file" id="file" require>
-                        <?php if($this->session->flashdata('fileValidate')) : ?>
+                        <?php if ($this->session->flashdata('fileValidate')) : ?>
                             <small class="text-danger"><?= $this->session->flashdata('fileValidate') ?></small>
                         <?php endif; ?>
                     </div>
@@ -331,7 +336,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <label class="sr-only" for="opsi_a">Opsi A</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                            <div class="input-group-text">A</div>
+                                <div class="input-group-text">A</div>
                             </div>
                             <input type="text" name="opsi_a" class="form-control" id="opsi_a" placeholder="Input Opsi B" required>
                         </div>
@@ -340,7 +345,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <label class="sr-only" for="opsi_b">Opsi B</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                            <div class="input-group-text">B</div>
+                                <div class="input-group-text">B</div>
                             </div>
                             <input type="text" name="opsi_b" class="form-control" id="opsi_b" placeholder="Input Opsi B" required>
                         </div>
@@ -349,7 +354,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <label class="sr-only" for="opsi_c">Opsi C</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                            <div class="input-group-text">C</div>
+                                <div class="input-group-text">C</div>
                             </div>
                             <input type="text" name="opsi_c" class="form-control" id="opsi_c" placeholder="Input Opsi C" require>
                         </div>
@@ -358,7 +363,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <label class="sr-only" for="opsi_d">Opsi D</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                            <div class="input-group-text">D</div>
+                                <div class="input-group-text">D</div>
                             </div>
                             <input type="text" name="opsi_d" class="form-control" id="opsi_d" placeholder="Input Opsi D" required>
                         </div>
@@ -538,15 +543,15 @@ $this->load->view('admin/template_admin/sidebar');
 <?php
 $this->load->view('admin/template_admin/footer');
 ?>
-<?php if($this->session->flashdata('modal')) : ?>
+<?php if ($this->session->flashdata('modal')) : ?>
     <script>
         $('#<?= $this->session->flashdata('modal') ?>').modal('show')
     </script>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('tab')) : ?>
+<?php if ($this->session->flashdata('tab')) : ?>
     <script>
-        $(function(){
+        $(function() {
             $('.tab-pane').removeClass('show active');
             $('.nav-link').removeClass('active');
             $('#<?= $this->session->flashdata('tab') ?>').addClass('active show');

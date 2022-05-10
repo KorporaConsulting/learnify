@@ -30,20 +30,18 @@ $this->load->view('admin/template_admin/sidebar');
 
             <div class="card-body">
                 <form method="POST" action="<?= base_url('admin/insert_enroll') ?>" enctype="multipart/form-data">
-
                     <div class="form-group">
-                        <label>Course</label>
-                        <select class="form-control select2" name="mapel">
-                            <option disabled selected>Pilih Course</option>
-                            <?php foreach ($mapel as $m) { ?>
-                                <option value="<?= $m->id_mapel ?>" <?php echo set_select('mapel', $m->id_mapel); ?>><?= $m->nama_mapel . ' - ' . $m->nama_guru ?></option>
+                        <label class="form-label">Semester</label>
+                        <select class="form-control select2" name="semester">
+                            <option disabled selected>Pilih Semester</option>
+                            <?php foreach ($semester as $m) { ?>
+                                <option value="<?= $m->id_semester ?>" <?php echo set_select('semester', $m->id_semester); ?>><?= $m->semester ?></option>
                             <?php } ?>
                         </select>
-                        <?= form_error('mapel', '<small class="text-danger">', '</small>'); ?>
+                        <?= form_error('semester', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <div class="form-group">
                             <label>User</label>

@@ -18,10 +18,9 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
 
-        $this->load->view('user/index');
+        $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
 
@@ -45,7 +44,15 @@ class User extends CI_Controller
     public function materi($id_materi)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['isi_materi'] = $this->m_siswa->tampil_data_isi_materi($id_materi, $id_user)->row();
+        $data['file_row'] = $this->m_siswa->tampil_data_file($id_materi, $id_user)->row();
+        $data['file'] = $this->m_siswa->tampil_data_file($id_materi, $id_user)->result();
+        $data['video'] = $this->m_siswa->tampil_data_video($id_materi, $id_user)->row();
+        $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_materi, $id_user)->result();
+        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_materi, $id_user)->row();
+        // var_dump($data['file']);
+        // var_dump($data['quiz_row']);
+        // var_dump($data['video']);
+        // die;
         $data['materi'] = $this->m_siswa->get_nama_materi($id_materi)->row();
         $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');

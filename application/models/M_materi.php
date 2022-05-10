@@ -7,16 +7,52 @@ class M_materi extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
-        
+        $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
+
         return  $this->db->get();
     }
+    public function get_mapel($id)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->where('id_mapel', $id);
+        return  $this->db->get();
+    }
+
+
+    public function tampil_data_mapel_where($id)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
+        $this->db->where('mapel.id_mapel', $id);
+        return  $this->db->get();
+    }
+    public function tampil_data_semester()
+    {
+        $this->db->select('*');
+        $this->db->from('semester');
+        return  $this->db->get();
+    }
+
+    public function check_unique_semester($id = '', $semester)
+    {
+        $this->db->where('semester', $semester);
+        if ($id) {
+            $this->db->where_not_in('id_semester', $id);
+        }
+        return $this->db->get('semester')->num_rows();
+    }
+
     public function tampil_sort_mapel()
     {
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
         $this->db->order_by('urutan');
-        
+
         return  $this->db->get();
     }
     public function tampil_data_materi_course($id)
@@ -24,7 +60,9 @@ class M_materi extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('semester', 'semester.id_semester = mapel.id_semester');
         $this->db->where('mapel.id_mapel', $id);
+        $this->db->order_by('materi.urutan', 'asc');
         return  $this->db->get();
     }
     public function tampil_data_materi()
@@ -32,6 +70,17 @@ class M_materi extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('semester', 'semester.id_semester = mapel.id_semester');
+        return  $this->db->get();
+    }
+
+    public function where_sort_data_materi($id)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->where('mapel.id_mapel', $id);
+        $this->db->order_by('materi.urutan');
         return  $this->db->get();
     }
 
@@ -75,6 +124,14 @@ class M_materi extends CI_Model
         $this->db->where('file.id_materi', $id);
         return  $this->db->get();
     }
+    public function update_semester($id)
+    {
+        $this->db->select('*');
+        $this->db->from('semester');
+        $this->db->where('id_semester', $id);
+        return $query = $this->db->get();
+    }
+
     public function update_mapel($id)
     {
         $this->db->select('*');
@@ -83,6 +140,7 @@ class M_materi extends CI_Model
         $this->db->where('mapel.id_mapel', $id);
         return $query = $this->db->get();
     }
+
 
     public function belajar($id = null)
     {
@@ -103,6 +161,12 @@ class M_materi extends CI_Model
     }
 
     public function delete_mapel($where, $table)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
+
+    public function delete_semester($where, $table)
     {
         $this->db->where($where);
         $this->db->delete($table);
@@ -144,11 +208,11 @@ class M_materi extends CI_Model
         $this->db->where($where);
         $this->db->update($table, $data);
     }
-    public function check_enroll($id_mapel, $id_user)
+    public function check_enroll($id_semester, $id_user)
     {
         $this->db->select('*');
         $this->db->from('enroll');
-        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('id_semester', $id_semester);
         $this->db->where('id_user', $id_user);
         $query = $this->db->get();
         return $query->num_rows();

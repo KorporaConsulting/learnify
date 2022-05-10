@@ -188,8 +188,6 @@ class Admin extends CI_Controller
     public function data_guru()
     {
         $this->load->model('m_guru');
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-        $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_guru->tampil_data()->result();
         $this->load->view('admin/guru/data_guru', $data);
@@ -290,7 +288,7 @@ class Admin extends CI_Controller
                 'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'image' => $image,
+                'image_guru' => $image,
                 'jk' => htmlspecialchars($this->input->post('jk', true)),
                 'alamat' => htmlspecialchars($this->input->post('alamat', true)),
             ];
@@ -302,11 +300,165 @@ class Admin extends CI_Controller
         }
     }
 
+    // manajemen Semester
+    public function add_semester()
+    {
+        $this->load->view('admin/semester/add_semester');
+    }
+    public function insert_semester()
+    {
+        $this->form_validation->set_rules('semester', 'Semester', 'required|is_unique[semester.semester]', [
+            'required' => 'Harap isi kolom Nama.',
+            'is_unique' => 'Semester telah ada.'
+        ]);
+        if (empty($_FILES['image']['name'])) {
+            $this->form_validation->set_rules('image', 'Image', 'required', [
+                'required' => 'Harap upload gambar.'
+            ]);
+        }
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('admin/semester/add_semester');
+        } else {
+            $this->load->library('upload');
+            $config['upload_path'] = './assets/img'; //path folder
+            $config['allowed_types'] = 'jpg|png|jpeg'; //type yang dapat diakses bisa anda sesuaikan
+
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('image')) {
+                $gbr = $this->upload->data();
+                //Compress Image
+                $config['image_library'] = 'gd2';
+                $config['source_image'] = './assets/img' . $gbr['file_name'];
+                $config['create_thumb'] = FALSE;
+                $config['maintain_ratio'] = FALSE;
+                $config['quality'] = '50%';
+                $config['width'] = 600;
+                $config['height'] = 600;
+                $config['new_image'] = './assets/img' . $gbr['file_name'];
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+
+                $gambar = $gbr['file_name'];
+                $data = [
+                    'semester' => htmlspecialchars($this->input->post('semester', true)),
+                    'image_semester' => $gambar
+                ];
+                $this->db->insert('semester', $data);
+                $this->session->set_flashdata('success-reg', 'Berhasil!');
+                redirect(base_url('admin/data_semester'));
+            } else {
+                $this->session->set_flashdata('gagal-reg', 'gagal!');
+                redirect(base_url('admin/data_semester'));
+            }
+        }
+    }
+    public function data_semester()
+    {
+        $this->load->model('m_materi');
+
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+
+        $this->load->view('admin/semester/data_semester', $data);
+    }
+    public function update_semester($id)
+    {
+        $this->load->model('m_materi');
+        $data['semester'] = $this->m_materi->update_semester($id)->row();
+        $this->load->view('admin/semester/update_semester', $data);
+    }
+    function check_semester($semester)
+    {
+        if ($this->input->post('id_semester'))
+            $id = $this->input->post('id_semester');
+        else
+            $id = '';
+        $result = $this->m_materi->check_unique_semester($id, $semester);
+        if ($result == 0)
+            $response = true;
+        else {
+            $this->form_validation->set_message('check_semester', 'Semester Telah digunakan');
+            $response = false;
+        }
+        return $response;
+    }
+
+    public function semester_edit()
+    {
+        $id_semester = $this->input->post('id_semester');
+        $this->form_validation->set_rules('semester', 'Semester', 'required|callback_check_semester');
+
+        if ($this->form_validation->run() == false) {
+            $id = $this->input->post('id_semester');
+            $data['semester'] = $this->m_materi->update_semester($id)->row();
+            $this->load->view('admin/semester/update_semester', $data);
+        } else {
+            if (empty($_FILES['image']['name'])) {
+
+                $data = [
+                    'semester' => htmlspecialchars($this->input->post('semester', true)),
+                    'image_semester' =>
+                    htmlspecialchars($this->input->post('image', true)),
+                ];
+                $where = array(
+                    'id_semester' => $id_semester,
+                );
+                $this->m_materi->update_data($where, $data, 'semester');
+                $this->session->set_flashdata('success-edit', 'Berhasil!');
+                redirect(base_url('admin/data_semester'));
+            } else {
+                $config['upload_path'] = './assets/img'; //path folder
+                $config['allowed_types'] = 'jpg|png|jpeg'; //type yang dapat diakses bisa anda sesuaikan
+
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('image')) {
+                    $gbr = $this->upload->data();
+                    //Compress Image
+                    $config['image_library'] = 'gd2';
+                    $config['source_image'] = './assets/img/courses' . $gbr['file_name'];
+                    $config['create_thumb'] = FALSE;
+                    $config['maintain_ratio'] = FALSE;
+                    $config['quality'] = '50%';
+                    $config['width'] = 600;
+                    $config['height'] = 600;
+                    $config['new_image'] = './assets/img/courses' . $gbr['file_name'];
+                    $this->load->library('image_lib', $config);
+                    $this->image_lib->resize();
+
+                    $id_mapel = $this->input->post('id_mapel');
+                    $gambar = $gbr['file_name'];
+                    $data = [
+                        'semester' => htmlspecialchars($this->input->post('semester', true)),
+                        'image_semester' =>
+                        htmlspecialchars($this->input->post('image', true)),
+                    ];
+                    $where = array(
+                        'id_semester' => $id_semester,
+                    );
+                    $this->m_materi->update_data($where, $data, 'semester');
+                    $this->session->set_flashdata('success-edit', 'Berhasil!');
+                    redirect(base_url('admin/data_semester'));
+                } else {
+                    $this->session->set_flashdata('gagal-reg', 'gagal!');
+                    redirect(base_url('admin/update_semester/' . $id_semester));
+                }
+            }
+        }
+    }
+
+    public function delete_semester($id)
+    {
+        $where = array('id_semester' => $id);
+        $this->m_materi->delete_semester($where, 'semester');
+        $this->session->set_flashdata('semester-delete', 'berhasil');
+        redirect('admin/data_semester');
+    }
     //manajemen mapel
     public function add_mapel()
     {
         $this->load->model('m_guru');
         $data['mentor'] = $this->m_guru->tampil_data()->result();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
         $this->load->view('admin/mapel/add_mapel', $data);
     }
 
@@ -361,7 +513,7 @@ class Admin extends CI_Controller
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
-                    'semester' => htmlspecialchars($this->input->post('semester', true)),
+                    'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 ];
                 $this->db->insert('mapel', $data);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -372,6 +524,7 @@ class Admin extends CI_Controller
             }
         }
     }
+
 
     public function data_mapel()
     {
@@ -392,8 +545,6 @@ class Admin extends CI_Controller
 
     public function update_sort_mapel()
     {
-
-
         $this->db->where_in('id_mapel', $this->input->post('data'));
         $this->db->delete('mapel');
 
@@ -405,17 +556,18 @@ class Admin extends CI_Controller
         ]);
     }
 
-    public function sort_materi()
-    {   
+    public function sort_materi($id)
+    {
         $this->load->model('m_materi', 'materi');
 
-        $data['materi'] = $this->materi->tampil_data_materi()->result();
+        $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
 
         $this->load->view('admin/materi/sort_materi', $data);
     }
 
     public function update_sort_materi()
     {
+        $this->db->where_in('id_mapel', $this->input->post('id_mapel'));
         $this->db->where_in('id_materi', $this->input->post('data'));
         $this->db->delete('materi');
 
@@ -432,6 +584,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
         $data['mentor'] = $this->m_guru->tampil_data()->result();
         $data['user'] = $this->m_materi->update_mapel($id)->row();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
         $this->load->view('admin/mapel/update_mapel', $data);
     }
     public function mapel_edit()
@@ -465,7 +618,7 @@ class Admin extends CI_Controller
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
-                    'semester' => htmlspecialchars($this->input->post('semester', true)),
+                    'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 ];
                 $where = array(
                     'id_mapel' => $id_mapel,
@@ -500,7 +653,7 @@ class Admin extends CI_Controller
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
-                        'semester' => htmlspecialchars($this->input->post('semester', true)),
+                        'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                     ];
                     $where = array(
                         'id_mapel' => $id_mapel,
@@ -528,6 +681,7 @@ class Admin extends CI_Controller
     {
         $this->load->model('m_materi');
         $data['user'] = $this->m_materi->tampil_data_materi_course($id)->result();
+        $data['course'] = $this->m_materi->get_mapel($id)->row();
         $data['materi'] = $id;
         $this->load->view('admin/materi/data_materi', $data);
     }
@@ -586,11 +740,16 @@ class Admin extends CI_Controller
         $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
         $this->load->view('admin/materi/add_materi', $data);
     }
+    public function add_materi_course($id)
+    {
+        $data['mapel'] = $this->m_materi->tampil_data_mapel_where($id)->result();
+        $this->load->view('admin/materi/add_materi', $data);
+    }
     public function insert_materi()
     {
         $this->load->model('m_materi');
         $this->form_validation->set_rules('nama_materi', 'Nama', 'required|trim', [
-            'required' => 'Harap isi kolom NAMA.',
+            'required' => 'Harap isi kolom Materi.',
         ]);
         $this->form_validation->set_rules('desk', 'Desk', 'required|trim', [
             'required' => 'Harap isi kolom Deskripsi.',
@@ -615,6 +774,40 @@ class Admin extends CI_Controller
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_materi'));
+        }
+    }
+    public function insert_materi_course()
+    {
+        $id = $this->input->post('id_mapel');
+        $this->load->model('m_materi');
+        $this->form_validation->set_rules('nama_materi', 'Nama', 'required|trim', [
+            'required' => 'Harap isi kolom Materi.',
+        ]);
+        $this->form_validation->set_rules('desk', 'Desk', 'required|trim', [
+            'required' => 'Harap isi kolom Deskripsi.',
+        ]);
+        $this->form_validation->set_rules('mapel', 'Mapel', 'required|trim', [
+            'required' => 'Harap Pilih Mapel.',
+        ]);
+
+
+        if ($this->form_validation->run() == false) {
+            // $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+            // $this->load->view('admin/materi/add_materi', $data);
+            $this->session->set_flashdata('gagal-reg', 'Gagal!');
+            redirect_back();
+        } else {
+
+            $data = [
+                'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
+                'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
+                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+            ];
+
+            $this->db->insert('materi', $data);
+
+            $this->session->set_flashdata('success-reg', 'Berhasil!');
+            redirect(base_url('admin/data_materi_course/' . $id));
         }
     }
     public function update_materi($id)
@@ -652,8 +845,15 @@ class Admin extends CI_Controller
     {
         $data['materi'] = $this->m_materi->where_tampil_materi($id)->row();
         $data['video'] = $this->m_materi->where_tampil_video($id)->result();
+        $data['video_row'] = $this->m_materi->where_tampil_video($id)->row();
         $data['file'] = $this->m_materi->where_tampil_file($id)->result();
+        $data['file_row'] = $this->m_materi->where_tampil_file($id)->row();
         $data['quiz'] = $this->m_materi->where_tampil_quiz($id)->result();
+        $data['quiz_row'] = $this->m_materi->where_tampil_quiz($id)->row();
+        // var_dump($data['quiz_row']);
+        // var_dump($data['file_row']);
+        // var_dump($data['video_row']);
+        // die;
         $this->load->view('admin/materi/isi_materi', $data);
     }
 
@@ -672,6 +872,9 @@ class Admin extends CI_Controller
 
             $this->db->insert('video', $data);
             $this->session->set_flashdata('success-reg', 'Berhasil!');
+            $this->session->set_flashdata('tab', 'home3');
+            $this->session->set_flashdata('nav-link', 'home-tab3');
+
             redirect(base_url('admin/isi_materi/' . $id_materi));
         } else {
             $upload_video = $_FILES['video'];
@@ -726,6 +929,8 @@ class Admin extends CI_Controller
 
             $this->m_materi->update_data_video($where, $data, 'video');
             $this->session->set_flashdata('success-video-edit', 'Berhasil!');
+            $this->session->set_flashdata('tab', 'home3');
+            $this->session->set_flashdata('nav-link', 'home-tab3');
             redirect(base_url('admin/isi_materi/' . $id_materi));
         } else {
             $upload_video = $_FILES['video'];
@@ -755,6 +960,8 @@ class Admin extends CI_Controller
 
             $this->m_materi->update_data_video($where, $data, 'video');
             $this->session->set_flashdata('success-video-edit', 'Berhasil!');
+            $this->session->set_flashdata('success-reg', 'Berhasil!');
+            $this->session->set_flashdata('tab', 'home3');
             redirect(base_url('admin/isi_materi/' . $id_materi));
         }
     }
@@ -763,6 +970,8 @@ class Admin extends CI_Controller
         $where = array('id_video' => $id);
         $this->m_materi->delete_video($where, 'video');
         $this->session->set_flashdata('video-delete', 'berhasil');
+        $this->session->set_flashdata('tab', 'home3');
+        $this->session->set_flashdata('nav-link', 'home-tab3');
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
     public function insert_file()
@@ -775,6 +984,8 @@ class Admin extends CI_Controller
             'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
         ];
         $this->db->insert('file', $data);
+        $this->session->set_flashdata('tab', 'profile3');
+        $this->session->set_flashdata('nav-link', 'profile-tab3');
         $this->session->set_flashdata('success-file', 'Berhasil!');
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
@@ -798,6 +1009,8 @@ class Admin extends CI_Controller
         );
 
         $this->m_materi->update_data_file($where, $data, 'file');
+        $this->session->set_flashdata('tab', 'profile3');
+        $this->session->set_flashdata('nav-link', 'profile-tab3');
         $this->session->set_flashdata('success-file-edit', 'Berhasil!');
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
@@ -807,6 +1020,8 @@ class Admin extends CI_Controller
         $where = array('id_file' => $id);
         $this->m_materi->delete_file($where, 'file');
         $this->session->set_flashdata('file-delete', 'berhasil');
+        $this->session->set_flashdata('tab', 'profile3');
+        $this->session->set_flashdata('nav-link', 'profile-tab3');
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
 
@@ -827,18 +1042,20 @@ class Admin extends CI_Controller
     public function data_enroll()
     {
         $data['user'] = $this->m_enroll->tampil_data_enroll()->result();
+        // var_dump($data['user']);
+        // die;
         $this->load->view('admin/enroll/data_enroll', $data);
     }
     public function add_enroll()
     {
-        $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/enroll/add_enroll', $data);
     }
 
     public function enroll_check()
     {
-        $check_enroll = $this->m_materi->check_enroll($this->input->post('mapel', true), $this->input->post('user', true));
+        $check_enroll = $this->m_materi->check_enroll($this->input->post('semester', true), $this->input->post('user', true));
 
         if ($check_enroll > 0) {
             $this->form_validation->set_message('enroll_check', 'User telah memiliki Course');
@@ -851,20 +1068,20 @@ class Admin extends CI_Controller
 
     public function insert_enroll()
     {
-        $this->form_validation->set_rules('mapel', 'Course', 'required|trim|callback_enroll_check', [
-            'required' => 'Harap isi kolom Course.',
+        $this->form_validation->set_rules('semester', 'Semester', 'required|callback_enroll_check', [
+            'required' => 'Harap isi kolom Semester.'
         ]);
         $this->form_validation->set_rules('user', 'User', 'required|trim', [
             'required' => 'Harap isi kolom User.',
         ]);
 
         if ($this->form_validation->run() == false) {
-            $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+            $data['semester'] = $this->m_materi->tampil_data_semester()->result();
             $data['user'] = $this->m_siswa->tampil_data()->result();
             $this->load->view('admin/enroll/add_enroll', $data);
         } else {
             $data = [
-                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 'id_user' => htmlspecialchars($this->input->post('user', true)),
             ];
             $this->db->insert('enroll', $data);

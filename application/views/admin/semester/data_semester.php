@@ -7,25 +7,11 @@ $this->load->view('admin/template_admin/sidebar');
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <?php if ($this->uri->segment(3) == "") { ?>
-                    <h2 class="card-title" style="color: black;">Management Materi</h2>
-                <?php  } else { ?>
-                    <h2 class="card-title" style="color: black;">Management Materi <?= $course->nama_mapel ?></h2>
-                <?php } ?>
+                <h2 class="card-title" style="color: black;">Management Semester Sales University</h2>
                 <hr>
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
-                <?php if ($this->uri->segment(3) == "") { ?>
-                    <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah
-                        Materi ⭢ </a>
-                <?php  } else { ?>
-                    <a href="<?= base_url('admin/add_materi_course/' . $this->uri->segment(3)) ?>" class="btn btn-success">Tambah
-                        Materi ⭢ </a>
-                    <a href="<?= base_url('admin/sort_materi/' . $this->uri->segment(3)) ?>" class="btn btn-primary">Sort
-                        Materi ⭢ </a>
-                <?php } ?>
-
-
-
+                <a href="<?= base_url('admin/add_semester') ?>" class="btn btn-success">Tambah
+                    Data Semester ⭢ </a>
             </div>
         </div>
         <div class="row">
@@ -36,10 +22,8 @@ $this->load->view('admin/template_admin/sidebar');
                             <thead class="thead-light">
                                 <tr class="text-center">
                                     <th scope="col">No</th>
-                                    <th scope="col">Nama Materi</th>
-                                    <th scope="col">Nama Course</th>
                                     <th scope="col">Semester</th>
-                                    <th scope="col">Isi Materi</th>
+                                    <th scope="col">Gambar</th>
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
@@ -47,7 +31,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <tbody>
                                 <?php
                                 $no = 1;
-                                foreach ($user as $u) {
+                                foreach ($semester as $u) {
                                 ?>
                                     <tr class="text-center">
 
@@ -56,23 +40,17 @@ $this->load->view('admin/template_admin/sidebar');
                                         </th>
 
                                         <td>
-                                            <?php echo $u->nama_materi ?>
-                                        </td>
-
-                                        <td>
-                                            <?php echo $u->nama_mapel ?>
-                                        </td>
-                                        <td>
                                             <?php echo $u->semester ?>
                                         </td>
 
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/isi_materi/' . $u->id_materi); ?>" class="btn btn-success">Edit isi Materi ⭢</a>
+                                        <td>
+                                            <img height="80px" src="<?= base_url() . 'assets/img/' . $u->image_semester; ?>">
                                         </td>
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/update_materi/' . $u->id_materi); ?>" class="btn btn-info">Edit Materi⭢</a>
 
-                                            <a onclick="yourConfirm(<?= $u->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                        <td class="text-center">
+                                            <a href="<?php echo site_url('admin/update_semester/' . $u->id_semester); ?>" class="btn btn-info">Update ⭢</a>
+
+                                            <a onclick="yourConfirm(<?= $u->id_semester ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
 
                                     </tr>
@@ -97,20 +75,8 @@ $this->load->view('admin/template_admin/sidebar');
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Data Materi Berhasil Ditambah!',
+            title: 'Data Semester Berhasil Ditambah!',
             text: 'Selamat data bertambah!',
-            showConfirmButton: false,
-            timer: 2500
-        })
-    </script>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('gagal-reg')) : ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Data Materi gagal Ditambah!',
-            text: 'Silahkan coba kembali!',
             showConfirmButton: false,
             timer: 2500
         })
@@ -121,7 +87,7 @@ $this->load->view('admin/template_admin/sidebar');
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Data Materi Telah Dirubah!',
+            title: 'Data Semester Telah Dirubah!',
             text: 'Selamat data berubah!',
             showConfirmButton: false,
             timer: 2500
@@ -129,11 +95,11 @@ $this->load->view('admin/template_admin/sidebar');
     </script>
 <?php endif; ?>
 
-<?php if ($this->session->flashdata('materi-delete')) : ?>
+<?php if ($this->session->flashdata('semester-delete')) : ?>
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Data Materi Telah Dihapus!',
+            title: 'Data Semester Telah Dihapus!',
             text: 'Selamat data telah Dihapus!',
             showConfirmButton: false,
             timer: 2500
@@ -156,7 +122,7 @@ $this->load->view('admin/template_admin/sidebar');
         }).then((result) => {
             console.log(result)
             if (result.value) {
-                window.location = "<?= base_url('admin/delete_materi/') ?>" + id;
+                window.location = "<?= base_url('admin/delete_semester/') ?>" + id;
             }
         })
     }

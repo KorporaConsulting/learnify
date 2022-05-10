@@ -22,9 +22,9 @@ $this->load->view('admin/template_admin/sidebar');
                             <thead class="thead-light">
                                 <tr class="text-center">
                                     <th scope="col">No</th>
-                                    <th scope="col">Nama Course</th>
                                     <th scope="col">Nama User</th>
                                     <th scope="col">Semester</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
@@ -32,22 +32,23 @@ $this->load->view('admin/template_admin/sidebar');
                             <tbody>
                                 <?php
                                 $no = 1;
+
                                 foreach ($user as $u) {
+                                    // echo json_encode($u);
+                                    // $semester = explode(',', $u->semester);
                                 ?>
                                     <tr class="text-center">
                                         <th scope="row">
                                             <?php echo $no++ ?>
                                         </th>
-
-                                        <td>
-                                            <b><?php echo $u->nama_mapel ?></b>
-                                        </td>
-
                                         <td>
                                             <b><?php echo $u->nama ?> </b>
                                         </td>
                                         <td>
-                                            <?php echo $u->semester ?>
+                                            <b><?php echo $u->semester ?> </b>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-primary">Enrolled</span>
                                         </td>
                                         <td class="text-center">
                                             <a onclick="deleteenroll(<?= $u->id_enroll ?>);" href="javascript:void(0);" class="btn btn-danger">Remove Enroll ✖</a>
@@ -74,7 +75,7 @@ $this->load->view('admin/template_admin/sidebar');
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Data Course Berhasil Ditambah!',
+            title: 'Data Enroll Berhasil Ditambah!',
             text: 'Selamat data bertambah!',
             showConfirmButton: false,
             timer: 2500

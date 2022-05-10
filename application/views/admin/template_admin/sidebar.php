@@ -62,6 +62,10 @@
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-book"></i>
                                 <span>Kursus</span></a>
                             <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/data_semester') ?>">Data Semester</a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_mapel') ?>">Data Course</a>
                                 </li>
                             </ul>
