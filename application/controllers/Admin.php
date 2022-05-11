@@ -913,7 +913,6 @@ class Admin extends CI_Controller
 
     public function video_edit()
     {
-
         $id_materi = $this->input->post('id_materi', true);
         $link = $this->input->post('link', true);
         if (empty($_FILES['video']['name'])) {

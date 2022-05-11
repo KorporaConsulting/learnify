@@ -28,7 +28,13 @@
                     <?php
                     $no = 1;
                     foreach ($materi as $m) { ?>
-                        <a href="<?= base_url('user/materi/' . $m->id_materi) ?>" class="list-group-item list-group-item-action text-center"><?= '<b>' . $m->nama_materi . '</b>' ?><span class="badge badge-primary badge-pill float-right">belum selesai</span></a>
+                        <a href="<?= base_url('user/materi/' . $m->id_materi) ?>" class="list-group-item list-group-item-action text-center"><?= '<b>' . $m->nama_materi . '</b>' ?></a>
+                        <?php if ($m->status == 0) { ?>
+                            <span class="badge badge-warning badge-pill float-right">belum selesai</span>
+                        <?php } elseif ($m->status == 1) { ?>
+                            <span class="badge badge-primary badge-pill float-right">selesai</span>
+                        <?php } ?>
+                        <br>
                     <?php } ?>
                 </div>
             </div>

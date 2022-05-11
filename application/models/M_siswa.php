@@ -29,6 +29,8 @@ class M_siswa extends CI_Model
         $this->db->join('user', 'user.id_user = enroll.id_user');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
         $this->db->where('mapel.id_mapel', $id_mapel);
         $this->db->where('user.id_user', $id_user);
         $this->db->order_by("materi.urutan", "asc");

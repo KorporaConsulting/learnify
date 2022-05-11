@@ -37,6 +37,8 @@ class User extends CI_Controller
         $id_user = $this->session->userdata('id_user');
         $data['materi'] = $this->m_siswa->tampil_data_materi($id_mapel, $id_user)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($id_mapel)->row();
+        // var_dump($data['materi']);
+        // die;
         $this->load->view('user/materi', $data);
         $this->load->view('template/footer');
     }
