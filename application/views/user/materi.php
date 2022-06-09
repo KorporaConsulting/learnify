@@ -21,23 +21,40 @@
 
 <!-- Start Class Card -->
 <div class="container">
+
     <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
         <div class="row" style="color: black; font-family: 'poppins';">
-            <div class="col-md-12 mt-1">
-                <div class="list-group">
-                    <?php
-                    $no = 1;
-                    foreach ($materi as $m) { ?>
-                        <a href="<?= base_url('user/materi/' . $m->id_materi) ?>" class="list-group-item list-group-item-action text-center"><?= '<b>' . $m->nama_materi . '</b>' ?></a>
-                        <?php if ($m->status == 0) { ?>
-                            <span class="badge badge-warning badge-pill float-right">belum selesai</span>
-                        <?php } elseif ($m->status == 1) { ?>
-                            <span class="badge badge-primary badge-pill float-right">selesai</span>
-                        <?php } ?>
-                        <br>
-                    <?php } ?>
+            <?php
+            $no = 1;
+            foreach ($materi as $m) { ?>
+                <div class="col-md-12 mt-1">
+                    <div class="list-group">
+                        <?php
+                        $nama_low = strtolower($m->nama_materi);
+                        $nama_slug = str_replace(" ", "-", $nama_low);
+                        ?>
+                        <a href="<?= base_url('user/materi/' . $nama_slug) ?>">
+                            <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
+                                <div class="row" style="color: black; font-family: 'poppins';">
+                                    <div class="col-md-12 mt-1">
+                                        <h2><?php if ($m->status == 0) { ?>
+                                                <i class="fa fa-circle-thin float-right" style="color:green"></i>
+                                                <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                            <?php } elseif ($m->status == 1) { ?>
+                                                <i class="fa fa-check-circle float-right" title="Selesai" style="color:green"></i>
+                                                <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                            <?php } ?>
+                                        </h2>
+                                        <h1 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
+                                        </h1>
+                                        <p><?= $m->desk_materi ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </div>

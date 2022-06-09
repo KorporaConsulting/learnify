@@ -46,6 +46,22 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="invalid-feedback">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Mulai</label>
+                        <input type="date" class="form-control" name="tgl_mulai">
+                        <?= form_error('tgl_mulai', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal Selesai</label>
+                        <input type="date" class="form-control" name="tgl_selesai">
+                        <?= form_error('tgl_selesai', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="section-title">Gambar Course</div>
                         <div class="custom-file">

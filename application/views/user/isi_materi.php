@@ -1,5 +1,6 @@
  <?php $this->load->view('user/template_user/header'); ?>
 
+
  <!-- Start Greeting Cards -->
 
  <!-- End Greeting Cards -->
@@ -27,7 +28,7 @@
                  <?php
                     if ($file_row->id_file == null && $quiz_row->id_soal == null && $video->id_video == null) { ?>
                      <div class="jumbotron mt-5 mb-5 pt-5 pb-5">
-                         <img src="<?= base_url('assets/') ?>img/sad.svg" class="img-fluid" alt="Responsive image">
+                         <img src="<?= base_url('assets/') ?>img/sad.svg" width="300px" class="img-fluid" alt="Responsive image">
                          <h1 class="display-4">Belum tersedia!</h1>
                          <p class="lead">Mohon maaf materi yang anda akses belum teredia</p>
                          <hr class="my-4">
@@ -38,9 +39,20 @@
                      </div>
                  <?php } elseif ($file_row->id_file == null && $quiz_row->id_soal == null) { ?>
                      <div class=" card-body p-5">
-                         <h4 class="card-title display-5">Video</h4>
+                         <?php
+                            if ($status_materi->status != 1) { ?>
+                             <div class="text-right">
+                                 <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(3)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
+                             </div>
+                         <?php } ?>
+                         <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
                          <hr style="background-color: white;">
-                         <div class="embed-responsive embed-responsive-4by3">
+
+                         <!-- <div class="plyr__video-embed" id="player">
+                             <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1" allowfullscreen allowtransparency allow="autoplay"></iframe>
+                         </div> -->
+
+                         <div class="embed-responsive embed-responsive-16by9 plyr__video-embed" id="player">
                              <iframe class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
                          </div>
                          <div class="text-center mt-2">
@@ -53,6 +65,12 @@
                          <div class="container">
                              <h1 class="display-4">Download Modul</h1>
                              <p class="lead">Silahkan download modul dibawah ini.</p>
+                             <?php
+                                if ($status_materi->status != 1) { ?>
+                                 <div class="text-right">
+                                     <a href="<?= base_url('user/mark/' . $this->uri->segment(3)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
+                                 </div>
+                             <?php } ?>
                          </div>
                      </div>
                      <div class="card-body p-5">
@@ -63,7 +81,7 @@
                                  <div class="col-md-4 mb-4">
                                      <a href="<?php echo $files->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center"><i class="fa fa-download"></i> Modul <?= $files->nama_file ?></a>
                                  </div>
-                             <?php  } ?>
+                             <?php } ?>
                          </div>
                      </div>
 

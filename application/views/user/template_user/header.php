@@ -26,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Scripts -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/popper.js"></script>
@@ -57,9 +58,11 @@
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a>
                             </li>
-                            <li class="nav-item active"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
                             </li>
-                            <li class=" nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/profile') ?>">Profile</a>
+                            </li>
+                            <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
                             </li>
                         </ul>
                     </div>

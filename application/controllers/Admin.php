@@ -508,8 +508,12 @@ class Admin extends CI_Controller
                 $this->image_lib->resize();
 
                 $gambar = $gbr['file_name'];
+                $title = trim(strtolower($this->input->post('nama_mapel', true)));
+                $out = explode(" ", $title);
+                $slug = implode("-", $out);
                 $data = [
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
+                    'slug' => $slug,
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -613,8 +617,12 @@ class Admin extends CI_Controller
 
             if (empty($_FILES['image']['name'])) {
                 $id_mapel = $this->input->post('id_mapel');
+                $title = trim(strtolower($this->input->post('nama_mapel', true)));
+                $out = explode(" ", $title);
+                $slug = implode("-", $out);
                 $data = [
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
+                    'slug' => $slug,
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -648,8 +656,12 @@ class Admin extends CI_Controller
 
                     $id_mapel = $this->input->post('id_mapel');
                     $gambar = $gbr['file_name'];
+                    $title = trim(strtolower($this->input->post('nama_mapel', true)));
+                    $out = explode(" ", $title);
+                    $slug = implode("-", $out);
                     $data = [
                         'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
+                        'slug' => $slug,
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -682,6 +694,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
         $data['user'] = $this->m_materi->tampil_data_materi_course($id)->result();
         $data['course'] = $this->m_materi->get_mapel($id)->row();
+
         $data['materi'] = $id;
         $this->load->view('admin/materi/data_materi', $data);
     }
@@ -735,6 +748,8 @@ class Admin extends CI_Controller
             redirect(base_url('admin/data_materi'));
         }
     }
+
+
     public function add_materi()
     {
         $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
@@ -763,17 +778,35 @@ class Admin extends CI_Controller
             $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
             $this->load->view('admin/materi/add_materi', $data);
         } else {
-
+            $title = trim(strtolower($this->input->post('nama_materi', true)));
+            $out = explode(" ", $title);
+            $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
+                'slug' => $slug,
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
-
             $this->db->insert('materi', $data);
+            $insert_id = $this->db->insert_id();
+            $check_enroll = $this->m_materi->check_table_enroll();
 
-            $this->session->set_flashdata('success-reg', 'Berhasil!');
-            redirect(base_url('admin/data_materi'));
+            if ($check_enroll == 0) {
+                $this->session->set_flashdata('success-reg', 'Berhasil!');
+                redirect(base_url('admin/data_materi'));
+            } else {
+                $id_user = $this->m_materi->get_status_materi()->result();
+                foreach ($id_user as $user) {
+                    $insert[] = array(
+                        "id_materi" => $insert_id,
+                        "id_user" => $user->id_user,
+                        "status" => 0,
+                    );
+                }
+                $this->db->insert_batch('status_materi', $insert);
+                $this->session->set_flashdata('success-reg', 'Berhasil!');
+                redirect(base_url('admin/data_materi'));
+            }
         }
     }
     public function insert_materi_course()
@@ -797,15 +830,36 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('gagal-reg', 'Gagal!');
             redirect_back();
         } else {
-
+            $title = trim(strtolower($this->input->post('nama_materi', true)));
+            $out = explode(" ", $title);
+            $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
+                'slug' => $slug,
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
 
             $this->db->insert('materi', $data);
+            $insert_id = $this->db->insert_id();
+            $check_enroll = $this->m_materi->check_table_enroll();
 
+            if ($check_enroll == 0) {
+                $this->session->set_flashdata('success-reg', 'Berhasil!');
+                redirect(base_url('admin/data_materi'));
+            } else {
+                $id_user = $this->m_materi->get_status_materi()->result();
+                foreach ($id_user as $user) {
+                    $insert[] = array(
+                        "id_materi" => $insert_id,
+                        "id_user" => $user->id_user,
+                        "status" => 0,
+                    );
+                }
+                $this->db->insert_batch('status_materi', $insert);
+                $this->session->set_flashdata('success-reg', 'Berhasil!');
+                redirect(base_url('admin/data_materi'));
+            }
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_materi_course/' . $id));
         }
@@ -820,8 +874,12 @@ class Admin extends CI_Controller
 
     public function edit_materi()
     {
+        $title = trim(strtolower($this->input->post('nama_materi', true)));
+        $out = explode(" ", $title);
+        $slug = implode("-", $out);
         $data = [
             'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
+            'slug' => $slug,
             'desk_materi' => htmlspecialchars($this->input->post('desk_materi', true)),
             'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
         ];
@@ -837,6 +895,10 @@ class Admin extends CI_Controller
     {
         $where = array('id_materi' => $id);
         $this->m_materi->delete_materi($where, 'materi');
+
+        $where = array('id_materi' => $id);
+        $this->m_materi->delete_materi($where, 'status_materi');
+
         $this->session->set_flashdata('materi-delete', 'berhasil');
         redirect('admin/data_materi');
     }
@@ -1084,12 +1146,34 @@ class Admin extends CI_Controller
                 'id_user' => htmlspecialchars($this->input->post('user', true)),
             ];
             $this->db->insert('enroll', $data);
+            $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
+
+            foreach ($get_enroll as $id_materi) {
+                $insert[] = array(
+                    "id_materi" => $id_materi->id_materi,
+                    "id_user" => $this->input->post('user', true),
+                    "status" => 0,
+                );
+            }
+
+            $this->db->insert_batch('status_materi', $insert);
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_enroll'));
         }
     }
     public function delete_enroll($id)
     {
+
+        // $check_enroll = $this->m_materi->check_table_enroll_id_user($id)->row();
+
+        // $id_user = $check_enroll->id_user;
+
+        // $where_status = array(
+        //     'id_user' => $id_user,
+        // );
+        // $this->m_materi->status_materi($where_status, 'status_materi');
+
+
         $where = array('id_enroll' => $id);
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');

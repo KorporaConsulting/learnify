@@ -64,6 +64,7 @@ class Welcome extends CI_Controller
                     'nama' => $user['nama'],
                     'ttl' => $user['ttl'],
                     'jk' => $user['jk'],
+                    'image_user' => $user['image_user'],
                 ];
 
                 $this->session->set_userdata($data);

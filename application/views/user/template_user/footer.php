@@ -1,6 +1,30 @@
 <br>
-
-
+<script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
+<!-- <script src="<?= base_url('assets/') ?>plyr/js/plyr.js"></script> -->
+<script>
+    const player = new Plyr('#player', {
+        title: 'Example Title',
+        clickToPlay: false,
+        controls: [
+            'play-large', // The large play button in the center
+            // 'restart', // Restart playback
+            // 'rewind', // Rewind by the seek time (default 10 seconds)
+            'play', // Play/pause playback
+            // 'fast-forward', // Fast forward by the seek time (default 10 seconds)
+            'progress', // The progress bar and scrubber for playback and buffering
+            // 'current-time', // The current time of playback
+            'duration', // The full duration of the media
+            'mute', // Toggle mute
+            'volume', // Volume control
+            // 'captions', // Toggle captions
+            // 'settings', // Settings menu
+            // 'pip', // Picture-in-picture (currently Safari only)
+            // 'airplay', // Airplay (currently Safari only)
+            // 'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+            'fullscreen',
+        ]
+    });
+</script>
 <!-- Start Animate On Scroll -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="<?= base_url('assets/') ?>js/stellar.js"></script>
@@ -34,4 +58,16 @@
 <script>
     AOS.init();
 </script>
+<script>
+    <?php if ($this->session->flashdata('success-mark')) : ?>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $this->session->flashdata('success-mark'); ?>',
+            text: 'Materi telah selesai',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    <?php endif; ?>
+</script>
+
 <!-- End Animate On Scroll -->

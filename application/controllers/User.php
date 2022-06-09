@@ -28,37 +28,71 @@ class User extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
+
         $this->load->view('user/course', $data);
         $this->load->view('template/footer');
     }
 
-    public function course($id_mapel)
+    public function course($slug)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['materi'] = $this->m_siswa->tampil_data_materi($id_mapel, $id_user)->result();
-        $data['mapel'] = $this->m_siswa->tampil_data_course($id_mapel)->row();
+        $data['materi'] = $this->m_siswa->tampil_data_materi($slug, $id_user)->result();
+        $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
+        // var_dump($data['materi']);
+        // die;
         // var_dump($data['materi']);
         // die;
         $this->load->view('user/materi', $data);
         $this->load->view('template/footer');
     }
 
-    public function materi($id_materi)
+    public function materi($slug)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['file_row'] = $this->m_siswa->tampil_data_file($id_materi, $id_user)->row();
-        $data['file'] = $this->m_siswa->tampil_data_file($id_materi, $id_user)->result();
-        $data['video'] = $this->m_siswa->tampil_data_video($id_materi, $id_user)->row();
-        $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_materi, $id_user)->result();
-        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_materi, $id_user)->row();
-        // var_dump($data['file']);
-        // var_dump($data['quiz_row']);
-        // var_dump($data['video']);
-        // die;
-        $data['materi'] = $this->m_siswa->get_nama_materi($id_materi)->row();
+        $data['file_row'] = $this->m_siswa->tampil_data_file($slug, $id_user)->row();
+        $data['file'] = $this->m_siswa->tampil_data_file($slug, $id_user)->result();
+        $data['video'] = $this->m_siswa->tampil_data_video($slug, $id_user)->row();
+        $data['quiz'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->result();
+        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->row();
+        $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
+
+        $id_materi = $data['materi']->id_materi;
+        $id_user = $this->session->userdata('id_user');
+
+        $data['status_materi'] = $this->m_materi->get_status_materi_user($id_materi, $id_user)->row();
+
+
         $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');
     }
+
+    public function profile()
+    {
+    }
+
+
+    public function mark($id_mapel, $slug)
+    {
+        $check_slug = $this->m_materi->get_materi($slug)->row();
+        $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
+
+        $id_materi = $check_slug->id_materi;
+        $slug_mapel = $slug_mapel->slug;
+        $id_user = $this->session->userdata('id_user');
+
+        $where = [
+            'id_materi' => $id_materi,
+            'id_user' => $id_user
+        ];
+        $data = [
+            'status' => 1
+        ];
+        $this->db->where($where);
+        $this->db->update('status_materi', $data);
+        $this->session->set_flashdata('success-mark', 'berhasil');
+        redirect('user/course/' . $slug_mapel);
+    }
+
 
     public function registration()
     {

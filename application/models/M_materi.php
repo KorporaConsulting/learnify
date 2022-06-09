@@ -18,7 +18,13 @@ class M_materi extends CI_Model
         $this->db->where('id_mapel', $id);
         return  $this->db->get();
     }
-
+    public function get_materi($slug)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('slug', $slug);
+        return  $this->db->get();
+    }
 
     public function tampil_data_mapel_where($id)
     {
@@ -216,5 +222,57 @@ class M_materi extends CI_Model
         $this->db->where('id_user', $id_user);
         $query = $this->db->get();
         return $query->num_rows();
+    }
+    public function get_list_materi($id_semester)
+    {
+        $this->db->select('materi.id_materi');
+        $this->db->from('mapel');
+        $this->db->join('semester', 'semester.id_semester = mapel.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->where('semester.id_semester', $id_semester);
+        return  $this->db->get();
+    }
+    public function get_check_user()
+    {
+        $this->db->select('status_materi.id_user');
+        $this->db->from('status_materi');
+        return  $this->db->get();
+    }
+    public function check_table_enroll()
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    public function get_status_materi()
+    {
+        $this->db->select('id_user');
+        $this->db->from('status_materi');
+        $this->db->group_by('id_user');
+        $query = $this->db->get();
+        return $query;
+    }
+    public function get_status_materi_user($id_materi, $id_user)
+    {
+        $this->db->select('status');
+        $this->db->from('status_materi');
+        $this->db->where('id_materi', $id_materi);
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query;
+    }
+    public function check_table_enroll_id_user($id)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->where('id_enroll', $id);
+        return $query = $this->db->get();
+        // return $query->num_rows();
+    }
+    public function status_materi($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
     }
 }
