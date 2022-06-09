@@ -47,6 +47,8 @@ class User extends CI_Controller
         $id_user = $this->session->userdata('id_user');
         $data['isi_materi'] = $this->m_siswa->tampil_data_isi_materi($id_materi, $id_user)->row();
         $data['materi'] = $this->m_siswa->get_nama_materi($id_materi)->row();
+        // var_dump($data);
+        // die();
         $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');
     }

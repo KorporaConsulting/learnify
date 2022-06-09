@@ -62,15 +62,20 @@
                      <div class="embed-responsive embed-responsive-4by3">
                          <iframe class="embed-responsive-item" <?php if ($isi_materi->video == null) { ?> src="https://www.youtube.com/embed/<?= $isi_materi->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $isi_materi->video) ?>" <?php } ?>></iframe>
                      </div>
-                     <div class="text-center mt-2">
+                     <div class="text-center mt-2 mb-4">
                          <h5><?= $isi_materi->nama_video ?></h5>
                          <p><?= $isi_materi->desk_video ?></p>
                      </div>
+                     <a href="" class="btn btn-success text-right">Lanjut Ke Quiz</a>
                  </div>
              </div>
          </div>
      </div>
  </div>
+ <!-- <div class="container">
+     <div class="row-mt-4">
+     </div>
+ </div> -->
 
  <!-- End Lesson Cards -->
  <?php $this->load->view('user/template_user/footer'); ?>
