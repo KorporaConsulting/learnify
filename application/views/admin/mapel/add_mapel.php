@@ -46,6 +46,22 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="invalid-feedback">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Mulai</label>
+                        <input type="date" class="form-control" name="tgl_mulai">
+                        <?= form_error('tgl_mulai', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal Selesai</label>
+                        <input type="date" class="form-control" name="tgl_selesai">
+                        <?= form_error('tgl_selesai', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="section-title">Gambar Course</div>
                         <div class="custom-file">
@@ -73,32 +89,28 @@ $this->load->view('admin/template_admin/sidebar');
 
                     <div class="form-group">
                         <label class="form-label">Semester</label>
-                        <div class="section-title">Terpilih</div>
-                        <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                                <input type="radio" name="semester" value="1" <?php echo set_radio('semester', '1'); ?> class="selectgroup-input">
-                                <span class="selectgroup-button">1 (SATU)</span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <input type="radio" name="semester" value="2" <?php echo set_radio('semester', '2'); ?> class="selectgroup-input">
-                                <span class="selectgroup-button">2 (DUA)</span>
-                            </label>
-                        </div>
-                        <?= form_error('semester', '<small class="text-danger">', '</small>'); ?>
-                        <div class="invalid-feedback">
-                        </div>
+                        <select class="form-control select2" name="semester">
+                            <option disabled selected>Pilih Semester</option>
+                            <?php foreach ($semester as $m) { ?>
+                                <option value="<?= $m->id_semester ?>" <?php echo set_select('semester', $m->id_semester); ?>><?= $m->semester ?></option>
+                            <?php } ?>
+                        </select>
                     </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success btn-lg btn-block">
-                            Submit ⭢
-                        </button>
+                    <?= form_error('semester', '<small class="text-danger">', '</small>'); ?>
+                    <div class="invalid-feedback">
                     </div>
-
-                </form>
             </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg btn-block">
+                    Submit ⭢
+                </button>
+            </div>
+
+            </form>
         </div>
-    </section>
+</div>
+</section>
 </div>
 </div>
 </div>

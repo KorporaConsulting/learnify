@@ -18,10 +18,9 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
 
-        $this->load->view('user/index');
+        $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
 
@@ -29,29 +28,141 @@ class User extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
+
         $this->load->view('user/course', $data);
         $this->load->view('template/footer');
     }
 
-    public function course($id_mapel)
+    public function course($slug)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['materi'] = $this->m_siswa->tampil_data_materi($id_mapel, $id_user)->result();
-        $data['mapel'] = $this->m_siswa->tampil_data_course($id_mapel)->row();
+        $data['materi'] = $this->m_siswa->tampil_data_materi($slug, $id_user)->result();
+        $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
+        // var_dump($data['materi']);
+        // die;
+        // var_dump($data['materi']);
+        // die;
         $this->load->view('user/materi', $data);
         $this->load->view('template/footer');
     }
 
-    public function materi($id_materi)
+    public function materi($slug)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['isi_materi'] = $this->m_siswa->tampil_data_isi_materi($id_materi, $id_user)->row();
-        $data['materi'] = $this->m_siswa->get_nama_materi($id_materi)->row();
-        // var_dump($data);
-        // die();
+        $data['file_row'] = $this->m_siswa->tampil_data_file($slug, $id_user)->row();
+        $data['file'] = $this->m_siswa->tampil_data_file($slug, $id_user)->result();
+        $data['video'] = $this->m_siswa->tampil_data_video($slug, $id_user)->row();
+        $data['quiz'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->result();
+        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->row();
+        $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
+
+        $id_materi = $data['materi']->id_materi;
+        $id_user = $this->session->userdata('id_user');
+
+        $data['status_materi'] = $this->m_materi->get_status_materi_user($id_materi, $id_user)->row();
+
+
         $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');
     }
+
+    public function quiz ($id_materi)
+    {
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $id_materi,
+            'type' => 'quiz'
+        ];
+
+        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+
+        if(!empty($cek_soal_dikerjakan)){
+            if($cek_soal_dikerjakan->nilai > 70){
+                echo 'lulus';
+                die;
+            }
+        }
+        // header('Content-type: application/json');
+        // echo json_encode($data);
+        // die;
+        $where = [
+            'id_materi' => $id_materi
+        ];
+
+        $data['quiz'] = $this->db->get_where('tb_soal', $where)->result();
+
+        //  header('content-type: application/json');
+
+        // echo json_encode([
+        //     'data' => $data
+        // ]);
+
+        $this->load->view('user/quiz/tampil_quiz', $data);
+    }
+
+    public function save_quiz()
+    {
+        header('Content-type: application/json');
+
+        $total_benar = 0;
+
+        for ($i=0; $i < $this->input->post('total_soal'); $i++) { 
+
+            if($this->input->post('answer_key' . $i) == $this->input->post('answer' . $i)){
+                $total_benar += 1;
+                $is_benar = 1;
+            }else{
+                $is_benar = 0;
+            }
+            $jawaban_batch [] = [
+                'id_user' => $this->session->userdata('id_user'),
+                'id_soal' => $this->input->post('id_soal')[$i],
+                'jawaban' => $this->input->post('answer' . $i),
+                'is_benar' => $is_benar
+            ];
+        }
+
+        $nilai = ($total_benar / $this->input->post('total_soal')) * 100;
+
+        $tb_nilai = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $this->input->post('id_materi'),
+            'type' => 'quiz',
+            'nilai' => $nilai,
+        ];
+        
+        $this->db->insert_batch('jawaban', $jawaban_batch);
+        $this->db->insert('nilai', $tb_nilai);
+        
+    }
+
+    public function profile()
+    {
+    }
+
+
+    public function mark($id_mapel, $slug)
+    {
+        $check_slug = $this->m_materi->get_materi($slug)->row();
+        $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
+
+        $id_materi = $check_slug->id_materi;
+        $slug_mapel = $slug_mapel->slug;
+        $id_user = $this->session->userdata('id_user');
+
+        $where = [
+            'id_materi' => $id_materi,
+            'id_user' => $id_user
+        ];
+        $data = [
+            'status' => 1
+        ];
+        $this->db->where($where);
+        $this->db->update('status_materi', $data);
+        $this->session->set_flashdata('success-mark', 'berhasil');
+        redirect('user/course/' . $slug_mapel);
+    }
+
 
     public function registration()
     {

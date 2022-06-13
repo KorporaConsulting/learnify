@@ -1,0 +1,93 @@
+<?php $this->load->view('user/template_user/header'); ?>
+<?php
+
+$totalQuiz = count($quiz);
+
+?>
+<!-- Start Greetings Card -->
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <?php for ($i = 1; $i <= $totalQuiz; $i++) : ?>
+                        <button class="btn btn-light"><?= $i ?></button>
+                    <?php endfor; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="card shadow bg-white mx-auto p-4 buat-text mb-2" style="width: 100%; border-radius:10px;">
+                <form action="<?= site_url('user/save_quiz') ?>" method="post">
+                    <input type="hidden" name="total_soal" value="<?= $totalQuiz ?>">
+                    <input type="hidden" name="id_materi" value="<?= $this->uri->segment(3); ?>">
+                    <div id="quiz">
+                        <?php foreach ($quiz as $key => $val) : ?>
+                            <input type="hidden" name="id_soal[]" value="<?= $val->id_soal ?>">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <?= $key + 1 ?>. <?= $val->soal ?>
+                                    </h3>
+                                </div>
+                                <div class="panel-body mb-3">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" checked=""> <?= $val->opsi_a ?>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios2" value="opsi_b"> <?= $val->opsi_b ?>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios3" value="opsi_c"> <?= $val->opsi_c ?>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios4" value="opsi_d"> <?= $val->opsi_d ?>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" name="answer_key<?= $key ?>" value="opsi_<?= $val->jawaban ?>">
+                                </div>
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-sm btn-primary prev">Prev</button>
+                                    <button type="button" class="btn btn-sm btn-primary next">Next</button>
+                                    <button type="submit" class="btn btn-sm btn-primary next">Submit</button>
+                                </div>
+                                </p>
+                            </div>
+                        <?php endforeach; ?>
+    
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/selectric@1.13.0/public/jquery.selectric.min.js" integrity="sha256-FEyhf2150teujGP4O8fW1UwKlodqIsIPSXvwvu1VGmE=" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $('#quiz').slick({
+                prevArrow: '.prev',
+                nextArrow: '.next',
+                infinite: false,
+                mobileFirst: true,
+                swipe: false,
+                touchMove: false,
+                useCSS: false,
+                speed: 0
+            });
+
+
+            if (jQuery().selectric) {
+                $(".selectric").selectric({});
+            }
+        })
+    </script>
+    <!-- End Class Card -->
+    <?php $this->load->view('user/template_user/footer'); ?>

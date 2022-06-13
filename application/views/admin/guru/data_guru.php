@@ -51,7 +51,7 @@ $this->load->view('admin/template_admin/sidebar');
 
 
                                         <td>
-                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image; ?>">
+                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_guru; ?>">
                                         </td>
 
                                         <td class="text-center">
@@ -63,14 +63,12 @@ $this->load->view('admin/template_admin/sidebar');
 
                                             <a onclick="yourConfirm(<?= $u->nip ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
-
                                     </tr>
                                 <?php
                                 }
                                 ?>
                             </tbody>
                         </table>
-                        <p class="small font-weight-bold">Pendaftaran guru hanya dapat dilakukan admin dan tidak bisa dilakukan sendiri</p>
                     </div>
                 </div>
             </div>

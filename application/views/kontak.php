@@ -37,7 +37,7 @@
                     </div>
                     <div class="info_item">
                         <i class="lnr lnr-envelope"></i>
-                        <h6><a href="#">apps.learnify@gmail.com</a></h6>
+                        <h6><a href="#">admin@salesuniversity.id</a></h6>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     </div>
                 </div>
