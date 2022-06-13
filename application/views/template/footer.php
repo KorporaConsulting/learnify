@@ -5,7 +5,7 @@
             <p class="col-lg-8 col-md-8 footer-text m-0">
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
-                </script> Sales University Powered by <a style="color: white;" href="https://korporaconsulting.com/">Korpora Consulting</a>
+                </script> Sales University Powered by <a style="color: white;" href="https://pastiprestasi.com/">Pasti Prestasi</a>
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
                 <a href="https://www.facebook.com/syaaauqi"><i class="fa fa-facebook"></i></a>

@@ -21,7 +21,7 @@ class M_siswa extends CI_Model
         return  $this->db->get();
     }
 
-    public function tampil_data_materi($slug, $id_user)
+    public function tampil_data_materi($slug)
     {
         $this->db->select('*');
         $this->db->from('enroll');
@@ -32,7 +32,8 @@ class M_siswa extends CI_Model
         $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
         // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
         $this->db->where('mapel.slug', $slug);
-        $this->db->where('user.id_user', $id_user);
+        $this->db->where('status_materi.id_user',  $this->session->userdata('id_user'));
+        $this->db->group_by("materi.id_materi");
         $this->db->order_by("materi.urutan", "asc");
         return  $this->db->get();
     }
@@ -109,6 +110,14 @@ class M_siswa extends CI_Model
         return  $this->db->get();
     }
 
+    public function get_profile($id)
+    {
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->where('id_user', $id);
+        return  $this->db->get();
+    }
+
     public function detail_siswa($id = null)
     {
         $query = $this->db->get_where('user', array('id_user' => $id))->row();
@@ -130,15 +139,5 @@ class M_siswa extends CI_Model
     {
         $this->db->where($where);
         $this->db->update($table, $data);
-    }
-
-    public function get_list_materi($id_semester)
-    {
-        $this->db->select('materi.nama_materi');
-        $this->db->from('mapel');
-        $this->db->join('semester', 'semester.id_semester = mapel.id_semester', 'left');
-        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
-        $this->db->where('semester.id_semester', $id_semester);
-        return  $this->db->get();
     }
 }

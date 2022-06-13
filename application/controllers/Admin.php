@@ -112,6 +112,24 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/detail_siswa', $data);
     }
 
+    public function progres_siswa($id, $slug)
+    {
+        $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
+        $data['progres'] = $this->m_materi->tampil_data_materi_admin($slug, $id)->result();
+        // var_dump($data['progres']);
+        // die;
+        $this->load->view('admin/progres/progres_materi', $data);
+    }
+
+    public function progres_course_siswa($id)
+    {
+        $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
+        $data['progres'] = $this->m_materi->tampil_data_course_admin($id)->result();
+        // var_dump($data['progres']);
+        // die;
+        $this->load->view('admin/progres/progres_course', $data);
+    }
+
     public function update_siswa($id)
     {
         $this->load->model('m_siswa');

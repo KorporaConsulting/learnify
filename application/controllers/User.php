@@ -9,7 +9,8 @@ class User extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('m_siswa');
         $this->load->model('m_materi');
-
+        $this->load->helper(array('form', 'url'));
+        $this->load->library('image_lib');
         if (!$this->session->userdata('id_user')) {
             $this->session->set_flashdata('not-login', 'Gagal!');
             redirect('welcome');
@@ -35,10 +36,10 @@ class User extends CI_Controller
 
     public function course($slug)
     {
-        $id_user = $this->session->userdata('id_user');
-        $data['materi'] = $this->m_siswa->tampil_data_materi($slug, $id_user)->result();
+
+        $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
-        // var_dump($data['materi']);
+        // var_dump($this->session->userdata('id_user'));
         // die;
         // var_dump($data['materi']);
         // die;
@@ -68,6 +69,102 @@ class User extends CI_Controller
 
     public function profile()
     {
+        $id_user = $this->session->userdata('id_user');
+        $data['profile'] = $this->m_siswa->get_profile($id_user)->row();
+
+        $this->load->view('user/profile', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function image_profile()
+    {
+        $config['upload_path']          = './assets/profile_picture/';
+        $config['allowed_types']        = 'jpeg|jpg|png';
+        $config['max_size']             = 2000;
+        // $config['max_width']            = 1024;
+        // $config['max_height']           = 768;
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('image_user')) {
+            $this->session->set_flashdata('error-profile', $this->upload->display_errors());
+            redirect('user/profile');
+        } else {
+            $image_data =   $this->upload->data();
+
+            $configer =  array(
+                'image_library'   => 'gd2',
+                'source_image'    =>  $image_data,
+                'maintain_ratio'  =>  TRUE,
+                'width'           =>  250,
+                'height'          =>  250,
+            );
+            $this->image_lib->clear();
+            $this->image_lib->initialize($configer);
+            $this->image_lib->resize();
+            $gambar = $image_data['file_name'];
+
+            $where = [
+                'id_user' => $this->session->userdata('id_user')
+            ];
+            $data = [
+                'image_user' => $gambar
+            ];
+
+            $this->db->where($where);
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('success-profile', 'berhasil mengubah image profile');
+            redirect('user/profile');
+        }
+    }
+
+    public function update_profile()
+    {
+        if ($this->input->post('password_baru') != "") {
+            $this->form_validation->set_rules(
+                'password_baru',
+                'Password'
+            );
+            $this->form_validation->set_rules('conf_password', 'Password', 'required|trim|matches[password_baru]', [
+                'matches' => 'Password tidak sama!',
+            ]);
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error-password', 'Gagal');
+                $this->profile();
+            } else {
+                $where = [
+                    'id_user' => $this->session->userdata('id_user')
+                ];
+                $data = [
+                    'nama' => $this->input->post('nama'),
+                    'email' => $this->input->post('email'),
+                    'password' => password_hash($this->input->post('password_baru'), PASSWORD_DEFAULT),
+                    'no_telp' => $this->input->post('no_telp'),
+                    'jk' => $this->input->post('jk'),
+                    'ttl' => $this->input->post('ttl'),
+                    'alamat' => $this->input->post('alamat'),
+                ];
+                $this->db->where($where);
+                $this->db->update('user', $data);
+                $this->session->set_flashdata('success-password', 'berhasil');
+                redirect('user/profile');
+            }
+        } else {
+            $where = [
+                'id_user' => $this->session->userdata('id_user')
+            ];
+            $data = [
+                'nama' => $this->input->post('nama'),
+                'email' => $this->input->post('email'),
+                'no_telp' => $this->input->post('no_telp'),
+                'jk' => $this->input->post('jk'),
+                'ttl' => $this->input->post('ttl'),
+                'alamat' => $this->input->post('alamat'),
+            ];
+            $this->db->where($where);
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('success-password', 'berhasil');
+            redirect('user/profile');
+        }
     }
 
 

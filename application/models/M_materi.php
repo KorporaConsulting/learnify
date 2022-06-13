@@ -18,6 +18,8 @@ class M_materi extends CI_Model
         $this->db->where('id_mapel', $id);
         return  $this->db->get();
     }
+
+
     public function get_materi($slug)
     {
         $this->db->select('*');
@@ -274,5 +276,68 @@ class M_materi extends CI_Model
     {
         $this->db->where($where);
         $this->db->delete($table);
+    }
+    public function tampil_data_materi_admin($slug, $id_user)
+    {
+        $this->db->select('* ,COUNT(status_materi.status) AS materi_status');
+        $this->db->from('mapel');
+        // $this->db->from('enroll');
+        // $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        // $this->db->join('user', 'user.id_user = enroll.id_user');
+        // $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
+        $this->db->where('status_materi.id_user', $id_user);
+        $this->db->where('mapel.slug', $slug);
+        $this->db->group_by("materi.id_materi");
+        $this->db->order_by("materi.urutan", "asc");
+        return  $this->db->get();
+    }
+    public function tampil_data_course_admin($id_user)
+    {
+        $this->db->select('status_materi.id_user,mapel.nama_mapel,mapel.slug, count(status_materi.status) as jumlah, SUM(status_materi.status = 1 ) AS done');
+        // $this->db->select('user.id_user,mapel.nama_mapel,mapel.slug, COUNT(IF(status_materi.status = 1, 1, null)) as done, COUNT(status) as jumlah');
+        $this->db->from('mapel');
+        // $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi');
+        // $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        // $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
+        $this->db->where('status_materi.id_user', $id_user);
+        // $this->db->group_by("materi.id_materi");
+        $this->db->group_by("mapel.nama_mapel");
+        $this->db->order_by("mapel.urutan", "asc");
+
+        return  $this->db->get();
+    }
+    public function get_row_all_status($id_user)
+    {
+        $this->db->select('COUNT(status_materi.status) AS materi_status');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
+        $this->db->where('user.id_user', $id_user);
+        $this->db->order_by("materi.urutan", "asc");
+        return  $this->db->get();
+    }
+    public function get_row_status_done($id_user)
+    {
+        $this->db->select('COUNT(IF(status_materi.status = 1, status, NULL)) as done_status,');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
+        $this->db->where('user.id_user', $id_user);
+        $this->db->order_by("materi.urutan", "asc");
+        return  $this->db->get();
     }
 }

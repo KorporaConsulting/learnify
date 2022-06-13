@@ -7,11 +7,11 @@ $this->load->view('admin/template_admin/sidebar');
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title" style="color: black;">Management Data Siswa Sales University</h2>
+                <h2 class="card-title" style="color: black;">Progress <?= $nama_siswa->nama ?></h2>
                 <hr>
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
-                <a href="<?= base_url('admin/add_siswa') ?>" class="btn btn-success">Tambah
-                    Data Siswa ⭢ </a>
+                <!-- <a href="<?= base_url('admin/add_siswa') ?>" class="btn btn-success">Tambah
+                    Data Siswa ⭢ </a> -->
             </div>
         </div>
         <div class="row">
@@ -21,46 +21,44 @@ $this->load->view('admin/template_admin/sidebar');
                         <table id="example" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
-                                    <th scope="col">NIS</th>
-                                    <th scope="col">Nama Siswa</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Gambar</th>
-                                    <!-- <th scope="col">Akun Aktif *</th> -->
-                                    <th scope="col">Detail</th>
-                                    <th scope="col">Option</th>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama Course</th>
+                                    <th scope="col">Nama Materi</th>
+                                    <th scope="col">Status</th>
+                                    <!-- <th scope="col">Option</th> -->
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <?php
-
-                                foreach ($user as $u) {
+                                $no = 1;
+                                foreach ($progres as $u) {
                                 ?>
                                     <tr class="text-center">
 
                                         <th scope="row">
-                                            <?php echo $u->nis ?>
+                                            <?= $no++ ?>
                                         </th>
 
                                         <td>
-                                            <?php echo $u->nama ?>
+                                            <?php echo $u->nama_mapel ?>
                                         </td>
 
                                         <td>
-                                            <?php echo $u->email ?>
+                                            <?php echo $u->nama_materi ?>
                                         </td>
 
                                         <td>
-                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_user; ?>">
+                                            <?php if ($u->status == 0) { ?>
+                                                <span class="badge badge-warning">Belum Selesai</span>
+                                            <?php } else { ?>
+                                                <span class="badge badge-primary">Selesai</span>
+                                            <?php } ?>
                                         </td>
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/detail_siswa/' . $u->id_user); ?>" class="btn btn-success">Detail User ⭢</a>
-                                            <a href="<?php echo site_url('admin/progres_course_siswa/' . $u->id_user); ?>" class="btn btn-primary">Progress User ⭢</a>
-                                        </td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_siswa/' . $u->id_user); ?>" class="btn btn-info">Update ⭢</a>
                                             <a onclick="yourConfirm(<?= $u->id_user ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                        </td>
+                                        </td> -->
 
                                     </tr>
                                 <?php
