@@ -340,4 +340,33 @@ class M_materi extends CI_Model
         $this->db->order_by("materi.urutan", "asc");
         return  $this->db->get();
     }
+
+    public function tampil_data_quiz()
+    {
+        $this->db->select('*');
+        $this->db->from('nilai');
+        $this->db->join('materi', 'materi.id_materi = nilai.id_materi');
+        $this->db->join('mapel', 'mapel.id_mapel = materi.id_mapel');
+        $this->db->join('user', 'user.id_user = nilai.id_user');
+        $this->db->where('nilai.nilai >= 70');
+        $this->db->order_by("user.nama", "desc");
+        return  $this->db->get();
+    }
+    public function histori_nilai($id_materi, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('nilai');
+        $this->db->join('materi', 'materi.id_materi = nilai.id_materi');
+        $this->db->where('nilai.id_materi', $id_materi);
+        $this->db->where('nilai.id_user', $id_user);
+        return $this->db->get();
+    }
+
+    public function get_user($id_user)
+    {
+        $this->db->select('nama');
+        $this->db->from('user');
+        $this->db->where('id_user', $id_user);
+        return $this->db->get();
+    }
 }

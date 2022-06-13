@@ -126,13 +126,28 @@ class User extends CI_Controller
 
         $nilai = ($total_benar / $this->input->post('total_soal')) * 100;
 
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $this->input->post('id_materi'),
+            'type' => 'quiz'
+        ];
+
+        $cek_soal_dikerjakan = $this->db->select('nilai')->where($where)->get('nilai')->num_rows();
+
+        if (!empty($cek_soal_dikerjakan)) {
+            if ($cek_soal_dikerjakan >= 2) {
+                if ($nilai >= 70) {
+                    $nilai = 70;
+                }
+            }
+        }
+
         $tb_nilai = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $this->input->post('id_materi'),
             'type' => 'quiz',
             'nilai' => $nilai,
         ];
-
         $this->db->insert_batch('jawaban', $jawaban_batch);
         // $id = $this->db->insert_id();
         $this->db->insert('nilai', $tb_nilai);
@@ -150,7 +165,7 @@ class User extends CI_Controller
 
         $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
         if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan->nilai > 70) {
+            if ($cek_soal_dikerjakan->nilai >= 70) {
                 $data['is_lulus'] = 1;
                 $this->mark_quiz($id);
             }
@@ -273,9 +288,13 @@ class User extends CI_Controller
 
         $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
         if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan->nilai > 70) {
+            if ($cek_soal_dikerjakan->nilai >= 70) {
                 $data = [
                     'status' => 1
+                ];
+            } else {
+                $data = [
+                    'status' => 0
                 ];
             }
         }

@@ -74,6 +74,10 @@
                                 </li>
                             </ul>
                             <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/data_quiz') ?>">Test Attemp</a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_enroll') ?>">Enroll User</a>
                                 </li>
                             </ul>

@@ -1302,4 +1302,23 @@ class Admin extends CI_Controller
 
         redirect('admin/isi_materi/' . $this->input->post('id_materi'));
     }
+
+
+    public function data_quiz()
+    {
+        $data['quiz'] = $this->m_materi->tampil_data_quiz()->result();
+        $this->load->view('admin/quiz/data_quiz', $data);
+    }
+
+    public function histori_quiz($id_materi, $id_user, $id_mapel)
+    {
+
+        $data['quiz'] = $this->m_materi->histori_nilai($id_materi, $id_user)->result();
+        $data['nama_user'] = $this->m_materi->get_user($id_user)->row();
+        $data['mapel'] = $this->m_materi->get_mapel($id_mapel)->row();
+        // var_dump($data['quiz']);
+        // die;
+
+        $this->load->view('admin/quiz/detail_quiz', $data);
+    }
 }

@@ -6,9 +6,15 @@
 ?>
 <!-- Start Greetings Card -->
 <div class="container">
-    <h4><?= $materi->nama_materi ?></h4>
-    <div class="row mt-5 pt-5">
-
+    <div class="row pt-5 px-5">
+        <h4><?= $materi->nama_materi ?></h4>
+        <div class="col-md-12 pt-2">
+            <div class="alert alert-warning" role="alert">
+                <strong>Jika anda tidak lulus lebih dari 2 kali maka nilai maksimal yang dapat Anda peroleh adalah 70</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
         <div class="col-md-12">
             <div class="card shadow bg-white mx-auto p-4 buat-text mb-2" style="width: 100%; border-radius:10px;">
                 <div class="card-header">
@@ -29,10 +35,10 @@
                                 <td><?= $hi->nama_materi ?></td>
                                 <td><?= $hi->nilai ?></td>
                                 <?php
-                                if ($hi->nilai <= 70) { ?>
+                                if ($hi->nilai < 70) { ?>
                                     <td><span class="badge badge-danger badge-lg">Tidak Lulus</span></td>
                                 <?php } else { ?>
-                                    <td><span class="badge badge-primary badge-lg">Lulus</span></td>
+                                    <td><span class="badge badge-success badge-lg">Lulus</span></td>
                                 <?php }
                                 ?>
                             </tr>
@@ -40,12 +46,12 @@
                         ?>
                     </tbody>
                 </table>
-                <?php
-                if (!isset($is_lulus)) { ?>
-                    <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">Kerjakan Quiz</a>
-                <?php  }
-                ?>
             </div>
+            <?php
+            if (!isset($is_lulus)) { ?>
+                <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">Ulangi Test</a>
+            <?php  }
+            ?>
         </div>
 
     </div>
