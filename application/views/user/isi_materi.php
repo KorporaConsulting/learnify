@@ -148,9 +148,16 @@
                  <?php } ?>
 
              </div>
+             <div>
+                 <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">quiz</a>
+             </div>
          </div>
      </div>
  </div>
+ <!-- <div class="container">
+     <div class="row-mt-4">
+     </div>
+ </div> -->
 
  <!-- End Lesson Cards -->
  <?php $this->load->view('user/template_user/footer'); ?>

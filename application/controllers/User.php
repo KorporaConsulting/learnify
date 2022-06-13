@@ -67,6 +67,76 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function quiz ($id_materi)
+    {
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $id_materi,
+            'type' => 'quiz'
+        ];
+
+        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+
+        if(!empty($cek_soal_dikerjakan)){
+            if($cek_soal_dikerjakan->nilai > 70){
+                echo 'lulus';
+                die;
+            }
+        }
+        // header('Content-type: application/json');
+        // echo json_encode($data);
+        // die;
+        $where = [
+            'id_materi' => $id_materi
+        ];
+
+        $data['quiz'] = $this->db->get_where('tb_soal', $where)->result();
+
+        //  header('content-type: application/json');
+
+        // echo json_encode([
+        //     'data' => $data
+        // ]);
+
+        $this->load->view('user/quiz/tampil_quiz', $data);
+    }
+
+    public function save_quiz()
+    {
+        header('Content-type: application/json');
+
+        $total_benar = 0;
+
+        for ($i=0; $i < $this->input->post('total_soal'); $i++) { 
+
+            if($this->input->post('answer_key' . $i) == $this->input->post('answer' . $i)){
+                $total_benar += 1;
+                $is_benar = 1;
+            }else{
+                $is_benar = 0;
+            }
+            $jawaban_batch [] = [
+                'id_user' => $this->session->userdata('id_user'),
+                'id_soal' => $this->input->post('id_soal')[$i],
+                'jawaban' => $this->input->post('answer' . $i),
+                'is_benar' => $is_benar
+            ];
+        }
+
+        $nilai = ($total_benar / $this->input->post('total_soal')) * 100;
+
+        $tb_nilai = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $this->input->post('id_materi'),
+            'type' => 'quiz',
+            'nilai' => $nilai,
+        ];
+        
+        $this->db->insert_batch('jawaban', $jawaban_batch);
+        $this->db->insert('nilai', $tb_nilai);
+        
+    }
+
     public function profile()
     {
         $id_user = $this->session->userdata('id_user');
