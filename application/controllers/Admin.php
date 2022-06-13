@@ -166,8 +166,6 @@ class Admin extends CI_Controller
         ]);
 
 
-
-
         if ($this->form_validation->run() == false) {
             $this->load->view('admin/siswa/update_siswa');
         } else {

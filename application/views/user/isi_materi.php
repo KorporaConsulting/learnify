@@ -85,8 +85,10 @@
                          </div>
                      </div>
 
-                 <?php } elseif ($video->id_video == null && $file_row->id_file == null) { ?>
-                     <div class="card-body p-5">
+                 <?php } elseif ($video->id_video == null && $file_row->id_file == null) {
+                        redirect('user/quiz/' . $materi->id_materi)
+                    ?>
+                     <!-- <div class="card-body p-5">
                          <h4 class="card-title display-5">Test</h4>
                          <hr style="background-color: white;">
                      </div>
@@ -96,45 +98,8 @@
                                  <div class="col-md-12 mt-1">
                                      <div class="card-body p-5">
                                          <div class="col-md-12 column">
-                                             <p class="lead">Completo al 40%</p>
-                                             <div class="progress">
-                                                 <div class="progress-bar" role="progressbar" style="width: 40%;">
-                                                     <span class="sr-only">Completo al 40%</span>
-                                                 </div>
-                                             </div>
-                                             <div class="panel panel-primary">
-                                                 <div class="panel-heading">
-                                                     <h3 class="panel-title">
-                                                         Domanda
-                                                     </h3>
-                                                 </div>
-                                                 <div class="panel-body">
-                                                     <div class="radio">
-                                                         <label>
-                                                             <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked=""> Questa è la risposta uno. Fossi in te, la lascerei perdere
-                                                         </label>
-                                                     </div>
-                                                     <div class="radio">
-                                                         <label>
-                                                             <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> Forse la due si avvicina... ma non ci giurerei
-                                                         </label>
-                                                     </div>
-                                                     <div class="radio">
-                                                         <label>
-                                                             <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3"> Opzione tre — da' retta, è questa
-                                                         </label>
-                                                     </div>
-                                                     <div class="radio">
-                                                         <label>
-                                                             <input type="radio" name="optionsRadios" id="optionsRadios4" value="option4"> Sulla risposta quattro non ci metterei la mano sul fuoco...
-                                                         </label>
-                                                     </div>
-
-                                                 </div>
-                                                 <div class="panel-footer">
-                                                     <a href="#" class="btn btn-primary " role="button">Conferma</a>
-                                                     <a href="#" class="btn btn-default disabled" role="button">Avanti</a>
-                                                 </div>
+                                             <div>
+                                                 <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">Mulai Quiz</a>
                                              </div>
                                              <div class="col-md-1 column">
                                              </div>
@@ -143,14 +108,12 @@
                                  </div>
                              </div>
                          </div>
-                     </div>
+                     </div> -->
 
                  <?php } ?>
 
              </div>
-             <div>
-                 <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">quiz</a>
-             </div>
+
          </div>
      </div>
  </div>

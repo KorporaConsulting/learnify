@@ -67,7 +67,7 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function quiz ($id_materi)
+    public function quiz($id_materi)
     {
         $where = [
             'id_user' => $this->session->userdata('id_user'),
@@ -76,13 +76,13 @@ class User extends CI_Controller
         ];
 
         $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
-
-        if(!empty($cek_soal_dikerjakan)){
-            if($cek_soal_dikerjakan->nilai > 70){
-                echo 'lulus';
-                die;
+        if (!empty($cek_soal_dikerjakan)) {
+            if ($cek_soal_dikerjakan->nilai > 70) {
+                // $data['is_lulus'] = 1;
+                redirect('user/hasil_quiz/' . $id_materi);
             }
         }
+
         // header('Content-type: application/json');
         // echo json_encode($data);
         // die;
@@ -91,6 +91,7 @@ class User extends CI_Controller
         ];
 
         $data['quiz'] = $this->db->get_where('tb_soal', $where)->result();
+        $data['materi'] = $this->db->get_where('materi', $where)->row();
 
         //  header('content-type: application/json');
 
@@ -107,15 +108,15 @@ class User extends CI_Controller
 
         $total_benar = 0;
 
-        for ($i=0; $i < $this->input->post('total_soal'); $i++) { 
+        for ($i = 0; $i < $this->input->post('total_soal'); $i++) {
 
-            if($this->input->post('answer_key' . $i) == $this->input->post('answer' . $i)){
+            if ($this->input->post('answer_key' . $i) == $this->input->post('answer' . $i)) {
                 $total_benar += 1;
                 $is_benar = 1;
-            }else{
+            } else {
                 $is_benar = 0;
             }
-            $jawaban_batch [] = [
+            $jawaban_batch[] = [
                 'id_user' => $this->session->userdata('id_user'),
                 'id_soal' => $this->input->post('id_soal')[$i],
                 'jawaban' => $this->input->post('answer' . $i),
@@ -131,10 +132,35 @@ class User extends CI_Controller
             'type' => 'quiz',
             'nilai' => $nilai,
         ];
-        
+
         $this->db->insert_batch('jawaban', $jawaban_batch);
+        // $id = $this->db->insert_id();
         $this->db->insert('nilai', $tb_nilai);
-        
+
+        redirect('user/hasil_quiz/' . $this->input->post('id_materi'));
+    }
+
+    public function hasil_quiz($id)
+    {
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $id,
+            'type' => 'quiz'
+        ];
+
+        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+        if (!empty($cek_soal_dikerjakan)) {
+            if ($cek_soal_dikerjakan->nilai > 70) {
+                $data['is_lulus'] = 1;
+                $this->mark_quiz($id);
+            }
+        }
+        $data['materi'] = $this->db->get_where('materi', ['id_materi' => $id])->row();
+        $data['histori'] = $this->m_siswa->histori_nilai($id)->result();
+        // var_dump($data['histori']);
+        // die;
+
+        $this->load->view('user/quiz/hasil', $data);
     }
 
     public function profile()
@@ -237,6 +263,30 @@ class User extends CI_Controller
         }
     }
 
+    public function mark_quiz($id)
+    {
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_materi' => $id,
+            'type' => 'quiz'
+        ];
+
+        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+        if (!empty($cek_soal_dikerjakan)) {
+            if ($cek_soal_dikerjakan->nilai > 70) {
+                $data = [
+                    'status' => 1
+                ];
+            }
+        }
+        $where = [
+            'id_materi' => $id,
+            'id_user' => $this->session->userdata('id_user')
+        ];
+
+        $this->db->where($where);
+        $this->db->update('status_materi', $data);
+    }
 
     public function mark($id_mapel, $slug)
     {
@@ -247,13 +297,17 @@ class User extends CI_Controller
         $slug_mapel = $slug_mapel->slug;
         $id_user = $this->session->userdata('id_user');
 
+
+
         $where = [
             'id_materi' => $id_materi,
             'id_user' => $id_user
         ];
+
         $data = [
             'status' => 1
         ];
+
         $this->db->where($where);
         $this->db->update('status_materi', $data);
         $this->session->set_flashdata('success-mark', 'berhasil');

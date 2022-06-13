@@ -140,4 +140,13 @@ class M_siswa extends CI_Model
         $this->db->where($where);
         $this->db->update($table, $data);
     }
+    public function histori_nilai($id)
+    {
+        $this->db->select('*');
+        $this->db->from('nilai');
+        $this->db->join('materi', 'materi.id_materi = nilai.id_materi');
+        $this->db->where('nilai.id_materi', $id);
+        $this->db->where('nilai.id_user', $this->session->userdata('id_user'));
+        return $this->db->get();
+    }
 }

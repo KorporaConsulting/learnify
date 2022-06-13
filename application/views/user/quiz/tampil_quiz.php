@@ -6,8 +6,10 @@ $totalQuiz = count($quiz);
 ?>
 <!-- Start Greetings Card -->
 <div class="container">
-    <div class="row">
-        <div class="col-4">
+    <h4><?= $materi->nama_materi ?></h4>
+    <div class="row mt-5 pt-5">
+
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <?php for ($i = 1; $i <= $totalQuiz; $i++) : ?>
@@ -17,7 +19,7 @@ $totalQuiz = count($quiz);
             </div>
         </div>
 
-        <div class="col-8">
+        <div class="col-md-8">
             <div class="card shadow bg-white mx-auto p-4 buat-text mb-2" style="width: 100%; border-radius:10px;">
                 <form action="<?= site_url('user/save_quiz') ?>" method="post">
                     <input type="hidden" name="total_soal" value="<?= $totalQuiz ?>">
@@ -34,7 +36,7 @@ $totalQuiz = count($quiz);
                                 <div class="panel-body mb-3">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" checked=""> <?= $val->opsi_a ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" required> <?= $val->opsi_a ?>
                                         </label>
                                     </div>
                                     <div class="radio">
@@ -55,14 +57,20 @@ $totalQuiz = count($quiz);
                                     <input type="hidden" name="answer_key<?= $key ?>" value="opsi_<?= $val->jawaban ?>">
                                 </div>
                                 <div class="panel-footer">
-                                    <button type="button" class="btn btn-sm btn-primary prev">Prev</button>
-                                    <button type="button" class="btn btn-sm btn-primary next">Next</button>
-                                    <button type="submit" class="btn btn-sm btn-primary next">Submit</button>
+                                    <?php if ($totalQuiz == $key + 1) { ?>
+                                        <button type="button" class="btn btn-sm btn-warning prev">Prev</button>
+                                        <button type="submit" class="btn btn-sm btn-primary next float-right">Submit</button>
+                                    <?php } elseif ($key == 0) { ?>
+                                        <button type="button" class="btn btn-sm btn-primary next">Next</button>
+                                    <?php } else { ?>
+                                        <button type="button" class="btn btn-sm btn-warning prev">Prev</button>
+                                        <button type="button" class="btn btn-sm btn-primary next">Next</button>
+                                    <?php  } ?>
                                 </div>
                                 </p>
                             </div>
                         <?php endforeach; ?>
-    
+
                     </div>
                 </form>
             </div>
@@ -82,8 +90,6 @@ $totalQuiz = count($quiz);
                 useCSS: false,
                 speed: 0
             });
-
-
             if (jQuery().selectric) {
                 $(".selectric").selectric({});
             }
