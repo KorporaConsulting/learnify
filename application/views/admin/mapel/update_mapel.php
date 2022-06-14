@@ -107,7 +107,6 @@ $this->load->view('admin/template_admin/sidebar');
                     <div class="invalid-feedback">
                     </div>
                 </div>
-
                 <input type="submit" value="Update ⭢" class="btn btn-success btn-block">
             </div>
         </form>

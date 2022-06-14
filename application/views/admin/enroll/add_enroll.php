@@ -82,6 +82,17 @@ $this->load->view('admin/template_admin/sidebar');
         })
     </script>
 <?php endif; ?>
+<?php if ($this->session->flashdata('error-enroll')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Tidak Ada Course pada Semester tersebut',
+            text: 'Silahkan coba lagi!',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    </script>
+<?php endif; ?>
 
 <?php
 $this->load->view('admin/template_admin/footer');

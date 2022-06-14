@@ -52,7 +52,7 @@ $this->load->view('admin/template_admin/sidebar');
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="<?php echo site_url('admin/progres_siswa/' . $u->id_user . '/' . $u->slug); ?>" class="btn btn-primary">Detail ⭢</a>
+                                            <a href="<?php echo site_url('admin/progres_siswa/' . $u->id_user . '/' . $u->slug_mapel); ?>" class="btn btn-primary">Detail ⭢</a>
                                         </td>
                                     </tr>
                                 <?php

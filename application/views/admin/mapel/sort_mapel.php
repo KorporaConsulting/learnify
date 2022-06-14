@@ -16,7 +16,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <div class="card-body">
                                 <ol id="list" class="list-group mb-4">
                                     <?php foreach ($user as $u) : ?>
-                                        <li style="cursor: pointer;" data-id="<?= $u->id_mapel ?>" data-nama_mapel="<?= $u->nama_mapel ?>" data-slug="<?= $u->slug ?>" data-desk="<?= $u->desk ?>" data-tgl_mulai="<?= $u->tgl_mulai ?>" data-tgl_selesai="<?= $u->tgl_selesai ?>" data-image="<?= $u->image ?>" data-id_guru="<?= $u->id_guru ?>" data-semester="<?= $u->id_semester ?>" class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> | Semester <?= $u->semester ?></li>
+                                        <li style="cursor: pointer;" data-id="<?= $u->id_mapel ?>" data-nama_mapel="<?= $u->nama_mapel ?>" data-slug_mapel="<?= $u->slug_mapel ?>" data-desk="<?= $u->desk ?>" data-tgl_mulai="<?= $u->tgl_mulai ?>" data-tgl_selesai="<?= $u->tgl_selesai ?>" data-image="<?= $u->image ?>" data-id_guru="<?= $u->id_guru ?>" data-semester="<?= $u->id_semester ?>" class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> | Semester <?= $u->semester ?></li>
                                     <?php endforeach; ?>
                                 </ol>
                                 <button id="sort" type="button" class="btn btn-primary">Update Urutan</button>
@@ -49,7 +49,7 @@ $this->load->view('admin/template_admin/footer');
             data_key.push({
                 id_mapel: $('.list-group-item')[i].dataset.id,
                 nama_mapel: $('.list-group-item')[i].dataset.nama_mapel,
-                slug: $('.list-group-item')[i].dataset.slug,
+                slug_mapel: $('.list-group-item')[i].dataset.slug_mapel,
                 desk: $('.list-group-item')[i].dataset.desk,
                 id_guru: $('.list-group-item')[i].dataset.id_guru,
                 tgl_mulai: $('.list-group-item')[i].dataset.tgl_mulai,

@@ -42,7 +42,7 @@
                          <?php
                             if ($status_materi->status != 1) { ?>
                              <div class="text-right">
-                                 <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(3)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
+                                 <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
                              </div>
                          <?php } ?>
                          <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
@@ -68,7 +68,7 @@
                              <?php
                                 if ($status_materi->status != 1) { ?>
                                  <div class="text-right">
-                                     <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(3)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
+                                     <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
                                  </div>
                              <?php } ?>
                          </div>

@@ -47,14 +47,14 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function materi($slug)
+    public function materi($id_mapel, $slug)
     {
         $id_user = $this->session->userdata('id_user');
-        $data['file_row'] = $this->m_siswa->tampil_data_file($slug, $id_user)->row();
-        $data['file'] = $this->m_siswa->tampil_data_file($slug, $id_user)->result();
-        $data['video'] = $this->m_siswa->tampil_data_video($slug, $id_user)->row();
-        $data['quiz'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->result();
-        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($slug, $id_user)->row();
+        $data['file_row'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->row();
+        $data['file'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->result();
+        $data['video'] = $this->m_siswa->tampil_data_video($id_mapel, $slug, $id_user)->row();
+        $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
+        $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->row();
         $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
 
         $id_materi = $data['materi']->id_materi;
@@ -312,11 +312,11 @@ class User extends CI_Controller
         $check_slug = $this->m_materi->get_materi($slug)->row();
         $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
 
+
+
         $id_materi = $check_slug->id_materi;
-        $slug_mapel = $slug_mapel->slug;
+        $slug_mapel = $slug_mapel->slug_mapel;
         $id_user = $this->session->userdata('id_user');
-
-
 
         $where = [
             'id_materi' => $id_materi,

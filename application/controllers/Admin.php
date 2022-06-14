@@ -112,10 +112,10 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/detail_siswa', $data);
     }
 
-    public function progres_siswa($id, $slug)
+    public function progres_siswa($id)
     {
         $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
-        $data['progres'] = $this->m_materi->tampil_data_materi_admin($slug, $id)->result();
+        $data['progres'] = $this->m_materi->tampil_data_materi_admin($id)->result();
         // var_dump($data['progres']);
         // die;
         $this->load->view('admin/progres/progres_materi', $data);
@@ -529,7 +529,7 @@ class Admin extends CI_Controller
                 $slug = implode("-", $out);
                 $data = [
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                    'slug' => $slug,
+                    'slug_mapel' => uniqid($slug),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -638,7 +638,7 @@ class Admin extends CI_Controller
                 $slug = implode("-", $out);
                 $data = [
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                    'slug' => $slug,
+                    'slug_mapel' => uniqid($slug),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -677,7 +677,7 @@ class Admin extends CI_Controller
                     $slug = implode("-", $out);
                     $data = [
                         'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                        'slug' => $slug,
+                        'slug_mapel' => uniqid($slug),
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
@@ -724,47 +724,6 @@ class Admin extends CI_Controller
         $this->load->view('admin/materi/data_materi', $data);
     }
 
-    public function tambah_materi()
-    {
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|trim|min_length[1]', [
-            'required' => 'Harap isi kolom deskripsi.',
-            'min_length' => 'deskripsi terlalu pendek.',
-        ]);
-        if ($this->form_validation->run() == false) {
-            $this->load->view('admin/add_materi');
-        } else {
-            $upload_video = $_FILES['video'];
-
-            if ($upload_video) {
-                $config['allowed_types'] = 'mp4|mkv|mov';
-                $config['max_size'] = '0';
-                $config['upload_path'] = './assets/materi_video';
-
-                $this->load->library('upload', $config);
-
-                if ($this->upload->do_upload('video')) {
-                    $video = $this->upload->data('file_name');
-                } else {
-                    $this->upload->display_errors();
-                }
-            }
-            $data = [
-                'nama_guru' => htmlspecialchars($this->input->post('nama_guru', true)),
-                'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                'video' => $video,
-                'deskripsi' => htmlspecialchars($this->input->post('deskripsi', true)),
-                'kelas' => htmlspecialchars($this->input->post('kelas', true)),
-            ];
-
-            $this->db->insert(
-                'materi',
-                $data
-            );
-            $this->session->set_flashdata('success-reg', 'Berhasil!');
-            redirect(base_url('admin/data_materi'));
-        }
-    }
-
 
     public function add_materi()
     {
@@ -779,7 +738,7 @@ class Admin extends CI_Controller
     public function insert_materi()
     {
         $this->load->model('m_materi');
-        $this->form_validation->set_rules('nama_materi', 'Nama', 'required|trim', [
+        $this->form_validation->set_rules('nama_materi', 'Nama', 'required', [
             'required' => 'Harap isi kolom Materi.',
         ]);
         $this->form_validation->set_rules('desk', 'Desk', 'required|trim', [
@@ -799,7 +758,7 @@ class Admin extends CI_Controller
             $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug' => $slug,
+                'slug_materi' => uniqid($slug),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
@@ -812,11 +771,13 @@ class Admin extends CI_Controller
                 redirect(base_url('admin/data_materi'));
             } else {
                 $id_user = $this->m_materi->get_status_materi()->result();
+                $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
                 foreach ($id_user as $user) {
                     $insert[] = array(
                         "id_materi" => $insert_id,
                         "id_user" => $user->id_user,
                         "status" => 0,
+                        "semester_status_materi" => $semester->id_semester
                     );
                 }
                 $this->db->insert_batch('status_materi', $insert);
@@ -829,7 +790,7 @@ class Admin extends CI_Controller
     {
         $id = $this->input->post('id_mapel');
         $this->load->model('m_materi');
-        $this->form_validation->set_rules('nama_materi', 'Nama', 'required|trim', [
+        $this->form_validation->set_rules('nama_materi', 'Nama', 'required', [
             'required' => 'Harap isi kolom Materi.',
         ]);
         $this->form_validation->set_rules('desk', 'Desk', 'required|trim', [
@@ -851,11 +812,10 @@ class Admin extends CI_Controller
             $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug' => $slug,
+                'slug_materi' => uniqid($slug),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
-
             $this->db->insert('materi', $data);
             $insert_id = $this->db->insert_id();
             $check_enroll = $this->m_materi->check_table_enroll();
@@ -865,11 +825,14 @@ class Admin extends CI_Controller
                 redirect(base_url('admin/data_materi'));
             } else {
                 $id_user = $this->m_materi->get_status_materi()->result();
+                $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
+
                 foreach ($id_user as $user) {
                     $insert[] = array(
                         "id_materi" => $insert_id,
                         "id_user" => $user->id_user,
                         "status" => 0,
+                        "semester_status_materi" => $semester->id_semester
                     );
                 }
                 $this->db->insert_batch('status_materi', $insert);
@@ -890,22 +853,34 @@ class Admin extends CI_Controller
 
     public function edit_materi()
     {
-        $title = trim(strtolower($this->input->post('nama_materi', true)));
-        $out = explode(" ", $title);
-        $slug = implode("-", $out);
-        $data = [
-            'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-            'slug' => $slug,
-            'desk_materi' => htmlspecialchars($this->input->post('desk_materi', true)),
-            'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
-        ];
-        $where = array(
-            'id_materi' => $this->input->post('id_materi'),
-        );
 
-        $this->m_materi->update_data_materi($where, $data, 'materi');
-        $this->session->set_flashdata('success-edit', 'berhasil');
-        redirect('admin/data_materi');
+        $this->form_validation->set_rules('nama_materi', 'Nama', 'required', [
+            'required' => 'Harap isi kolom Materi.',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            // $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
+            // $this->load->view('admin/materi/add_materi', $data);
+            $this->session->set_flashdata('gagal-reg', 'Gagal!');
+            redirect_back();
+        } else {
+            $title = trim(strtolower($this->input->post('nama_materi', true)));
+            $out = explode(" ", $title);
+            $slug = implode("-", $out);
+            $data = [
+                'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
+                'slug_materi' => uniqid($slug),
+                'desk_materi' => htmlspecialchars($this->input->post('desk_materi', true)),
+                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+            ];
+            $where = array(
+                'id_materi' => $this->input->post('id_materi'),
+            );
+
+            $this->m_materi->update_data_materi($where, $data, 'materi');
+            $this->session->set_flashdata('success-edit', 'berhasil');
+            redirect('admin/data_materi');
+        }
     }
     public function delete_materi($id)
     {
@@ -937,7 +912,6 @@ class Admin extends CI_Controller
 
     public function upload_video()
     {
-
         $id_materi = $this->input->post('id_materi', true);
         if (empty($_FILES['video']['name'])) {
             $link = $this->input->post('link', true);
@@ -1164,15 +1138,26 @@ class Admin extends CI_Controller
             $this->db->insert('enroll', $data);
             $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
 
-            foreach ($get_enroll as $id_materi) {
-                $insert[] = array(
-                    "id_materi" => $id_materi->id_materi,
-                    "id_user" => $this->input->post('user', true),
-                    "status" => 0,
-                );
+            $check_user = $this->m_materi->check_user($this->input->post('user'), $this->input->post('semester'));
+            if ($check_user == 0) {
+                if ($get_enroll != "") {
+                    foreach ($get_enroll as $id_materi) {
+                        $insert[] = array(
+                            "id_materi" => $id_materi->id_materi,
+                            "id_user" => $this->input->post('user', true),
+                            "status" => 0,
+                            "semester_status_materi" => $this->input->post('semester', true),
+                        );
+                    }
+                    $this->db->insert_batch('status_materi', $insert);
+                } else {
+                    $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+                    $data['user'] = $this->m_siswa->tampil_data()->result();
+                    $this->load->view('admin/enroll/add_enroll', $data);
+                    $this->session->set_flashdata('error-enroll', 'Gagal!');
+                    redirect(base_url('admin/add_enroll', $data));
+                }
             }
-
-            $this->db->insert_batch('status_materi', $insert);
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_enroll'));
         }
@@ -1187,9 +1172,9 @@ class Admin extends CI_Controller
         // $where_status = array(
         //     'id_user' => $id_user,
         // );
+        // if ($id_user == null) {
+        // }
         // $this->m_materi->status_materi($where_status, 'status_materi');
-
-
         $where = array('id_enroll' => $id);
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');

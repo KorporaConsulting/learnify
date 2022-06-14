@@ -17,13 +17,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 <ol id="list" class="list-group mb-4">
                                     <?php foreach ($materi as $u) : ?>
                                         <input type="hidden" name="id_mapel" id="id_mapel" value="<?= $u->id_mapel ?>">
-                                        <?php
-                                        $title = trim(strtolower($u->nama_materi));
-                                        $out = explode(" ", $title);
-                                        $slug = implode("-", $out);
-                                        ?>
-
-                                        <li style="cursor: pointer;" data-id_materi="<?= $u->id_materi ?>" data-id_mapel="<?= $u->id_mapel ?>" data-nama_materi="<?= $u->nama_materi ?>" data-slug="<?= $slug ?>" data-desk_materi=" <?= $u->desk_materi ?>" data-created_at="<?= $u->created_at ?>" class="list-group-item"><?= $u->nama_materi ?></li>
+                                        <li style="cursor: pointer;" data-id_materi="<?= $u->id_materi ?>" data-id_mapel="<?= $u->id_mapel ?>" data-nama_materi="<?= $u->nama_materi ?>" data-slug_materi="<?= $u->slug_materi ?>" data-desk_materi=" <?= $u->desk_materi ?>" data-created_at="<?= $u->created_at ?>" class="list-group-item"><?= $u->nama_materi ?></li>
                                     <?php endforeach; ?>
                                 </ol>
                                 <button id="sort" type="button" class="btn btn-primary">Update Urutan</button>
@@ -56,7 +50,7 @@ $this->load->view('admin/template_admin/footer');
                 id_mapel: $('.list-group-item')[i].dataset.id_mapel,
                 id_materi: $('.list-group-item')[i].dataset.id_materi,
                 nama_materi: $('.list-group-item')[i].dataset.nama_materi,
-                slug: $('.list-group-item')[i].dataset.slug,
+                slug_materi: $('.list-group-item')[i].dataset.slug_materi,
                 deks_materi: $('.list-group-item')[i].dataset.deks_materi,
                 urutan: i + 1,
                 created_at: $('.list-group-item')[i].dataset.created_at,

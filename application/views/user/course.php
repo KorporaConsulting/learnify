@@ -31,11 +31,8 @@
                     <?php
                     foreach ($course as $c) {
                     ?>
-                        <?php
-                        $nama_low = strtolower($c->nama_mapel);
-                        $nama_slug = str_replace(" ", "-", $nama_low);
-                        ?>
-                        <a href="<?= base_url('user/course/' . $nama_slug) ?>">
+
+                        <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
                             <div class="col-sm-4 mb-2 d-flex justify-content-center" data-aos-duration="1900" data-aos="fade-left">
                                 <div class="card mt-4 text-center">
                                     <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
@@ -44,7 +41,7 @@
                                         <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="<?= base_url('user/course/' . $nama_slug) ?>">Pilih Course</a>
+                                        <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">Pilih Course</a>
                                     </div>
                                 </div>
                             </div>

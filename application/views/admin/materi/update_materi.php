@@ -18,7 +18,7 @@ $this->load->view('admin/template_admin/sidebar');
             <input type="hidden" name="id_materi" value="<?= $user->id_materi ?>">
             <div id="detail" class="col-md-12 bg-white p-3" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                 <h1 class="font-weight-bold card-title text-center" style="color: black;">Update Data
-                    Courses
+                    Materi
                 </h1>
                 <p class="text-center" style="line-height: 5px;">Silahkan isi data dibawah untuk update
                     data, dan upload file diatas untuk update data profile picture</p>

@@ -29,11 +29,7 @@
             foreach ($materi as $m) { ?>
                 <div class="col-md-12 mt-1">
                     <div class="list-group">
-                        <?php
-                        $nama_low = strtolower($m->nama_materi);
-                        $nama_slug = str_replace(" ", "-", $nama_low);
-                        ?>
-                        <a href="<?= base_url('user/materi/' . $nama_slug) ?>">
+                        <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi) ?>">
                             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
                                 <div class="row" style="color: black; font-family: 'poppins';">
                                     <div class="col-md-12 mt-1">
