@@ -13,7 +13,7 @@ $totalQuiz = count($quiz);
             <div class="card">
                 <div class="card-body">
                     <?php for ($i = 1; $i <= $totalQuiz; $i++) : ?>
-                        <button class="btn btn-light"><?= $i ?></button>
+                        <button class="btn btn-light toSlide" id="<?= $i - 1  ?>"><?= $i ?></button>
                     <?php endfor; ?>
                 </div>
             </div>
@@ -27,7 +27,7 @@ $totalQuiz = count($quiz);
                     <div id="quiz">
                         <?php foreach ($quiz as $key => $val) : ?>
                             <input type="hidden" name="id_soal[]" value="<?= $val->id_soal ?>">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-primary" id="<?= $val->id_soal ?>">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         <?= $key + 1 ?>. <?= $val->soal ?>
@@ -36,22 +36,22 @@ $totalQuiz = count($quiz);
                                 <div class="panel-body mb-3">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" required> <?= $val->opsi_a ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" required data-slide="<?= $key ?>"> <?= $val->opsi_a ?>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios2" value="opsi_b"> <?= $val->opsi_b ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios2" value="opsi_b" data-slide="<?= $key ?>"> <?= $val->opsi_b ?>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios3" value="opsi_c"> <?= $val->opsi_c ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios3" value="opsi_c" data-slide="<?= $key ?>"> <?= $val->opsi_c ?>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios4" value="opsi_d"> <?= $val->opsi_d ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios4" value="opsi_d" data-slide="<?= $key ?>"> <?= $val->opsi_d ?>
                                         </label>
                                     </div>
                                     <input type="hidden" name="answer_key<?= $key ?>" value="opsi_<?= $val->jawaban ?>">
@@ -90,9 +90,15 @@ $totalQuiz = count($quiz);
                 useCSS: false,
                 speed: 0
             });
-            if (jQuery().selectric) {
-                $(".selectric").selectric({});
-            }
+            $('.toSlide').click(function() {
+                const index = $(this).attr('id');
+                $('#quiz').slick('slickGoTo', index)
+            });
+            $('input[type=radio]').change(function() {
+                const button = $(this).data('slide');
+                $('#'+button).removeClass('btn-light');
+                $('#'+button).addClass('btn-success');
+            })
         })
     </script>
     <!-- End Class Card -->
