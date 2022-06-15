@@ -36,7 +36,7 @@ $totalQuiz = count($quiz);
                                 <div class="panel-body mb-3">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" required data-slide="<?= $key ?>"> <?= $val->opsi_a ?>
+                                            <input type="radio" name="answer<?= $key ?>" id="optionsRadios1" value="opsi_a" data-slide="<?= $key ?>"> <?= $val->opsi_a ?>
                                         </label>
                                     </div>
                                     <div class="radio">
@@ -59,7 +59,7 @@ $totalQuiz = count($quiz);
                                 <div class="panel-footer">
                                     <?php if ($totalQuiz == $key + 1) { ?>
                                         <button type="button" class="btn btn-sm btn-warning prev">Prev</button>
-                                        <button type="submit" class="btn btn-sm btn-primary next float-right">Submit</button>
+                                        <button type="button" class="btn btn-sm btn-primary next float-right" onclick="confirm()">Submit</button>
                                     <?php } elseif ($key == 0) { ?>
                                         <button type="button" class="btn btn-sm btn-primary next">Next</button>
                                     <?php } else { ?>
@@ -90,16 +90,37 @@ $totalQuiz = count($quiz);
                 useCSS: false,
                 speed: 0
             });
+
             $('.toSlide').click(function() {
                 const index = $(this).attr('id');
                 $('#quiz').slick('slickGoTo', index)
             });
+
             $('input[type=radio]').change(function() {
                 const button = $(this).data('slide');
-                $('#'+button).removeClass('btn-light');
-                $('#'+button).addClass('btn-success');
+                $('#' + button).removeClass('btn-light');
+                $('#' + button).addClass('btn-success');
             })
+
+
         })
+
+        const confirm = function() {
+            Swal.fire({
+                title: 'apa anda yakin?',
+                text: "Cek kembali jawaban anda sebelum submit",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('form').submit();
+                }
+            })
+        }
     </script>
     <!-- End Class Card -->
     <?php $this->load->view('user/template_user/footer'); ?>
