@@ -55,7 +55,17 @@ class User extends CI_Controller
         $data['video'] = $this->m_siswa->tampil_data_video($id_mapel, $slug, $id_user)->row();
         $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
         $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->row();
+        $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
+        $data['tugas_row'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->row();
+        $data['tugas'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->result();
         $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
+
+        $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
+        $id_materi = $this->m_siswa->get_materi($slug)->row();
+        $id_materi = $id_materi->id_materi;
+        $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
+        // var_dump($data['list_tugas_row']);
+        // die;
 
         $id_materi = $data['materi']->id_materi;
         $id_user = $this->session->userdata('id_user');
@@ -191,7 +201,7 @@ class User extends CI_Controller
     {
         $config['upload_path']          = './assets/profile_picture/';
         $config['allowed_types']        = 'jpeg|jpg|png';
-        $config['max_size']             = 2000;
+        $config['max_size']             = 1000;
         // $config['max_width']            = 1024;
         // $config['max_height']           = 768;
         $this->load->library('upload', $config);
@@ -201,7 +211,6 @@ class User extends CI_Controller
             redirect('user/profile');
         } else {
             $image_data =   $this->upload->data();
-
             $configer =  array(
                 'image_library'   => 'gd2',
                 'source_image'    =>  $image_data,
@@ -311,9 +320,6 @@ class User extends CI_Controller
     {
         $check_slug = $this->m_materi->get_materi($slug)->row();
         $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
-
-
-
         $id_materi = $check_slug->id_materi;
         $slug_mapel = $slug_mapel->slug_mapel;
         $id_user = $this->session->userdata('id_user');
@@ -338,6 +344,49 @@ class User extends CI_Controller
     {
         $this->load->view('user/registration');
         $this->load->view('template/footer');
+    }
+
+    public function upload_tugas()
+    {
+
+        $id_materi = $this->m_siswa->get_materi($this->input->post('slug_materi'))->row();
+        $id_mapel = $this->input->post('id_mapel');
+        $slug_materi = $this->input->post('slug_materi');
+
+        $config['upload_path']          = './assets/tugas/';
+        $config['allowed_types']        = '*';
+        $config['max_size']             = 2000;
+        $config['encrypt_name']         = true;
+        $this->load->library('upload', $config);
+        $files_batch = [];
+
+        $jumlah_berkas = count($_FILES['tugas']['name']);
+        for ($i = 0; $i < $jumlah_berkas; $i++) {
+            if (!empty($_FILES['tugas']['name'][$i])) {
+                $_FILES['file']['name'] = $_FILES['tugas']['name'][$i];
+                $_FILES['file']['type'] = $_FILES['tugas']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['tugas']['tmp_name'][$i];
+                $_FILES['file']['error'] = $_FILES['tugas']['error'][$i];
+                $_FILES['file']['size'] = $_FILES['tugas']['size'][$i];
+                if ($this->upload->do_upload('file')) {
+                    $uploadData = $this->upload->data();
+                    $data['nama_file'] = $uploadData['file_name'];
+                    $data['desk_file'] = $this->input->post('notes');
+                    $data['link'] = base_url('assets/tugas/' . $uploadData['file_name']);
+                    $data['id_materi'] = $id_materi->id_materi;
+                    $data['is_tugas'] = 1;
+                    $data['id_user'] = $this->session->userdata('id_user');
+                    // $this->db->insert('file', $data);
+                    array_push($files_batch, $data);
+                } else {
+                    $this->session->set_flashdata('error-tugas', $this->upload->display_errors());
+                    redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+                }
+            }
+        }
+        $this->db->insert_batch('file', $files_batch);
+        $this->session->set_flashdata('sukses-tugas', 'Berhasil');
+        redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
     }
 
     public function registration_act()

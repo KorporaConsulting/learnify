@@ -903,9 +903,12 @@ class Admin extends CI_Controller
         $data['file_row'] = $this->m_materi->where_tampil_file($id)->row();
         $data['quiz'] = $this->m_materi->where_tampil_quiz($id)->result();
         $data['quiz_row'] = $this->m_materi->where_tampil_quiz($id)->row();
+        $data['tugas'] = $this->m_materi->where_tampil_tugas($id)->result();
+        $data['tugas_row'] = $this->m_materi->where_tampil_tugas($id)->row();
         // var_dump($data['quiz_row']);
         // var_dump($data['file_row']);
         // var_dump($data['video_row']);
+        // var_dump($data['tugas']);
         // die;
         $this->load->view('admin/materi/isi_materi', $data);
     }
@@ -1033,6 +1036,7 @@ class Admin extends CI_Controller
             'desk_file' => htmlspecialchars($this->input->post('desk_file', true)),
             'link' => htmlspecialchars($this->input->post('link', true)),
             'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            'is_tugas' => 0,
         ];
         $this->db->insert('file', $data);
         $this->session->set_flashdata('tab', 'profile3');
@@ -1054,6 +1058,7 @@ class Admin extends CI_Controller
             'desk_file' => htmlspecialchars($this->input->post('desk_file', true)),
             'link' => htmlspecialchars($this->input->post('link', true)),
             'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            'is_tugas' => 0,
         ];
         $where = array(
             'id_file' => $this->input->post('id_file'),
@@ -1305,5 +1310,21 @@ class Admin extends CI_Controller
         // die;
 
         $this->load->view('admin/quiz/detail_quiz', $data);
+    }
+    public function insert_tugas()
+    {
+        $id_materi = $this->input->post('id_materi', true);
+        $data = [
+            'nama_tugas' => htmlspecialchars($this->input->post('nama_tugas', true)),
+            'desk_tugas' => htmlspecialchars($this->input->post('desk_tugas', true)),
+            'due_date' => htmlspecialchars($this->input->post('due_date', true)),
+            'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            'approve' => 0,
+        ];
+        $this->db->insert('tugas', $data);
+        $this->session->set_flashdata('tab', 'contact4');
+        $this->session->set_flashdata('nav-link', 'contact-tab4');
+        $this->session->set_flashdata('success-file', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
     }
 }

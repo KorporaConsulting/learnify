@@ -97,6 +97,40 @@ class M_siswa extends CI_Model
         $this->db->where('user.id_user', $id_user);
         return  $this->db->get();
     }
+    public function tampil_data_tugas($id_mapel, $slug, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('tugas', 'tugas.id_materi = materi.id_materi', 'left');
+        $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
+        $this->db->where('mapel.id_mapel', $id_mapel);
+        $this->db->where('materi.slug_materi', $slug);
+        $this->db->where('user.id_user', $id_user);
+        return  $this->db->get();
+    }
+
+    public function tampil_data_list_tugas($id_mapel, $slug, $id_user)
+    {
+        $this->db->select('file.id_user,file.id_file, file.nama_file, desk_file, file.link, file.id_materi, tugas.approve');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        // $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('tugas', 'tugas.id_materi = materi.id_materi', 'left');
+        $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
+        $this->db->where('file.is_tugas', 1);
+        $this->db->where('mapel.id_mapel', $id_mapel);
+        $this->db->where('materi.slug_materi', $slug);
+        $this->db->where('file.id_user', $id_user);
+        $this->db->group_by('file.id_file');
+        return  $this->db->get();
+    }
+
 
     public function tampil_data_course($slug)
     {
@@ -151,5 +185,21 @@ class M_siswa extends CI_Model
         $this->db->where('nilai.id_materi', $id);
         $this->db->where('nilai.id_user', $this->session->userdata('id_user'));
         return $this->db->get();
+    }
+    public function get_materi($slug)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('slug_materi', $slug);
+        return  $this->db->get();
+    }
+    public function check_tugas_user($id_materi, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('file');
+        $this->db->where('id_materi', $id_materi);
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }

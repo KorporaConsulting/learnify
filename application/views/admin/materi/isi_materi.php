@@ -31,10 +31,13 @@ $this->load->view('admin/template_admin/sidebar');
                             <li class="nav-item">
                                 <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Quiz</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab4" data-toggle="tab" href="#contact4" role="tab" aria-controls="contact" aria-selected="false">Tugas</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="myTabContent2">
                             <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
-                                <?php if ($file_row == null && $quiz_row == null) { ?>
+                                <?php if ($file_row == null && $quiz_row == null && $tugas_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
                                 <?php } ?>
                                 <div class="row mt-5">
@@ -65,7 +68,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
-                                <?php if ($video_row == null && $quiz_row == null) { ?>
+                                <?php if ($video_row == null && $quiz_row == null && $tugas_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
                                 <?php } ?>
                                 <div class="row mt-5">
@@ -94,7 +97,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                                <?php if ($file_row == null && $video_row == null) { ?>
+                                <?php if ($file_row == null && $video_row == null && $tugas_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Soal ⭢</button>
                                 <?php } ?>
                                 <table id="example" class="table align-items-center table-flush mt-5">
@@ -116,31 +119,75 @@ $this->load->view('admin/template_admin/sidebar');
                                                 <th scope="row">
                                                     <?php echo $no++ ?>
                                                 </th>
-
                                                 <td>
                                                     <?php echo $u->soal ?>
                                                 </td>
-
                                                 <td>
                                                     <?php echo $u->created_at ?>
                                                 </td>
-
                                                 <td class="text-center">
                                                     <a href="<?php echo site_url('admin/detail_soal/' . $u->id_soal); ?>" class="btn btn-success">Detail ⭢</a>
                                                 </td>
-
                                                 <td class="text-center">
                                                     <a href="<?php echo site_url('admin/edit_soal/' . $u->id_soal); ?>" class="btn btn-info">Update ⭢</a>
-
                                                     <a onclick="deletesoal(<?= $u->id_soal ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                 </td>
-
                                             </tr>
                                         <?php
                                         }
                                         ?>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="tab-pane fade" id="contact4" role="tabpanel" aria-labelledby="contact-tab4">
+                                <?php if ($file_row == null && $video_row == null && $quiz_row == null) { ?>
+                                    <?php if ($tugas_row == null) { ?>
+                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".tugas">Tambah Tugas ⭢</button>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="row mt-5">
+                                    <div class="col-12 col-sm-6 col-lg-12">
+                                        <h4>List Tugas</h4>
+                                        <table id="example" class="table align-items-center table-flush mt-5">
+                                            <thead class="thead-light">
+                                                <tr class="text-center">
+                                                    <th scope="col">No</th>
+                                                    <th scope="col">Tugas</th>
+                                                    <th scope="col">Deskripsi</th>
+                                                    <th scope="col">Due Date</th>
+                                                    <th scope="col">Option</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $no = 1;
+                                                foreach ($tugas as $t) {
+                                                ?>
+                                                    <tr class="text-center">
+                                                        <th scope="row">
+                                                            <?php echo $no++ ?>
+                                                        </th>
+                                                        <td>
+                                                            <?php echo $t->nama_tugas ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $t->desk_tugas ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $t->due_date ?>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a href="<?php echo site_url('admin/edit_tugas/' . $t->id_tugas); ?>" class="btn btn-info">Edit ⭢</a>
+                                                            <a onclick="deletesoal(<?= $t->id_tugas ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                        </td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -247,6 +294,52 @@ $this->load->view('admin/template_admin/sidebar');
                         </div>
                     </div>
                 </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Tugas -->
+<div class="modal fade tugas" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Tambah Tugas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('admin/insert_tugas') ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>">
+                    <input type="hidden" name="modal" value="quiz">
+                    <div class="form-group">
+                        <label for="nama_tugas">Nama Tugas</label>
+                        <input required id="nama_tugas" type="text" class="form-control" value="<?php echo set_value('nama_tugas') ?>" name="nama_tugas">
+                        <?= form_error('nama_tugas', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi (Optional)</label>
+                        <textarea class="form-control" name="desk_tugas" id="desk_tugas" cols="30" rows="10"><?php echo set_value('desk_tugas') ?></textarea>
+                        <?= form_error('desk_tugas', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="due_date">Due Date</label>
+                        <input required id="due_date" type="date" class="form-control" value="<?php echo set_value('due_date') ?>" name="due_date">
+                        <?= form_error('due_date', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">
+                            Submit ⭢
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
