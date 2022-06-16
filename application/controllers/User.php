@@ -20,7 +20,9 @@ class User extends CI_Controller
     public function index()
     {
         $data['semester'] = $this->m_materi->tampil_data_semester()->result();
-
+        // header('Content-type: application/json');
+        // echo json_encode($this->session->userdata());
+        // die;
         $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
@@ -431,5 +433,17 @@ class User extends CI_Controller
             echo $this->email->print_debugger();
             die();
         }
+    }
+    public function regenerate_qrcode()
+    {
+        $this->load->library('qrcode');
+
+        $data['qr_code'] = $this->qrcode->generate($this->session->userdata('email'));
+        
+        $where['id_user'] = $this->session->userdata('id_user');
+
+        $this->db->where($where)->update('user', $data);
+
+        redirect('user');
     }
 }
