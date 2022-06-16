@@ -9,7 +9,7 @@ $this->load->view('admin/template_admin/sidebar');
         <div class="">
             <div class="card" style="width:100%;">
                 <div class="card-body">
-                    <h2 class="card-title" style="color: black;">Update Video</h2>
+                    <h2 class="card-title" style="color: black;">Edit Video</h2>
                     <hr>
                 </div>
             </div>

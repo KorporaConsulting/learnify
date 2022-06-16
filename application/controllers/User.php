@@ -11,6 +11,7 @@ class User extends CI_Controller
         $this->load->model('m_materi');
         $this->load->helper(array('form', 'url'));
         $this->load->library('image_lib');
+        $this->load->helper('download');
         if (!$this->session->userdata('id_user')) {
             $this->session->set_flashdata('not-login', 'Gagal!');
             redirect('welcome');
@@ -20,7 +21,7 @@ class User extends CI_Controller
     public function index()
     {
         $data['semester'] = $this->m_materi->tampil_data_semester()->result();
-
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
@@ -384,9 +385,38 @@ class User extends CI_Controller
                 }
             }
         }
-        $this->db->insert_batch('file', $files_batch);
-        $this->session->set_flashdata('sukses-tugas', 'Berhasil');
-        redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        if ($this->db->insert_batch('file', $files_batch)) {
+            $this->session->set_flashdata('sukses-tugas', 'File berhasil di upload');
+            redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        } else {
+            $this->session->set_flashdata('error-tugas', 'File gagal di upload');
+            redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        }
+    }
+
+    public function hapus_tugas($id, $id_mapel, $slug_materi)
+    {
+        $where = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_file' => $id,
+        ];
+        $this->db->delete('file', $where);
+        if ($this->db->error()['message']) {
+            $this->session->set_flashdata('error-tugas', 'File gagal dihapus');
+            redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        } else if (!$this->db->affected_rows()) {
+            $this->session->set_flashdata('error-tugas', 'File gagal dihapus');
+            redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        } else {
+            $this->session->set_flashdata('sukses-tugas', 'File berhasil dihapus');
+            redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
+        }
+    }
+
+    public function download_file($nama_file)
+    {
+        // $link = base_url('assets/tugas/');
+        force_download('assets/tugas/' . $nama_file, null);
     }
 
     public function registration_act()

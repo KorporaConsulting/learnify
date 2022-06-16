@@ -151,7 +151,6 @@ $this->load->view('admin/template_admin/sidebar');
                                         <table id="example" class="table align-items-center table-flush mt-5">
                                             <thead class="thead-light">
                                                 <tr class="text-center">
-                                                    <th scope="col">No</th>
                                                     <th scope="col">Tugas</th>
                                                     <th scope="col">Deskripsi</th>
                                                     <th scope="col">Due Date</th>
@@ -160,13 +159,9 @@ $this->load->view('admin/template_admin/sidebar');
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $no = 1;
                                                 foreach ($tugas as $t) {
                                                 ?>
                                                     <tr class="text-center">
-                                                        <th scope="row">
-                                                            <?php echo $no++ ?>
-                                                        </th>
                                                         <td>
                                                             <?php echo $t->nama_tugas ?>
                                                         </td>
@@ -178,7 +173,7 @@ $this->load->view('admin/template_admin/sidebar');
                                                         </td>
                                                         <td class="text-center">
                                                             <a href="<?php echo site_url('admin/edit_tugas/' . $t->id_tugas); ?>" class="btn btn-info">Edit ⭢</a>
-                                                            <a onclick="deletesoal(<?= $t->id_tugas ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                            <a onclick="deletetugas(<?= $t->id_tugas ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                         </td>
                                                     </tr>
                                                 <?php
@@ -553,6 +548,17 @@ $this->load->view('admin/template_admin/sidebar');
         })
     </script>
 <?php endif; ?>
+<?php if ($this->session->flashdata('success-tugas-edit')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Data Tugas Telah Dirubah!',
+            text: 'Selamat data berubah!',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    </script>
+<?php endif; ?>
 
 <?php if ($this->session->flashdata('video-delete')) : ?>
     <script>
@@ -576,7 +582,17 @@ $this->load->view('admin/template_admin/sidebar');
         })
     </script>
 <?php endif; ?>
-
+<?php if ($this->session->flashdata('tugas-delete')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Data Tugas Telah Dihapus!',
+            text: 'Selamat data telah Dihapus!',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    </script>
+<?php endif; ?>
 <!-- End Sweetalert -->
 
 <script type="text/javascript">
@@ -616,7 +632,7 @@ $this->load->view('admin/template_admin/sidebar');
     }
 </script>
 <script type="text/javascript">
-    function deletesoal(id, id_materi) {
+    function deletetugas(id, id_materi) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -628,7 +644,7 @@ $this->load->view('admin/template_admin/sidebar');
         }).then((result) => {
             console.log(result)
             if (result.value) {
-                window.location = "<?= base_url('admin/delete_soal/') ?>" + id + "/" + id_materi;
+                window.location = "<?= base_url('admin/delete_tugas/') ?>" + id + "/" + id_materi;
             }
         })
     }

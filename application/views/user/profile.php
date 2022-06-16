@@ -41,8 +41,8 @@
                 <form action="<?= base_url('user/image_profile') ?>" enctype="multipart/form-data" method="post">
                     <div class="form-group">
                         <div class="custom-file">
-                            <input type="file" required class="custom-file-input" name="image_user" accept="image/*" id="customFileLang" lang=in">
-                            <label class="custom-file-label" for="customFileLang">Pilih Gambar</label>
+                            <input type="file" id="profile" required class="custom-file-input" name="image_user" accept="image/*" id="customFileLang" lang=in">
+                            <label class="custom-file-label" id="profile-pilih" for="customFileLang">Pilih Gambar</label>
                         </div>
                     </div>
                     <div class="form-grup">
@@ -184,4 +184,10 @@
         })
     </script>
 <?php endif; ?>
+<script>
+    $('#profile').change(function(e) {
+        var filename = this.files[0].name;
+        $('#profile-pilih').text(filename);
+    });
+</script>
 <?php $this->load->view('user/template_user/footer'); ?>

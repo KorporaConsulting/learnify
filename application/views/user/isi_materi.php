@@ -154,7 +154,7 @@
                                                                  <td><?= $no++ ?></td>
                                                                  <td><?= $t->nama_file ?></td>
                                                                  <td><?= $t->desk_file ?></td>
-                                                                 <td><a class="btn btn-primary" href="<?= $t->link ?>" role="button">File</a></td>
+                                                                 <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
                                                                  <td>
                                                                      <?php
                                                                         if ($t->approve == 0) { ?>
@@ -164,7 +164,12 @@
                                                                      <?php  } ?>
                                                                  </td>
                                                                  <td>
-                                                                     <a class="btn btn-danger" href="<?= base_url('user/hapus_tugas/' . $t->id_file) ?>" role="button">Hapus</a>
+                                                                     <?php
+                                                                        if ($t->approve == 0) { ?>
+                                                                         <a href="#" class="btn btn-danger" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
+                                                                     <?php } else { ?>
+                                                                         <a href="#" class="btn btn-danger disabled" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
+                                                                     <?php  } ?>
                                                                  </td>
                                                              </tr>
                                                          <?php } ?>
@@ -207,7 +212,6 @@
                          <?php } ?>
                      <?php  }
                         ?>
-
                  <?php } ?>
              </div>
 
@@ -222,8 +226,8 @@
      <?php if ($this->session->flashdata('sukses-tugas')) : ?>
          Swal.fire({
              icon: 'success',
-             title: '<?php echo $this->session->flashdata('sukses-tugas'); ?>',
-             text: 'Tugas berhasil diupload',
+             title: 'Berhasil!',
+             text: '<?php echo $this->session->flashdata('sukses-tugas'); ?>',
              showConfirmButton: false,
              timer: 2500
          })
@@ -239,6 +243,24 @@
              timer: 2500
          })
      <?php endif; ?>
+ </script>
+ <script>
+     function confirm(link) {
+         //  console.log(link)
+         Swal.fire({
+             title: 'Apakah Anda yakin?',
+             text: "File yang terhapus tidak akan bisa kembali",
+             icon: 'warning',
+             showCancelButton: true,
+             confirmButtonColor: '#3085d6',
+             cancelButtonColor: '#d33',
+             confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+             if (result.value) {
+                 window.location.href = link
+             }
+         })
+     }
  </script>
  <!-- End Lesson Cards -->
  <?php $this->load->view('user/template_user/footer'); ?>

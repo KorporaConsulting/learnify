@@ -12,6 +12,7 @@ class Admin extends CI_Controller
         $this->load->model('m_enroll');
         $this->load->helper('url');
         $this->load->library('upload');
+        $this->load->helper('download');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
             redirect('welcome/admin');
@@ -1253,7 +1254,6 @@ class Admin extends CI_Controller
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['encrypt_name'] = true;
         $config['max_size']     = '2048';
-
         $this->load->library('upload', $config);
 
         if ($_FILES['file']['error'] != 4) {
@@ -1267,7 +1267,6 @@ class Admin extends CI_Controller
             }
 
             $data = $this->upload->data();
-
             $filename = $data['file_name'];
         } else {
             $filename = $this->input->post('oldFile');
@@ -1326,5 +1325,110 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('nav-link', 'contact-tab4');
         $this->session->set_flashdata('success-file', 'Berhasil!');
         redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+
+    public function edit_tugas($id)
+    {
+        $where = array('id_tugas' => $id);
+        $data['tugas'] = $this->m_materi->update_materi($where, 'tugas')->row();
+        $this->load->view('admin/tugas/edit_tugas', $data);
+    }
+
+    public function update_tugas()
+    {
+        $id_materi = $this->input->post('id_materi', true);
+        $data = [
+            'nama_tugas' => htmlspecialchars($this->input->post('nama_tugas', true)),
+            'desk_tugas' => htmlspecialchars($this->input->post('desk_tugas', true)),
+            'due_date' => htmlspecialchars($this->input->post('due_date', true)),
+            'id_materi' => htmlspecialchars($this->input->post('id_materi', true))
+        ];
+        $where = array(
+            'id_tugas' => $this->input->post('id_tugas'),
+        );
+
+        $this->m_materi->update_data_tugas($where, $data, 'tugas');
+        $this->session->set_flashdata('tab', 'contact4');
+        $this->session->set_flashdata('nav-link', 'contact-tab4');
+        $this->session->set_flashdata('success-tugas-edit', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+    public function delete_tugas($id, $id_materi)
+    {
+        $where = array('id_tugas' => $id);
+        $this->m_materi->delete_tugas($where, 'tugas');
+        $this->session->set_flashdata('tugas-delete', 'berhasil');
+        $this->session->set_flashdata('tab', 'contact4');
+        $this->session->set_flashdata('nav-link', 'contact-tab4');
+        $this->session->set_flashdata('success-tugas-edit', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+
+    public function list_tugas_user()
+    {
+        $data['tugas_list'] = $this->m_materi->where_tampil_tugas_user()->result();
+        $this->load->view('admin/tugas/list_tugas_user', $data);
+    }
+
+    public function approve_tugas($id_file, $id_materi, $id_user)
+    {
+        $data = [
+            'approve' => 1
+        ];
+        $where = array(
+            'id_file' => $id_file,
+            'id_materi' => $id_materi,
+            'id_user' => $id_user,
+        );
+        $this->m_materi->approve_tugas($where, $data, 'file');
+
+        $check_file = $this->m_materi->check_file_user($id_materi, $id_user);
+        $check_file_done = $this->m_materi->check_file_user_done($id_materi, $id_user);
+
+        // var_dump($check_file_done);
+        // die;
+
+        if ($check_file == $check_file_done) {
+            $data_status = [
+                'status' => 1
+            ];
+            $where_status = [
+                'id_materi' => $id_materi,
+                'id_user' => $id_user,
+            ];
+            $this->m_materi->approve_tugas($where_status, $data_status, 'status_materi');
+        }
+
+        $this->session->set_flashdata('success-approve', 'Tugas telah disetujui');
+        redirect('admin/list_tugas_user');
+    }
+    public function delete_approve_tugas($id_file, $id_materi, $id_user)
+    {
+        $data = [
+            'approve' => 0
+        ];
+        $where = array(
+            'id_file' => $id_file,
+            'id_materi' => $id_materi,
+            'id_user' => $id_user,
+        );
+        $this->m_materi->approve_tugas($where, $data, 'file');
+
+        $check_file = $this->m_materi->check_file_user($id_materi, $id_user);
+        $check_file_done = $this->m_materi->check_file_user_done($id_materi, $id_user);
+
+        if ($check_file != $check_file_done) {
+            $data_status = [
+                'status' => 0
+            ];
+            $where_status = [
+                'id_materi' => $id_materi,
+                'id_user' => $id_user,
+            ];
+            $this->m_materi->approve_tugas($where_status, $data_status, 'status_materi');
+        }
+
+        $this->session->set_flashdata('success-approve', 'Approve telah dihapus');
+        redirect('admin/list_tugas_user');
     }
 }

@@ -197,7 +197,11 @@ class M_materi extends CI_Model
         $this->db->where($where);
         $this->db->delete($table);
     }
-
+    public function delete_tugas($where, $table)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
     public function update_materi($where, $table)
     {
         return $this->db->get_where($table, $where);
@@ -208,6 +212,11 @@ class M_materi extends CI_Model
         $this->db->update($table, $data);
     }
     public function update_data_file($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
+    }
+    public function update_data_tugas($where, $data, $table)
     {
         $this->db->where($where);
         $this->db->update($table, $data);
@@ -399,13 +408,38 @@ class M_materi extends CI_Model
         $this->db->where('id_mapel', $id_mapel);
         return  $this->db->get();
     }
-    public function check_tugas_user($id_materi, $id_user)
+    public function where_tampil_tugas_user()
     {
         $this->db->select('*');
-        $this->db->from('tugas');
+        $this->db->from('materi');
+        $this->db->join('mapel', 'mapel.id_mapel = materi.id_mapel');
+        $this->db->join('tugas', 'tugas.id_materi = materi.id_materi');
+        $this->db->join('file', 'file.id_materi = materi.id_materi');
+        $this->db->join('user', 'user.id_user = file.id_user');
+        return  $this->db->get();
+    }
+    public function approve_tugas($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
+    }
+    public function check_file_user($id_materi, $id_user)
+    {
+        $this->db->select('*');
         $this->db->where('id_materi', $id_materi);
         $this->db->where('id_user', $id_user);
-        $query = $this->db->get();
+        $this->db->where('is_tugas', 1);
+        $query = $this->db->get('file');
+        return $query->num_rows();
+    }
+    public function check_file_user_done($id_materi, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->where('id_materi', $id_materi);
+        $this->db->where('id_user', $id_user);
+        $this->db->where('is_tugas', 1);
+        $this->db->where('approve', 1);
+        $query = $this->db->get('file');
         return $query->num_rows();
     }
 }

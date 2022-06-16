@@ -8,7 +8,7 @@ $this->load->view('admin/template_admin/sidebar');
         <div class="">
             <div class="card" style="width:100%;">
                 <div class="card-body">
-                    <h2 class="card-title" style="color: black;">Update Data Mentor</h2>
+                    <h2 class="card-title" style="color: black;">Edit Data Mentor</h2>
                     <hr>
                     <!-- <p class="card-text"> Update data siswa meliputi Email dan Nama Lengkap.
                         Kita tidak bisa mengubah password guru, Hanya guru yang dapat mengubah passwordnya

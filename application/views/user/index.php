@@ -19,9 +19,9 @@
             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                 <div class="row" style="color: black; font-family: 'poppins';">
                     <div class="col-md-12 mt-1 text-center">
-                        <img class="rounded-circle" width="100px" alt="100x100" src="<?= base_url('assets/profile_picture/' . $this->session->userdata('image_user')) ?>" data-holder-rendered="true">
+                        <img class="rounded-circle" width="100px" alt="100x100" src="<?= base_url('assets/profile_picture/') . $user->image_user ?>" data-holder-rendered="true">
                         <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1>
-                        <h5><?= $this->session->userdata('nama') ?></h5>
+                        <h5><?= $user->nama ?></h5>
                     </div>
                 </div>
             </div>
