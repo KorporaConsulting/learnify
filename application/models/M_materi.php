@@ -129,6 +129,15 @@ class M_materi extends CI_Model
         $this->db->from('file');
         $this->db->join('materi', 'materi.id_materi = file.id_materi');
         $this->db->where('file.id_materi', $id);
+        $this->db->where('file.is_tugas', 0);
+        return  $this->db->get();
+    }
+    public function where_tampil_tugas($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tugas');
+        $this->db->join('materi', 'materi.id_materi = tugas.id_materi');
+        $this->db->where('tugas.id_materi', $id);
         return  $this->db->get();
     }
     public function update_semester($id)
@@ -389,5 +398,14 @@ class M_materi extends CI_Model
         $this->db->where('id_materi', $id_materi);
         $this->db->where('id_mapel', $id_mapel);
         return  $this->db->get();
+    }
+    public function check_tugas_user($id_materi, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('tugas');
+        $this->db->where('id_materi', $id_materi);
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }
