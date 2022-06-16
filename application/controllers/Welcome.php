@@ -65,6 +65,7 @@ class Welcome extends CI_Controller
                     'ttl' => $user['ttl'],
                     'jk' => $user['jk'],
                     'image_user' => $user['image_user'],
+                    'qr_code' => $user['qr_code']
                 ];
 
                 $this->session->set_userdata($data);

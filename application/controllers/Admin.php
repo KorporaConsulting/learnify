@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
+
 class Admin extends CI_Controller
 {
     public function __construct()
@@ -76,6 +78,7 @@ class Admin extends CI_Controller
             } else {
                 $image = 'nill.svg';
             }
+
             $data = [
                 'nis' => htmlspecialchars($this->input->post('nis', true)),
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
@@ -89,7 +92,10 @@ class Admin extends CI_Controller
                 'role' => 3,
             ];
 
+            $this->load->library('qrcode');
+            $data['qr_code'] = $this->qrcode->generate($this->input->post('email', true));
             $this->db->insert('user', $data);
+            
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_siswa'));
