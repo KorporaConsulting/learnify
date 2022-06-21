@@ -40,9 +40,10 @@ class User extends CI_Controller
 
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
+        $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
         // var_dump($this->session->userdata('id_user'));
         // die;
-        // var_dump($data['materi']);
+        // var_dump($data['semester']);
         // die;
         $this->load->view('user/materi', $data);
         $this->load->view('template/footer');
@@ -50,6 +51,9 @@ class User extends CI_Controller
 
     public function materi($id_mapel, $slug)
     {
+        $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
+        $id_materi = $data['materi']->id_materi;
+
         $id_user = $this->session->userdata('id_user');
         $data['file_row'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->row();
         $data['file'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->result();
@@ -59,20 +63,16 @@ class User extends CI_Controller
         $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
         $data['tugas_row'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->row();
         $data['tugas'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->result();
-        $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
-
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
-        $id_materi = $this->m_siswa->get_materi($slug)->row();
-        $id_materi = $id_materi->id_materi;
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
-        // var_dump($data['list_tugas_row']);
-        // die;
 
-        $id_materi = $data['materi']->id_materi;
         $id_user = $this->session->userdata('id_user');
-
         $data['status_materi'] = $this->m_materi->get_status_materi_user($id_materi, $id_user)->row();
-
+        $data['urutan_materi'] = $this->m_siswa->get_urutan($id_mapel, $slug)->row();
+        $urutan_prev = ($data['urutan_materi']->urutan) - 1;
+        $urutan_next = ($data['urutan_materi']->urutan) + 1;
+        $data['previous'] = $this->m_siswa->get_urutan_previous($id_mapel, $urutan_prev)->row();
+        $data['next'] = $this->m_siswa->get_urutan_previous($id_mapel, $urutan_next)->row();
 
         $this->load->view('user/isi_materi', $data);
         $this->load->view('template/footer');
@@ -514,13 +514,10 @@ class User extends CI_Controller
     public function regenerate_qrcode()
     {
         $this->load->library('qrcode');
-
         $data['qr_code'] = $this->qrcode->generate($this->session->userdata('email'));
-        
         $where['id_user'] = $this->session->userdata('id_user');
-
         $this->db->where($where)->update('user', $data);
-
-        redirect('user');
+        $this->session->set_flashdata('sukses-qr', 'QR code berhasil di generate');
+        redirect('user/profile');
     }
 }

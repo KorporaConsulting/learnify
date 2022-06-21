@@ -116,7 +116,7 @@ $totalQuiz = count($quiz);
                 confirmButtonText: 'Submit',
                 cancelButtonText: 'Batal'
             }).then((result) => {
-                if (result.isConfirmed) {
+                if (result.value) {
                     $('form').submit();
                 }
             })

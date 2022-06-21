@@ -41,7 +41,7 @@
         })
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+
     <style>
 
     </style>
@@ -67,6 +67,12 @@
                             <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Course</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#">Transkrip</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#">Pembayaran</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user/profile') ?>">Profile</a>
                             </li>

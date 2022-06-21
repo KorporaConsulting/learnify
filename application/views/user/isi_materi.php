@@ -1,30 +1,13 @@
  <?php $this->load->view('user/template_user/header'); ?>
 
 
- <!-- Start Greeting Cards -->
-
- <!-- End Greeting Cards -->
-
-
- <!-- Start Lesson Cards -->
- <!-- <div class="container">
-     <div class="row mt-4">
-         <div class="col-md-12 w-150 mb-4">
-             <div class="card materi border-0">
-                 <div class="card-body p-5">
-                     <h1 class="card-title display-4"><?= $isi_materi->nama_materi; ?></h1>
-                     <hr style="background-color: white;">
-                     <p class="card-text"><?= $isi_materi->desk_materi; ?></p>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div> -->
-
  <div class="container">
      <div class="row mt-4">
          <div class="col-md-12 w-150 mb-4">
-             <div class="card materi border-0">
+             <div class="mt-5 pt-5">
+                 <h3><a href="<?= base_url('user/course/' . $file_row->slug_mapel) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Materi</a></h3>
+             </div>
+             <div class="card materi mt-2 border-0">
                  <?php
                     if ($file_row->id_file == null && $quiz_row->id_soal == null && $video->id_video == null && $tugas_row->id_tugas == null) { ?>
                      <div class="jumbotron mt-5 mb-5 pt-5 pb-5">
@@ -37,7 +20,27 @@
                              <a class="btn btn-primary btn-lg" href="#" onclick="history.back()">Kembali</a>
                          </p>
                      </div>
+                     <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                         <div class="row">
+                             <div class="col-6">
+                                 <?php if (isset($previous)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                 <?php } ?>
+                             </div>
+                             <div class="col-6">
+                                 <?php if (isset($next)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                 <?php } ?>
+                             </div>
+                         </div>
+                     <?php } ?>
                  <?php } elseif ($file_row->id_file == null && $quiz_row->id_soal == null && $tugas_row->id_tugas == null) { ?>
+
+                     <style>
+                         .ytp-title-channel {
+                             display: none !important;
+                         }
+                     </style>
                      <div class=" card-body p-5">
                          <?php
                             if ($status_materi->status != 1) { ?>
@@ -45,21 +48,33 @@
                                  <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
                              </div>
                          <?php } ?>
-                         <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
-                         <hr style="background-color: white;">
+                         <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
+                             <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
+                             <hr style="background-color: white;">
 
-                         <!-- <div class="plyr__video-embed" id="player">
-                             <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1" allowfullscreen allowtransparency allow="autoplay"></iframe>
-                         </div> -->
-
-                         <div class="embed-responsive embed-responsive-16by9 plyr__video-embed" id="player">
-                             <iframe class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
-                         </div>
-                         <div class="text-center mt-2">
-                             <h5><?= $video->nama_video ?></h5>
-                             <p><?= $video->desk_video ?></p>
+                             <div class="embed-responsive embed-responsive-16by9 plyr__video-embed" id="player">
+                                 <iframe class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                             </div>
+                             <div class="text-center mt-2">
+                                 <h5><?= $video->nama_video ?></h5>
+                                 <p><?= $video->desk_video ?></p>
+                             </div>
                          </div>
                      </div>
+                     <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                         <div class="row">
+                             <div class="col-6">
+                                 <?php if (isset($previous)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                 <?php } ?>
+                             </div>
+                             <div class="col-6">
+                                 <?php if (isset($next)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                 <?php } ?>
+                             </div>
+                         </div>
+                     <?php } ?>
                  <?php } elseif ($video->id_video == null && $quiz_row->id_soal == null && $tugas_row->id_tugas == null) { ?>
                      <div class="jumbotron jumbotron-fluid">
                          <div class="container">
@@ -83,33 +98,24 @@
                                  </div>
                              <?php } ?>
                          </div>
+                         <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                             <div class="row mt-5 pt-5 pb-5 mb-5">
+                                 <div class="col-6">
+                                     <?php if (isset($previous)) { ?>
+                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                     <?php } ?>
+                                 </div>
+                                 <div class="col-6">
+                                     <?php if (isset($next)) { ?>
+                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                     <?php } ?>
+                                 </div>
+                             </div>
+                         <?php } ?>
                      </div>
-
                  <?php } elseif ($video->id_video == null && $file_row->id_file == null && $tugas_row->id_tugas == null) {
                         redirect('user/quiz/' . $materi->id_materi)
                     ?>
-                     <!-- <div class="card-body p-5">
-                         <h4 class="card-title display-5">Test</h4>
-                         <hr style="background-color: white;">
-                     </div>
-                     <div class="container">
-                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-                             <div class="row" style="color: black; font-family: 'poppins';">
-                                 <div class="col-md-12 mt-1">
-                                     <div class="card-body p-5">
-                                         <div class="col-md-12 column">
-                                             <div>
-                                                 <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">Mulai Quiz</a>
-                                             </div>
-                                             <div class="col-md-1 column">
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div> -->
-
                  <?php } elseif ($video->id_video == null && $quiz_row->id_soal == null) { ?>
                      <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                          <div class="row" style="color: black; font-family: 'poppins';">
@@ -122,14 +128,11 @@
                      </div>
                      <?php
                         if ($list_tugas_row != 0) { ?>
-                         <!-- <div class="jumbotron jumbotron-fluid mt-4"> -->
                          <div class="card shadow bg-white mx-auto p-4 buat-text mt-3" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                              <div class="container">
-                                 <!-- <h3><span class="badge badge-primary"> <?= $no++ ?> </span></h3> -->
                                  <h2 class="display-5" style="color: black ;"><?= $tugas_row->nama_tugas ?></h2>
                                  <p class="lead"><?= $tugas_row->desk_tugas ?></p>
                              </div>
-
                              <div class="row justify-content-center">
                                  <div class="col-md-12">
                                      <div class="row" style="color: black; font-family: 'poppins';">
@@ -179,7 +182,6 @@
                                          </div>
                                      </div>
                                  </div>
-                                 <!-- </div> -->
                              </div>
                          </div>
                      <?php  } else { ?>
@@ -210,18 +212,27 @@
                                  </div>
                              </div>
                          <?php } ?>
-                     <?php  }
-                        ?>
+                     <?php  }  ?>
+                     <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                         <div class="row">
+                             <div class="col-6">
+                                 <?php if (isset($previous)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                 <?php } ?>
+                             </div>
+                             <div class="col-6">
+                                 <?php if (isset($next)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                 <?php } ?>
+                             </div>
+                         </div>
+                     <?php } ?>
                  <?php } ?>
              </div>
 
          </div>
      </div>
  </div>
- <!-- <div class="container">
-     <div class="row-mt-4">
-     </div>
- </div> -->
  <script>
      <?php if ($this->session->flashdata('sukses-tugas')) : ?>
          Swal.fire({

@@ -36,7 +36,6 @@ class Welcome extends CI_Controller
             $this->load->library('user_agent');
             redirect($this->agent->referrer());
         } else {
-            //validasi sukses
             $this->login();
         }
     }
@@ -67,7 +66,6 @@ class Welcome extends CI_Controller
                     'image_user' => $user['image_user'],
                     'qr_code' => $user['qr_code']
                 ];
-
                 $this->session->set_userdata($data);
                 redirect(base_url('user'));
             } else {

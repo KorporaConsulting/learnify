@@ -11,7 +11,7 @@ $this->load->view('admin/template_admin/sidebar');
                     <div class="table-responsive">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Sort Mapel</h3>
+                                <h3 class="card-title">Sort Mapel <?= $materi_row->nama_mapel ?></h3>
                             </div>
                             <div class="card-body">
                                 <ol id="list" class="list-group mb-4">

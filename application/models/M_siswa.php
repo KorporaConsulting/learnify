@@ -25,11 +25,11 @@ class M_siswa extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('enroll');
-        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
-        $this->db->join('user', 'user.id_user = enroll.id_user');
-        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
-        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
-        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user', 'left');
         // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
         $this->db->where('mapel.slug_mapel', $slug);
         $this->db->where('status_materi.id_user',  $this->session->userdata('id_user'));
@@ -209,5 +209,65 @@ class M_siswa extends CI_Model
         $this->db->from('user');
         $this->db->where('id_user', $id_user);
         return $this->db->get();
+    }
+    public function get_semester_mapel($slug)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->join('semester', 'semester.id_semester = mapel.id_semester');
+        $this->db->where('mapel.slug_mapel', $slug);
+        return  $this->db->get();
+    }
+    public function get_urutan($id_mapel, $slug)
+    {
+        $this->db->select('materi.urutan');
+        $this->db->from('mapel');
+        $this->db->join('materi', 'mapel.id_mapel = materi.id_mapel');
+        $this->db->where('materi.id_mapel', $id_mapel);
+        $this->db->where('materi.slug_materi', $slug);
+        return  $this->db->get();
+    }
+    public function get_urutan_previous($id_mapel, $urutan)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('urutan', $urutan);
+        return  $this->db->get();
+    }
+    public function get_nama_file($id_materi)
+    {
+        $this->db->select('id_file');
+        $this->db->from('file');
+        $this->db->where('id_materi', $id_materi);
+        return  $this->db->get();
+    }
+    public function get_nama_video($id_materi)
+    {
+        $this->db->select('id_video');
+        $this->db->from('video');
+        $this->db->where('id_materi', $id_materi);
+        return  $this->db->get();
+    }
+    public function get_nama_quiz($id_materi)
+    {
+        $this->db->select('id_soal');
+        $this->db->from('tb_soal');
+        $this->db->where('id_materi', $id_materi);
+        return  $this->db->get();
+    }
+    public function get_nama_tugas($id_materi)
+    {
+        $this->db->select('id_tugas');
+        $this->db->from('tugas');
+        $this->db->where('id_materi', $id_materi);
+        return  $this->db->get();
+    }
+    public function get_slug_course($id_mapel)
+    {
+        $this->db->select('slug_mapel');
+        $this->db->from('mapel');
+        $this->db->where('id_mapel', $id_mapel);
+        return  $this->db->get();
     }
 }

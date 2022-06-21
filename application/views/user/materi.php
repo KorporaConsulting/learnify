@@ -9,6 +9,7 @@
                 </h1>
                 <p>Hello Students!, Ini merupakan halaman Materi Silahkan pilih materi yang dapat kamu
                     akses </p>
+                <h3><a href="<?= base_url('user/semester/' . $semester->semester) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Course</a></h3>
             </div>
         </div>
     </div>

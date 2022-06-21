@@ -12,7 +12,7 @@ $this->load->view('admin/template_admin/sidebar');
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
                 <a href="<?= base_url('admin/add_mapel') ?>" class="btn btn-success">Tambah
                     Data Course ⭢ </a>
-                <a href="<?= base_url('admin/sort_mapel') ?>" class="btn btn-primary">
+                <a href="<?= base_url('admin/data_sort_semester') ?>" class="btn btn-primary">
                     Sort Course ⭢ </a>
             </div>
         </div>
@@ -59,7 +59,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_mapel/' . $u->id_mapel); ?>" class="btn btn-info">Edit ⭢</a>
 
-                                            <a onclick="yourConfirm(<?= $u->id_mapel ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                            <a onclick="yourConfirm(<?= $u->id_mapel ?>,<?= $u->id_semester ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
 
                                     </tr>
@@ -131,7 +131,7 @@ $this->load->view('admin/template_admin/sidebar');
 <!-- End Sweetalert -->
 
 <script type="text/javascript">
-    function yourConfirm(id) {
+    function yourConfirm(id, semester) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -143,7 +143,7 @@ $this->load->view('admin/template_admin/sidebar');
         }).then((result) => {
             console.log(result)
             if (result.value) {
-                window.location = "<?= base_url('admin/delete_mapel/') ?>" + id;
+                window.location = "<?= base_url('admin/delete_mapel/') ?>" + id + '/' + semester;
             }
         })
     }

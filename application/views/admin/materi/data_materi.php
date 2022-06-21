@@ -72,7 +72,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_materi/' . $u->id_materi); ?>" class="btn btn-info">Edit Materi⭢</a>
 
-                                            <a onclick="yourConfirm(<?= $u->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                            <a onclick="yourConfirm(<?= $u->id_materi ?>,<?= $u->id_mapel ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
 
                                     </tr>
@@ -144,7 +144,7 @@ $this->load->view('admin/template_admin/sidebar');
 <!-- End Sweetalert -->
 
 <script type="text/javascript">
-    function yourConfirm(id) {
+    function yourConfirm(id, mapel) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -156,7 +156,7 @@ $this->load->view('admin/template_admin/sidebar');
         }).then((result) => {
             console.log(result)
             if (result.value) {
-                window.location = "<?= base_url('admin/delete_materi/') ?>" + id;
+                window.location = "<?= base_url('admin/delete_materi/') ?>" + id + '/' + mapel;
             }
         })
     }

@@ -8,7 +8,7 @@ class M_materi extends CI_Model
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
         $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
-
+        $this->db->order_by('mapel.id_semester');
         return  $this->db->get();
     }
 
@@ -53,12 +53,13 @@ class M_materi extends CI_Model
         return $this->db->get('semester')->num_rows();
     }
 
-    public function tampil_sort_mapel()
+    public function tampil_sort_mapel($id)
     {
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
         $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
+        $this->db->where('mapel.id_semester', $id);
         $this->db->order_by('urutan');
         return  $this->db->get();
     }
@@ -441,5 +442,51 @@ class M_materi extends CI_Model
         $this->db->where('approve', 1);
         $query = $this->db->get('file');
         return $query->num_rows();
+    }
+
+    public function check_urutan($id_mapel)
+    {
+        $this->db->select_max('urutan');
+        $this->db->where('id_mapel', $id_mapel);
+        return $this->db->get('materi');
+    }
+    public function check_urutan_materi($id, $id_mapel)
+    {
+        $this->db->select('urutan');
+        $this->db->from('materi');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('id_materi', $id);
+        return $this->db->get();
+    }
+    public function get_urutan_materi($urutan, $id_mapel)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('urutan >', $urutan);
+        return $this->db->get();
+    }
+
+    public function check_urutan_mapel($id_semester)
+    {
+        $this->db->select_max('urutan');
+        $this->db->where('id_semester', $id_semester);
+        return $this->db->get('mapel');
+    }
+    public function check_urutan_mapel_delete($id, $id_semester)
+    {
+        $this->db->select('urutan');
+        $this->db->from('mapel');
+        $this->db->where('id_mapel', $id);
+        $this->db->where('id_semester', $id_semester);
+        return $this->db->get();
+    }
+    public function get_urutan_mapel($urutan, $id_semester)
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->where('id_semester', $id_semester);
+        $this->db->where('urutan >', $urutan);
+        return $this->db->get();
     }
 }

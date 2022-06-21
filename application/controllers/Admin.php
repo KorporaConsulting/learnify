@@ -95,7 +95,7 @@ class Admin extends CI_Controller
             $this->load->library('qrcode');
             $data['qr_code'] = $this->qrcode->generate($this->input->post('email', true));
             $this->db->insert('user', $data);
-            
+
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_siswa'));
@@ -509,8 +509,15 @@ class Admin extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['mentor'] = $this->m_guru->tampil_data()->result();
+            $data['semester'] = $this->m_materi->tampil_data_semester()->result();
             $this->load->view('admin/mapel/add_mapel', $data);
         } else {
+
+            $check_urutan = $this->m_materi->check_urutan_mapel($this->input->post('semester', true))->row();
+            $urutan = ($check_urutan->urutan) + 1;
+            // var_dump($urutan);
+            // die;
+
             $this->load->library('upload');
             $config['upload_path'] = './assets/img/courses'; //path folder
             $config['allowed_types'] = 'jpg|png|jpeg'; //type yang dapat diakses bisa anda sesuaikan
@@ -541,6 +548,7 @@ class Admin extends CI_Controller
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
+                    'urutan' =>  $urutan,
                 ];
                 $this->db->insert('mapel', $data);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -556,17 +564,25 @@ class Admin extends CI_Controller
     public function data_mapel()
     {
         $this->load->model('m_materi');
-
         $data['user'] = $this->m_materi->tampil_data_mapel()->result();
-
         $this->load->view('admin/mapel/data_mapel', $data);
     }
+
+    public function data_sort_semester()
+    {
+        $this->load->model('m_materi');
+
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+
+        $this->load->view('admin/mapel/data_sort', $data);
+    }
+
     public function sort_mapel()
     {
         $this->load->model('m_materi');
 
-        $data['user'] = $this->m_materi->tampil_sort_mapel()->result();
-
+        $data['user'] = $this->m_materi->tampil_sort_mapel($this->input->post('semester'))->result();
+        $data['semester'] = $this->input->post('semester');
         $this->load->view('admin/mapel/sort_mapel', $data);
     }
 
@@ -588,6 +604,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi', 'materi');
 
         $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
+        $data['materi_row'] = $this->materi->where_sort_data_materi($id)->row();
 
         $this->load->view('admin/materi/sort_materi', $data);
     }
@@ -704,9 +721,20 @@ class Admin extends CI_Controller
             }
         }
     }
-    public function delete_mapel($id)
+    public function delete_mapel($id, $id_semester)
     {
         $this->load->model('m_materi');
+        $check_urutan = $this->m_materi->check_urutan_mapel_delete($id, $id_semester)->row();
+        $get_urutan = $this->m_materi->get_urutan_mapel($check_urutan->urutan, $id_semester)->result();
+        // $urutan = ($check_urutan->urutan);
+        foreach ($get_urutan as $k => $g) {
+            $data = [
+                'urutan' => ($g->urutan) - 1,
+            ];
+            $this->db->where('id_mapel', $g->id_mapel);
+            $this->db->update('mapel', $data);
+        }
+
         $where = array('id_mapel' => $id);
         $this->m_materi->delete_mapel($where, 'mapel');
         $this->session->set_flashdata('mapel-delete', 'berhasil');
@@ -760,6 +788,9 @@ class Admin extends CI_Controller
             $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
             $this->load->view('admin/materi/add_materi', $data);
         } else {
+            $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
+            $urutan = ($check_urutan->urutan) + 1;
+
             $title = trim(strtolower($this->input->post('nama_materi', true)));
             $out = explode(" ", $title);
             $slug = implode("-", $out);
@@ -768,6 +799,7 @@ class Admin extends CI_Controller
                 'slug_materi' => uniqid($slug),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                'urutan' => $urutan,
             ];
             $this->db->insert('materi', $data);
             $insert_id = $this->db->insert_id();
@@ -814,6 +846,11 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('gagal-reg', 'Gagal!');
             redirect_back();
         } else {
+            $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
+            $urutan = ($check_urutan->urutan) + 1;
+
+            // var_dump($urutan);
+            // die;
             $title = trim(strtolower($this->input->post('nama_materi', true)));
             $out = explode(" ", $title);
             $slug = implode("-", $out);
@@ -822,6 +859,7 @@ class Admin extends CI_Controller
                 'slug_materi' => uniqid($slug),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                'urutan' => $urutan,
             ];
             $this->db->insert('materi', $data);
             $insert_id = $this->db->insert_id();
@@ -829,7 +867,6 @@ class Admin extends CI_Controller
 
             if ($check_enroll == 0) {
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
-                redirect(base_url('admin/data_materi'));
             } else {
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
@@ -843,8 +880,6 @@ class Admin extends CI_Controller
                     );
                 }
                 $this->db->insert_batch('status_materi', $insert);
-                $this->session->set_flashdata('success-reg', 'Berhasil!');
-                redirect(base_url('admin/data_materi'));
             }
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_materi_course/' . $id));
@@ -889,13 +924,28 @@ class Admin extends CI_Controller
             redirect('admin/data_materi');
         }
     }
-    public function delete_materi($id)
+    public function delete_materi($id, $id_mapel)
     {
+
+        $check_urutan = $this->m_materi->check_urutan_materi($id, $id_mapel)->row();
+        $get_urutan = $this->m_materi->get_urutan_materi($check_urutan->urutan, $id_mapel)->result();
+        // $urutan = ($check_urutan->urutan);
+        foreach ($get_urutan as $k => $g) {
+            $data = [
+                'urutan' => ($g->urutan) - 1,
+            ];
+            $this->db->where('id_materi', $g->id_materi);
+            $this->db->update('materi', $data);
+        }
+        // var_dump($data);
+        // die;
+
         $where = array('id_materi' => $id);
         $this->m_materi->delete_materi($where, 'materi');
 
         $where = array('id_materi' => $id);
         $this->m_materi->delete_materi($where, 'status_materi');
+
 
         $this->session->set_flashdata('materi-delete', 'berhasil');
         redirect('admin/data_materi');

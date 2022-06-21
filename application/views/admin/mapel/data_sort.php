@@ -11,16 +11,22 @@ $this->load->view('admin/template_admin/sidebar');
                     <div class="table-responsive">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Sort Mapel Semester <?= $semester ?></h3>
+                                <h3 class="card-title">Sort Mapel</h3>
                             </div>
                             <div class="card-body">
-                                <ol id="list" class="list-group mb-4">
-                                    <?php foreach ($user as $u) : ?>
-                                        <li style="cursor: pointer;" data-id="<?= $u->id_mapel ?>" data-nama_mapel="<?= $u->nama_mapel ?>" data-slug_mapel="<?= $u->slug_mapel ?>" data-desk="<?= $u->desk ?>" data-tgl_mulai="<?= $u->tgl_mulai ?>" data-tgl_selesai="<?= $u->tgl_selesai ?>" data-image="<?= $u->image ?>" data-id_guru="<?= $u->id_guru ?>" data-semester="<?= $u->id_semester ?>" class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> </li>
-                                    <?php endforeach; ?>
-                                </ol>
-                                <a href="<?= base_url('admin/data_sort_semester') ?>" type="button" class="btn btn-info">Kembali</a>
-                                <button id="sort" type="button" class="btn btn-primary">Update Urutan</button>
+                                <form action="<?= base_url('admin/sort_mapel') ?>" method="post">
+                                    <div class="form-group">
+                                        <label for="">Pilih Semester yang akan di sort</label>
+                                        <select class="form-control select2" name="semester" id="semester">
+                                            <option disabled selected>Pilih semester</option>
+                                            <?php foreach ($semester as $s) : ?>
+                                                <option value="<?= $s->id_semester ?>"><?= $s->semester ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <a href="<?= base_url('admin/data_mapel') ?>" type="button" class="btn btn-info">Kembali</a>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
                             </div>
                         </div>
                     </div>

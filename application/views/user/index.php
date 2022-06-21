@@ -31,11 +31,11 @@
             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                 <div class="row" style="color: black; font-family: 'poppins';">
                     <div class="col-md-12 mt-1 text-center">
-                        <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url($this->session->userdata('qr_code')) ?>" data-holder-rendered="true">
+                        <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url() . $user->qr_code ?>" data-holder-rendered="true">
                         <!-- <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1> -->
                         <h5>QR absensi</h5>
-                        <!-- <a href="<?= site_url('user/regenerate_qrcode') ?>" class="btn btn-sm btn-warning">Generate Ulang</a> -->
-                        <a href="<?= base_url($this->session->userdata('qr_code')) ?>" class="btn btn-sm btn-info" download>Download</a>
+                        <!-- <a href="<?= site_url('user/regenerate_qrcode') ?>" class="btn btn-sm btn-warning">Generate Ulang</a>
+                        <a href="<?= base_url($user->qr_code) ?>" class="btn btn-sm btn-info" download>Download</a> -->
                         <button type="button" class="btn btn-sm btn-primary" onclick="absen()">Absen</button>
                     </div>
                 </div>

@@ -37,7 +37,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-6 text-center">
-                            <img src="<?= base_url('assets/'); ?>img/modal-login-2.png" class="img-fluid img-responsive mx-auto " style="height: 350px;">
+                            <img src="<?= base_url('assets/'); ?>img/modal-login-2.svg" class="img-fluid img-responsive mx-auto " style="height: 350px;">
                         </div>
                         <div class=" col-md-6">
                             <form action="<?= base_url('welcome/validateLogin') ?>" method="post">
@@ -45,14 +45,14 @@
                                     <label class="label-font" for="
                                         exampleFormControlInput1">
                                         Email</label>
-                                    <input type="text" value="<?= set_value('email'); ?>" class="form-control" name="email" autocomplete="off" id="email" placeholder="Masukan email mu disini ..">
+                                    <input required type="text" value="<?= set_value('email'); ?>" class="form-control" name="email" autocomplete="off" id="email" placeholder="Masukan email mu disini ..">
                                     <small class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
                                     <label class="label-font" for="
                                         exampleFormControlInput1">
                                         Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="Masukan password mu disini ..">
+                                    <input required type="password" name="password" class="form-control" id="password" placeholder="Masukan password mu disini ..">
                                     <small class="text-danger"></small>
                                 </div>
                                 <div class="form-check mt-2">
@@ -68,7 +68,7 @@
                                     belum punya akun? daftar <a href=" <?= base_url('user/registration') ?>">
                                         disini.</a>
                                 </p>
-                                <button class="btn btn-block font-weight-bold" style="background-color: #4dbf1c;color:white;font-size:18px;">Login
+                                <button class="btn btn-block font-weight-bold" style="background-color: #193c7f;color:white;font-size:18px;">Login
                                     Sekarang!</button>
                             </form>
                         </div>
