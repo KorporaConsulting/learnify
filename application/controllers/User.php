@@ -51,6 +51,9 @@ class User extends CI_Controller
 
     public function materi($id_mapel, $slug)
     {
+        $data['side_materi'] = $this->m_siswa->tampil_data_side_materi($id_mapel)->result();
+
+
         $data['materi'] = $this->m_siswa->get_nama_materi($slug)->row();
         $id_materi = $data['materi']->id_materi;
 
@@ -182,6 +185,9 @@ class User extends CI_Controller
             }
         }
         $data['materi'] = $this->db->get_where('materi', ['id_materi' => $id])->row();
+        $id_mapel =  $data['materi']->id_mapel;
+        $data['mapel'] = $this->db->get_where('mapel', ['id_mapel' => $id_mapel])->row();
+        $data['slug_mapel'] = $data['mapel']->slug_mapel;
         $data['histori'] = $this->m_siswa->histori_nilai($id)->result();
         // var_dump($data['histori']);
         // die;
@@ -337,7 +343,7 @@ class User extends CI_Controller
         $this->db->where($where);
         $this->db->update('status_materi', $data);
         $this->session->set_flashdata('success-mark', 'berhasil');
-        redirect('user/course/' . $slug_mapel);
+        redirect('user/materi/' . $id_mapel . '/' . $slug);
     }
 
 

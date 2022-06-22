@@ -70,7 +70,6 @@ $totalQuiz = count($quiz);
                                 </p>
                             </div>
                         <?php endforeach; ?>
-
                     </div>
                 </form>
             </div>

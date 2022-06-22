@@ -6,6 +6,11 @@
 ?>
 <!-- Start Greetings Card -->
 <div class="container">
+    <div class="row pt-5">
+        <div class="col-6">
+            <a href="<?= site_url('user/course/' . $slug_mapel) ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> Kembali ke List Materi</a></a>
+        </div>
+    </div>
     <div class="row pt-5 px-5">
         <h4><?= $materi->nama_materi ?></h4>
         <div class="col-md-12 pt-2">
@@ -47,11 +52,16 @@
                     </tbody>
                 </table>
             </div>
-            <?php
-            if (!isset($is_lulus)) { ?>
-                <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-primary">Ulangi Test</a>
-            <?php  }
-            ?>
+            <div class="row">
+                <div class="col text-right">
+                    <?php
+                    if (!isset($is_lulus)) { ?>
+                        <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-warning"><i class="fa fa-refresh"></i> Ulangi Test</a>
+                    <?php  }
+                    ?>
+                </div>
+            </div>
+
         </div>
 
     </div>

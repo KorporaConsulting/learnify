@@ -57,11 +57,11 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-success">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-clipboard"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>Kelas</h4>
+                            <h4>Materi</h4>
                         </div>
                         <div class="card-body">
                             <?php echo $this->db->count_all('materi'); ?>
