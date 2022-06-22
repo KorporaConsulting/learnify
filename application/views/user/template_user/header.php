@@ -69,8 +69,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a>
-                            </li>
+                            <!-- <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a>
+                            </li> -->
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user/all_semester') ?>">Course</a>
@@ -79,10 +79,20 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" href="#">Pembayaran</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/profile') ?>">Profile</a>
+                            <!-- <li class="nav-item"><a class="nav-link" href="<?= base_url('user/profile') ?>">Profile</a>
+                            </li> -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                    Hai, <?php echo $this->session->userdata('nama'); ?> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <!-- <a class="dropdown-item" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a> -->
+                                    <a class="dropdown-item" href="<?= base_url('user/profile') ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+                                    <a class=" dropdown-item text-danger" href="<?= base_url('welcome/logout') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                                </div>
                             </li>
-                            <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
-                            </li>
+                            <!-- <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
+                            </li> -->
                         </ul>
                     </div>
                 </div>

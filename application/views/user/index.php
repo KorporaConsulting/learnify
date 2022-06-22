@@ -16,16 +16,16 @@
 
 
 
-<div class="container" style="min-height: 100vh;">
+<div class="container pt-3" style="min-height: 100vh;">
     <div class="card mb-3 shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
         <h1 class="display-4">Selamat Datang <?= $this->session->userdata('nama') ?></h1>
         <p class="lead">Semoga aktivitas belajarmu disini menyenangkan.</p>
         <hr class="my-4">
         <p>Ingin menemukan course yang tepat dan terbaik untuk anda? Pilih course dan cari yang sesuai dengan kebutuhan kamu</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Course</a>
+        <a class="btn btn-primary btn-lg" href="<?= base_url('user/all_semester') ?>" role="button">Course</a>
     </div>
     <div class="row">
-        <?php if(isset($aktifitas_belajar)) : ?>
+        <?php if (isset($aktifitas_belajar)) : ?>
             <div class="col-lg-6">
                 <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                     <div class="card-header">

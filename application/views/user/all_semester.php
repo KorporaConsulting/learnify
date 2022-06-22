@@ -20,8 +20,8 @@
 
 
 <!-- Start Class Card -->
-<div class="container" style="min-height: 80vh">
-    <div class="row mt-5 mb-5 justify-content-center align-items-center" style="height: 100%;">
+<div class="container" style="min-height: 100vh">
+    <div class="row mt-5 pt-5 mb-5 justify-content-center align-items-center" style="height: 100%;">
         <div class="col-md-12 ">
             <div class="row justify-content-center">
                 <?php foreach ($semester as $s) { ?>
