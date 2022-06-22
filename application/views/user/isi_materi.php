@@ -1,12 +1,47 @@
  <?php $this->load->view('user/template_user/header'); ?>
 
 
- <div class="container">
+ <div class="container-fluid">
+     <div class="row">
+         <div class="col-6 mt-5">
+             <h3><a href="<?= base_url('user/course/' . $file_row->slug_mapel) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Materi</a></h3>
+         </div>
+         <div class="col-6 mt-5  text-right">
+             <?php
+                if ($status_materi->status != 1) { ?>
+                 <h3><a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="badge badge-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a></h3>
+             <?php } ?>
+         </div>
+     </div>
      <div class="row mt-4">
-         <div class="col-md-12 w-150 mb-4">
-             <div class="mt-5 pt-5">
-                 <h3><a href="<?= base_url('user/course/' . $file_row->slug_mapel) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Materi</a></h3>
-             </div>
+         <div class="col-md-3 mt-5 mb-4 d-none d-lg-block overflow-auto " style="max-height:100vh ;">
+             <?php
+                $no = 1;
+                foreach ($side_materi as $m) { ?>
+                 <div class="list-group">
+                     <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi) ?>">
+                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px; <?= ($m->slug_materi == $this->uri->segment(4)) ? 'style="border-color: #1bdbde; border: 5px solid;"' : ""  ?>>
+                             <div class="row" style="color: black; font-family: 'poppins';">
+                                 <div class="col-md-12 mt-1">
+                                     <h2><?php if ($m->status == 0) { ?>
+                                             <i class="fa fa-circle-thin float-right" style="color:green"></i>
+                                             <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                         <?php } elseif ($m->status == 1) { ?>
+                                             <i class="fa fa-check-circle float-right" title="Selesai" style="color:green"></i>
+                                             <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                         <?php } ?>
+                                     </h2>
+                                     <h5 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
+                                     </h5>
+                                     <p><?= $m->desk_materi ?></p>
+                                 </div>
+                             </div>
+                         </div>
+                     </a>
+                 </div>
+             <?php } ?>
+         </div>
+         <div class="col-md-9 w-150 mb-4">
              <div class="card materi mt-2 border-0">
                  <?php
                     if ($file_row->id_file == null && $quiz_row->id_soal == null && $video->id_video == null && $tugas_row->id_tugas == null) { ?>
@@ -16,9 +51,9 @@
                          <p class="lead">Mohon maaf materi yang anda akses belum teredia</p>
                          <hr class="my-4">
                          <p></p>
-                         <p class="lead">
+                         <!-- <p class="lead">
                              <a class="btn btn-primary btn-lg" href="#" onclick="history.back()">Kembali</a>
-                         </p>
+                         </p> -->
                      </div>
                      <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
                          <div class="row">
@@ -42,12 +77,7 @@
                          }
                      </style>
                      <div class=" card-body p-5">
-                         <?php
-                            if ($status_materi->status != 1) { ?>
-                             <div class="text-right">
-                                 <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
-                             </div>
-                         <?php } ?>
+
                          <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                              <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
                              <hr style="background-color: white;">
@@ -76,42 +106,39 @@
                          </div>
                      <?php } ?>
                  <?php } elseif ($video->id_video == null && $quiz_row->id_soal == null && $tugas_row->id_tugas == null) { ?>
-                     <div class="jumbotron jumbotron-fluid">
-                         <div class="container">
-                             <h1 class="display-4">Download Modul</h1>
-                             <p class="lead">Silahkan download modul dibawah ini.</p>
-                             <?php
-                                if ($status_materi->status != 1) { ?>
-                                 <div class="text-right">
-                                     <a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="btn btn-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a>
-                                 </div>
-                             <?php } ?>
-                         </div>
-                     </div>
-                     <div class="card-body p-5">
-                         <h4 class="card-title display-5">Modul</h4>
-                         <hr style="background-color: white;">
-                         <div class="row">
-                             <?php foreach ($file as $files) { ?>
-                                 <div class="col-md-4 mb-4">
-                                     <a href="<?php echo $files->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center"><i class="fa fa-download"></i> Modul <?= $files->nama_file ?></a>
-                                 </div>
-                             <?php } ?>
-                         </div>
-                         <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
-                             <div class="row mt-5 pt-5 pb-5 mb-5">
-                                 <div class="col-6">
-                                     <?php if (isset($previous)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
-                                     <?php } ?>
-                                 </div>
-                                 <div class="col-6">
-                                     <?php if (isset($next)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
-                                     <?php } ?>
-                                 </div>
+
+                     <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
+                         <div class="jumbotron jumbotron-fluid">
+                             <div class="container">
+                                 <h1 class="display-4">Download Modul</h1>
+                                 <p class="lead">Silahkan download modul dibawah ini.</p>
                              </div>
-                         <?php } ?>
+                         </div>
+                         <div class="card-body p-5">
+                             <h4 class="card-title display-5">Modul</h4>
+                             <hr style="background-color: white;">
+                             <div class="row">
+                                 <?php foreach ($file as $files) { ?>
+                                     <div class="col-md-4 mb-4">
+                                         <a href="<?php echo $files->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center"><i class="fa fa-download"></i> Modul <?= $files->nama_file ?></a>
+                                     </div>
+                                 <?php } ?>
+                             </div>
+                             <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                                 <div class="row mt-5 pt-5 pb-5 mb-5">
+                                     <div class="col-6">
+                                         <?php if (isset($previous)) { ?>
+                                             <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                         <?php } ?>
+                                     </div>
+                                     <div class="col-6">
+                                         <?php if (isset($next)) { ?>
+                                             <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                         <?php } ?>
+                                     </div>
+                                 </div>
+                             <?php } ?>
+                         </div>
                      </div>
                  <?php } elseif ($video->id_video == null && $file_row->id_file == null && $tugas_row->id_tugas == null) {
                         redirect('user/quiz/' . $materi->id_materi)
