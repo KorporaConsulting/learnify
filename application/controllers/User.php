@@ -20,8 +20,15 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        if (isset($_COOKIE['lastMapel'])){
+            $data['aktifitas_belajar'] = json_decode($_COOKIE['lastMapel']);
+        }
+
+        // header('Content-type: application/json');
+        // echo json_encode($data);
+        // die;
         $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
@@ -35,12 +42,25 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function all_semester ()
+    {
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+        
+
+        $this->load->view('user/all_semester', $data);
+    }
+
     public function course($slug)
     {
 
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
+        
+        setcookie('lastMapel', json_encode([
+            'url' => current_url(),
+            'data' => $data['mapel']
+        ]), 0, '/');
         // var_dump($this->session->userdata('id_user'));
         // die;
         // var_dump($data['semester']);
@@ -513,11 +533,19 @@ class User extends CI_Controller
     }
     public function regenerate_qrcode()
     {
+        
+
         $this->load->library('qrcode');
         $data['qr_code'] = $this->qrcode->generate($this->session->userdata('email'));
         $where['id_user'] = $this->session->userdata('id_user');
         $this->db->where($where)->update('user', $data);
         $this->session->set_flashdata('sukses-qr', 'QR code berhasil di generate');
+        $this->session->set_userdata('qr_code', $data['qr_code']);
         redirect('user/profile');
+    }
+
+    public function detail_activity_learn ()
+    {
+        $this->load->view('user/detail_activity_learn');
     }
 }

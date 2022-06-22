@@ -68,7 +68,7 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user') ?>">Course</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/all_semester') ?>">Course</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="#">Transkrip</a>
                             </li>

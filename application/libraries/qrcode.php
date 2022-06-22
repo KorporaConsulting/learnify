@@ -14,10 +14,14 @@ class qrcode
 
     public function generate($data)
     {
+        $password = "ketik amin biar saya masuk surga";
+        $encrypted_string = openssl_encrypt($data, "AES-128-ECB", $password);
+        // $decrypted_string = openssl_decrypt($encrypted_string, "AES-128-ECB", $password);
+
         $result = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
-            ->data($data)
+            ->data($encrypted_string)
             // ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
             ->size(300)
