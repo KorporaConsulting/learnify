@@ -20,7 +20,7 @@
                 foreach ($side_materi as $m) { ?>
                  <div class="list-group">
                      <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi) ?>">
-                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px; <?= ($m->slug_materi == $this->uri->segment(4)) ? 'style="border-color: #1bdbde;"' : ""  ?>>
+                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px; <?= ($m->slug_materi == $this->uri->segment(4)) ? 'style="border-color: #1bdbde; border: 5px solid;"' : ""  ?>>
                              <div class="row" style="color: black; font-family: 'poppins';">
                                  <div class="col-md-12 mt-1">
                                      <h2><?php if ($m->status == 0) { ?>
@@ -42,7 +42,6 @@
              <?php } ?>
          </div>
          <div class="col-md-9 w-150 mb-4">
-
              <div class="card materi mt-2 border-0">
                  <?php
                     if ($file_row->id_file == null && $quiz_row->id_soal == null && $video->id_video == null && $tugas_row->id_tugas == null) { ?>
