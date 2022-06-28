@@ -23,10 +23,13 @@ $this->load->view('admin/template_admin/sidebar');
                     <div class="card-body">
                         <ul class="nav nav-pills" id="myTab3" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Video</a>
+                                <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">Link Zoom</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Modul/File</a>
+                                <a class="nav-link" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Video</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Modul</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Quiz</a>
@@ -36,8 +39,58 @@ $this->load->view('admin/template_admin/sidebar');
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent2">
-                            <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
+                            <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab2">
                                 <?php if ($file_row == null && $quiz_row == null && $tugas_row == null) { ?>
+                                    <?php if ($zoom_row == null) { ?>
+                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".zoom">Tambah Link Zoom ⭢</button>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="row mt-5">
+                                    <div class="col-12 col-sm-6 col-lg-12">
+                                        <h4>Link Zoom Kelas Live</h4>
+                                        <table id="example" class="table align-items-center mt-5">
+                                            <thead class="thead-light">
+                                                <tr class="text-center">
+                                                    <th scope="col">No</th>
+                                                    <th scope="col">Link Zoom</th>
+                                                    <th scope="col">Deskripsi</th>
+                                                    <th scope="col">Tanggal dibuat</th>
+                                                    <th scope="col">Option</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $no = 1;
+                                                foreach ($zoom as $u) {
+                                                ?>
+                                                    <tr class="text-center">
+                                                        <th scope="row">
+                                                            <?php echo $no++ ?>
+                                                        </th>
+                                                        <td>
+                                                            <a target="_blank" class="btn btn-primary" href="<?php echo $u->link ?>" role="button"><?php echo $u->link ?></a>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $u->desk_file ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $u->created_at ?>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a href="<?php echo site_url('admin/update_zoom/' . $u->id_file); ?>" class="btn btn-info">Edit ⭢</a>
+                                                            <a onclick="zoom_delete(<?= $u->id_file ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                        </td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="home3" role="tabpanel" aria-labelledby="home-tab3">
+                                <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
                                 <?php } ?>
                                 <div class="row mt-5">
@@ -68,12 +121,12 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
-                                <?php if ($video_row == null && $quiz_row == null && $tugas_row == null) { ?>
+                                <?php if ($video_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
                                 <?php } ?>
                                 <div class="row mt-5">
                                     <div class="col-12 col-sm-6 col-lg-12">
-                                        <h4>List Modul/File</h4>
+                                        <h4>List Modul</h4>
                                         <div class="row">
                                             <?php foreach ($file as $m) { ?>
                                                 <div class="col-md-3">
@@ -97,7 +150,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                                <?php if ($file_row == null && $video_row == null && $tugas_row == null) { ?>
+                                <?php if ($file_row == null && $video_row == null && $tugas_row == null && $zoom_row == null) { ?>
                                     <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Soal ⭢</button>
                                 <?php } ?>
                                 <table id="example" class="table align-items-center table-flush mt-5">
@@ -129,7 +182,7 @@ $this->load->view('admin/template_admin/sidebar');
                                                     <a href="<?php echo site_url('admin/detail_soal/' . $u->id_soal); ?>" class="btn btn-success">Detail ⭢</a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="<?php echo site_url('admin/edit_soal/' . $u->id_soal); ?>" class="btn btn-info">Update ⭢</a>
+                                                    <a href="<?php echo site_url('admin/edit_soal/' . $u->id_soal); ?>" class="btn btn-info">Edit ⭢</a>
                                                     <a onclick="deletesoal(<?= $u->id_soal ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                 </td>
                                             </tr>
@@ -140,7 +193,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="contact4" role="tabpanel" aria-labelledby="contact-tab4">
-                                <?php if ($file_row == null && $video_row == null && $quiz_row == null) { ?>
+                                <?php if ($file_row == null && $video_row == null && $quiz_row == null && $zoom_row == null) { ?>
                                     <?php if ($tugas_row == null) { ?>
                                         <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".tugas">Tambah Tugas ⭢</button>
                                     <?php } ?>
@@ -490,7 +543,51 @@ $this->load->view('admin/template_admin/sidebar');
         </div>
     </div>
 </div>
+<div class="modal fade zoom" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Tambah Link Zoom</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('admin/insert_zoom') ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>">
+                    <input type="hidden" name="modal" value="quiz">
+                    <div class="form-group">
+                        <label for="nama_zoom">Topik</label>
+                        <input required id="nama_zoom" type="text" class="form-control" value="<?php echo set_value('nama_zoom') ?>" name="nama_zoom">
+                        <?= form_error('nama_zoom', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi (Optional)</label>
+                        <textarea class="form-control" name="desk_zoom" id="desk_zoom" cols="30" rows="10"><?php echo set_value('desk_zoom') ?></textarea>
+                        <?= form_error('desk_zoom', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="link">Link Zoom</label>
+                        <input required id="link" type="text" class="form-control" value="<?php echo set_value('link') ?>" name="link">
+                        <?= form_error('link', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">
+                            Submit ⭢
+                        </button>
+                    </div>
+                </form>
+            </div>
 
+        </div>
+    </div>
+</div>
 
 <!-- Start Sweetalert -->
 <?php if ($this->session->flashdata('success-video')) : ?>
@@ -627,6 +724,23 @@ $this->load->view('admin/template_admin/sidebar');
             console.log(result)
             if (result.value) {
                 window.location = "<?= base_url('admin/delete_file/') ?>" + id + "/" + id_materi;
+            }
+        })
+    }
+
+    function zoom_delete(id, id_materi) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            console.log(result)
+            if (result.value) {
+                window.location = "<?= base_url('admin/delete_zoom/') ?>" + id + "/" + id_materi;
             }
         })
     }

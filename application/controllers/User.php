@@ -1,4 +1,7 @@
 <?php
+
+use SebastianBergmann\Environment\Console;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller
@@ -22,9 +25,14 @@ class User extends CI_Controller
     {
 
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
-        if (isset($_COOKIE['lastMapel'])){
+        if (isset($_COOKIE['lastMapel'])) {
             $data['aktifitas_belajar'] = json_decode($_COOKIE['lastMapel']);
         }
+        $data['total_absen'] = $this->m_siswa->get_total_absen();
+        $data['absen'] = $this->m_siswa->get_absen();
+
+        // var_dump($data['total_absen']);
+        // die;
 
         // header('Content-type: application/json');
         // echo json_encode($data);
@@ -42,11 +50,9 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function all_semester ()
+    public function all_semester()
     {
         $data['semester'] = $this->m_materi->tampil_data_semester()->result();
-        
-
         $this->load->view('user/all_semester', $data);
     }
 
@@ -56,13 +62,15 @@ class User extends CI_Controller
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
-        
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        $data['check_absensi'] = $this->m_siswa->check_absensi($data['mapel']->id_mapel, $this->session->userdata('id_user'));
+
+
         setcookie('lastMapel', json_encode([
             'url' => current_url(),
             'data' => $data['mapel']
         ]), 0, '/');
-        // var_dump($this->session->userdata('id_user'));
-        // die;
+
         // var_dump($data['semester']);
         // die;
         $this->load->view('user/materi', $data);
@@ -80,6 +88,8 @@ class User extends CI_Controller
         $id_user = $this->session->userdata('id_user');
         $data['file_row'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->row();
         $data['file'] = $this->m_siswa->tampil_data_file($id_mapel, $slug, $id_user)->result();
+        $data['zoom_row'] = $this->m_siswa->tampil_data_zoom($id_mapel, $slug, $id_user)->row();
+        $data['zoom'] = $this->m_siswa->tampil_data_zoom($id_mapel, $slug, $id_user)->result();
         $data['video'] = $this->m_siswa->tampil_data_video($id_mapel, $slug, $id_user)->row();
         $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
         $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->row();
@@ -88,6 +98,9 @@ class User extends CI_Controller
         $data['tugas'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
+
+        // var_dump($data['file_row']);
+        // die;
 
         $id_user = $this->session->userdata('id_user');
         $data['status_materi'] = $this->m_materi->get_status_materi_user($id_materi, $id_user)->row();
@@ -162,8 +175,7 @@ class User extends CI_Controller
 
         $where = [
             'id_user' => $this->session->userdata('id_user'),
-            'id_materi' => $this->input->post('id_materi'),
-            'type' => 'quiz'
+            'id_materi' => $this->input->post('id_materi')
         ];
 
         $cek_soal_dikerjakan = $this->db->select('nilai')->where($where)->get('nilai')->num_rows();
@@ -176,10 +188,15 @@ class User extends CI_Controller
             }
         }
 
+        if ($this->input->post('type') == 0) {
+            $type = 'quiz';
+        } else {
+            $type = 'final';
+        }
         $tb_nilai = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $this->input->post('id_materi'),
-            'type' => 'quiz',
+            'type' => $type,
             'nilai' => $nilai,
         ];
         $this->db->insert_batch('jawaban', $jawaban_batch);
@@ -539,8 +556,6 @@ class User extends CI_Controller
     }
     public function regenerate_qrcode()
     {
-        
-
         $this->load->library('qrcode');
         $data['qr_code'] = $this->qrcode->generate($this->session->userdata('email'));
         $where['id_user'] = $this->session->userdata('id_user');
@@ -550,8 +565,63 @@ class User extends CI_Controller
         redirect('user/profile');
     }
 
-    public function detail_activity_learn ()
+    public function detail_activity_learn()
     {
         $this->load->view('user/detail_activity_learn');
+    }
+
+    public function absensi_input()
+    {
+        $password = "ketik amin biar saya masuk surga";
+        $email = $this->input->post('qr_code', true);
+        // $encrypted_string = openssl_encrypt($email, "AES-128-ECB", $password);
+
+        $decrypted_string = openssl_decrypt($email, "AES-128-ECB", $password);
+
+
+        if ($decrypted_string != $this->session->userdata('email')) {
+            echo 'error';
+            die;
+        }
+
+        $data = array(
+            'id_user' => $this->input->post('id_user'),
+            'id_mapel' => $this->input->post('id_mapel'),
+            'status_absensi' => $this->input->post('status_absensi')
+        );
+        $this->db->insert('absensi', $data);
+        echo 'Absen successfully.';
+    }
+
+    public function transkrip()
+    {
+        $data['nilai_quiz'] = $this->m_siswa->nilai_quiz()->result();
+        // $data['nilai_final'] = $this->m_siswa->nilai_final()->result();
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+
+
+        //get the highest value from multi dimenstion array in php
+        //get the max value from multi dimenstion array in php
+        $array = [[100, 200, 600], [205, 108, 849, 456], [548, 149, 7840]];
+        $max = 0;
+        for ($i = 0; $i < count($array); $i++) {
+            for ($j = 0; $j < count($array[$i]); $j++) {
+                if ($array[$i][$j] > $max) {
+                    $max = $array[$i][$j];
+                }
+            }
+        }
+        print $max;
+
+        // $row = [];
+        // $lastNilai = 0;
+        // foreach ($data['nilai_quiz'] as $key => $value) {
+        //     if ($value->nilai > $lastNilai) {
+        //         $lastNilai = $value->nilai;
+        //         $row = $value;
+        //     }
+        // }
+        die;
+        $this->load->view('user/transkrip', $data);
     }
 }

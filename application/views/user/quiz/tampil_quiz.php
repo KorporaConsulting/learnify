@@ -24,6 +24,7 @@ $totalQuiz = count($quiz);
                 <form action="<?= site_url('user/save_quiz') ?>" method="post">
                     <input type="hidden" name="total_soal" value="<?= $totalQuiz ?>">
                     <input type="hidden" name="id_materi" value="<?= $this->uri->segment(3); ?>">
+
                     <div id="quiz">
                         <?php foreach ($quiz as $key => $val) : ?>
                             <input type="hidden" name="id_soal[]" value="<?= $val->id_soal ?>">
@@ -55,6 +56,7 @@ $totalQuiz = count($quiz);
                                         </label>
                                     </div>
                                     <input type="hidden" name="answer_key<?= $key ?>" value="opsi_<?= $val->jawaban ?>">
+                                    <input type="hidden" name="type" value="<?= $val->final_test ?>">
                                 </div>
                                 <div class="panel-footer">
                                     <?php if ($totalQuiz == $key + 1) { ?>
@@ -69,6 +71,7 @@ $totalQuiz = count($quiz);
                                 </div>
                                 </p>
                             </div>
+
                         <?php endforeach; ?>
                     </div>
                 </form>

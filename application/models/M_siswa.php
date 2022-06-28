@@ -86,6 +86,22 @@ class M_siswa extends CI_Model
         return  $this->db->get();
     }
 
+    public function tampil_data_zoom($id_mapel, $slug, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
+        $this->db->where('mapel.id_mapel', $id_mapel);
+        $this->db->where('materi.slug_materi', $slug);
+        $this->db->where('user.id_user', $id_user);
+        $this->db->where('file.is_tugas', 2);
+        return  $this->db->get();
+    }
+
     public function tampil_data_video($id_mapel, $slug, $id_user)
     {
         $this->db->select('*');
@@ -286,5 +302,43 @@ class M_siswa extends CI_Model
         $this->db->from('mapel');
         $this->db->where('id_mapel', $id_mapel);
         return  $this->db->get();
+    }
+    public function check_absensi($id_mapel, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    public function get_total_absen()
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        $this->db->where('user.id_user',  $this->session->userdata('id_user'));
+        $query =  $this->db->get();
+        return $query->num_rows();
+    }
+    public function get_absen()
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->where('id_user',  $this->session->userdata('id_user'));
+        $query =  $this->db->get();
+        return $query->num_rows();
+    }
+    public function nilai_quiz()
+    {
+        $this->db->select('mapel.nama_mapel,materi.nama_materi,nilai.nilai');
+        $this->db->from('mapel');
+        $this->db->join('materi', 'mapel.id_mapel = materi.id_mapel');
+        $this->db->join('nilai', 'materi.id_materi = nilai.id_materi');
+        $this->db->where('nilai.id_user', $this->session->userdata('id_user'));
+        $this->db->where('nilai.type', 'quiz');
+        return $this->db->get();
     }
 }
