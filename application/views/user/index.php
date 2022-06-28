@@ -142,8 +142,12 @@
                             } // Optional, if you want bounded box UI
                         },
                         (decodedText, decodedResult) => {
+                            
                             $('#absenModal').modal('hide');
                             $('#kehadiran').html('76/100');
+
+                            $.
+
                             html5QrCode.stop().then((ignore) => {
                                 // QR Code scanning is stopped.
                             }).catch((err) => {
