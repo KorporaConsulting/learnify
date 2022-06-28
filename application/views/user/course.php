@@ -12,7 +12,7 @@
                     dan taddaa materi dan video materi siap disaksikan! Dan jangan lupa kerjakan ujian agar kamu lulus 😉 </p>
                 <hr>
                 <h4 data-aos="fade-down" data-aos-duration="1700"><?php echo $this->session->userdata('nama'); ?> - Sales University Students</h3>
-                    <h3><a href="<?= base_url('user') ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Semester</a></h3>
+                    <h3><a href="<?= base_url('user/all_semester') ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Semester</a></h3>
             </div>
         </div>
     </div>

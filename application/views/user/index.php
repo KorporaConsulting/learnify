@@ -5,7 +5,7 @@
         <div class="row" style="color: black; font-family: 'poppins';">
             <div class="col-md-12 mt-1">
                 <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400">Selamat Datang
-                    di Sales University <span style="font-size: 40px;">👋🏻
+                    di Sales University <span style="font-size: 40px;">
                     </span> </h1>
                 <p>Hello Students! , Ini merupakan halaman utama Sales University ! Selamat belajar ya students!</p>
                 <hr>
@@ -18,7 +18,7 @@
 
 <div class="container pt-3" style="min-height: 100vh;">
     <div class="card mb-3 shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-        <h1 class="display-4">Selamat Datang <?= $this->session->userdata('nama') ?></h1>
+        <h1 class="display-4">Selamat Datang <?= $this->session->userdata('nama') ?> 👋🏻</h1>
         <p class="lead">Semoga aktivitas belajarmu disini menyenangkan.</p>
         <hr class="my-4">
         <p>Ingin menemukan course yang tepat dan terbaik untuk anda? Pilih course dan cari yang sesuai dengan kebutuhan kamu</p>
@@ -53,7 +53,7 @@
         <div class="col-lg-6">
             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                 <div class="card-header">
-                    List Course
+                    Absensi
                 </div>
                 <div class="card-body">
                     <div class="row mb-3 justify-content-center" style="color: black; font-family: 'poppins';">
@@ -64,20 +64,15 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-md-4 mt-1 text-center">
-                            <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url() . $user->qr_code ?>" data-holder-rendered="true">
-                            <!-- <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1> -->
-                            <h5>QR absensi</h5>
-                            <!-- <a href="<?= site_url('user/regenerate_qrcode') ?>" class="btn btn-sm btn-warning">Generate Ulang</a>
-                        <a href="<?= base_url($user->qr_code) ?>" class="btn btn-sm btn-info" download>Download</a> -->
-                            <button type="button" class="btn btn-sm btn-primary" onclick="absen()">Absen</button>
-                        </div>
-
-                        <div class="col-md-8 row">
+                        <div class="col-md-12 row">
                             <div class="col-md-12 mt-1">
                                 <h5 class="text-center">Kehadiran</h5>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="kehadiran">75/100</div>
+                                    <?php
+                                    if ($total_absen <= 0) $total_absen = 1;
+                                    $absen_progres  = ($absen / $total_absen) * 100;
+                                    ?>
+                                    <div class="progress-bar" role="progressbar" style="width:<?= ($absen_progres) ? $absen_progres : 0  ?> %" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="kehadiran"><?= $absen ?>/<?= $total_absen ?></div>
                                 </div>
                                 <!-- <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url('assets/img/qr-code-login/qr_icon.svg') ?>" data-holder-rendered="true"> -->
                             </div>

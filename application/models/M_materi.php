@@ -303,7 +303,7 @@ class M_materi extends CI_Model
         $this->db->where($where);
         $this->db->delete($table);
     }
-    public function tampil_data_materi_admin($id_user)
+    public function tampil_data_materi_admin($id_user, $slug)
     {
         $this->db->select('* ,COUNT(status_materi.status) AS materi_status');
         $this->db->from('mapel');
@@ -315,7 +315,7 @@ class M_materi extends CI_Model
         $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user');
         // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
         $this->db->where('status_materi.id_user', $id_user);
-        // $this->db->where('mapel.slug_mapel', $slug);
+        $this->db->where('mapel.slug_mapel', $slug);
         $this->db->group_by("materi.id_materi");
         $this->db->order_by("materi.urutan", "asc");
         return  $this->db->get();
@@ -488,5 +488,14 @@ class M_materi extends CI_Model
         $this->db->where('id_semester', $id_semester);
         $this->db->where('urutan >', $urutan);
         return $this->db->get();
+    }
+    public function where_tampil_zoom($id)
+    {
+        $this->db->select('*');
+        $this->db->from('file');
+        $this->db->join('materi', 'materi.id_materi = file.id_materi');
+        $this->db->where('file.id_materi', $id);
+        $this->db->where('file.is_tugas', 2);
+        return  $this->db->get();
     }
 }

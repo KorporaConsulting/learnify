@@ -16,7 +16,7 @@ class qrcode
     {
         $password = "ketik amin biar saya masuk surga";
         $encrypted_string = openssl_encrypt($data, "AES-128-ECB", $password);
-        // $decrypted_string = openssl_decrypt($encrypted_string, "AES-128-ECB", $password);
+        $decrypted_string = openssl_decrypt($encrypted_string, "AES-128-ECB", $password);
 
         $result = Builder::create()
             ->writer(new PngWriter())

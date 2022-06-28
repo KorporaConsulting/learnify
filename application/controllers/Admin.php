@@ -119,10 +119,10 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/detail_siswa', $data);
     }
 
-    public function progres_siswa($id)
+    public function progres_siswa($id, $slug)
     {
         $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
-        $data['progres'] = $this->m_materi->tampil_data_materi_admin($id)->result();
+        $data['progres'] = $this->m_materi->tampil_data_materi_admin($id, $slug)->result();
         // var_dump($data['progres']);
         // die;
         $this->load->view('admin/progres/progres_materi', $data);
@@ -962,6 +962,8 @@ class Admin extends CI_Controller
         $data['quiz_row'] = $this->m_materi->where_tampil_quiz($id)->row();
         $data['tugas'] = $this->m_materi->where_tampil_tugas($id)->result();
         $data['tugas_row'] = $this->m_materi->where_tampil_tugas($id)->row();
+        $data['zoom'] = $this->m_materi->where_tampil_zoom($id)->result();
+        $data['zoom_row'] = $this->m_materi->where_tampil_zoom($id)->row();
         // var_dump($data['quiz_row']);
         // var_dump($data['file_row']);
         // var_dump($data['video_row']);
@@ -1486,5 +1488,62 @@ class Admin extends CI_Controller
 
         $this->session->set_flashdata('success-approve', 'Approve telah dihapus');
         redirect('admin/list_tugas_user');
+    }
+
+
+    public function insert_zoom()
+    {
+        $id_materi = $this->input->post('id_materi', true);
+        $data = [
+            'nama_file' => htmlspecialchars($this->input->post('nama_zoom', true)),
+            'desk_file' => htmlspecialchars($this->input->post('desk_zoom', true)),
+            'link' => htmlspecialchars($this->input->post('link', true)),
+            'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            'is_tugas' => 2,
+        ];
+        $this->db->insert('file', $data);
+        $this->session->set_flashdata('tab', 'home2');
+        $this->session->set_flashdata('nav-link', 'home-tab2');
+        $this->session->set_flashdata('success-zoom', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+
+    public function update_zoom($id)
+    {
+        $where = array('id_file' => $id);
+        $data['file'] = $this->m_materi->update_materi($where, 'file')->row();
+        $this->load->view('admin/materi/update_zoom', $data);
+    }
+
+    public function edit_zoom()
+    {
+        $id_materi = $this->input->post('id_materi', true);
+        $data = [
+            'nama_file' => htmlspecialchars($this->input->post('nama_zoom', true)),
+            'desk_file' => htmlspecialchars($this->input->post('desk_zoom', true)),
+            'link' => htmlspecialchars($this->input->post('link', true)),
+            // 'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            // 'is_tugas' => 2,
+        ];
+
+        $where = array(
+            'id_file' => $this->input->post('id_file'),
+        );
+
+        $this->m_materi->update_data_file($where, $data, 'file');
+        $this->session->set_flashdata('tab', 'home2');
+        $this->session->set_flashdata('nav-link', 'home-tab2');
+        $this->session->set_flashdata('success-zoom', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+
+    public function delete_zoom($id, $id_materi)
+    {
+        $where = array('id_file' => $id);
+        $this->m_materi->delete_file($where, 'file');
+        $this->session->set_flashdata('tab', 'home2');
+        $this->session->set_flashdata('nav-link', 'home-tab2');
+        $this->session->set_flashdata('success-zoom', 'Berhasil!');
+        redirect(base_url('admin/isi_materi/' . $id_materi));
     }
 }
