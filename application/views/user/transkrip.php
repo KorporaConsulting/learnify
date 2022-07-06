@@ -44,25 +44,38 @@
         </div>
         <div class="row mt-5 justify-content-center align-items-center">
             <div class="col-md-12 ">
+                <a class="btn btn-sm btn-info float-right mb-3" href="<?= base_url('user/detail_transkrip') ?>">Detail</a>
+                <a class="btn btn-sm btn-primary float-left mb-3" href="<?= base_url('user/print_transkrip') ?>"><i class="fa fa-print"></i> Cetak</a>
                 <div class="table-responsive">
                     <table class="table">
-                        <thead>
+                        <thead class="text-center">
                             <tr>
                                 <th>Semester</th>
                                 <th>Kode Course</th>
                                 <th>Course</th>
                                 <th>Nilai</th>
-                                <th>Mutu</th>
+                                <th>Grade</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                        <tbody class="text-center">
+                            <?php foreach ($transkrip as $t) { ?>
+                                <tr>
+                                    <td scope="row"><?= $t->id_semester ?></td>
+                                    <td><?= $t->kode_mapel ?></td>
+                                    <td><?= $t->nama_mapel ?></td>
+                                    <td><?= $t->nilai_final ?></td>
+                                    <?php foreach ($mutu as $mu) { ?>
+                                        <?php
+                                        $pisah = explode("-", $mu->nilai);
+                                        ?>
+                                        <?php if ($t->nilai_final >= $pisah[0] && $t->nilai_final <= $pisah[1]) { ?>
+                                            <td><b style="color: black;"><?= $mu->mutu ?></b></td>
+                                        <?php
+                                            break;
+                                        } ?>
+                                    <?php } ?>
+                                </tr>
+                            <?php  } ?>
                         </tbody>
                     </table>
                 </div>

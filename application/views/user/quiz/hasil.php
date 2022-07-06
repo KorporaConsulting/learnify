@@ -13,11 +13,13 @@
     </div>
     <div class="row pt-5 px-5">
         <h4><?= $materi->nama_materi ?></h4>
-        <div class="col-md-12 pt-2">
-            <div class="alert alert-warning" role="alert">
-                <strong>Jika anda tidak lulus lebih dari 2 kali maka nilai maksimal yang dapat Anda peroleh adalah 70</strong>
+        <?php if ($is_final == 1) { ?>
+            <div class="col-md-12 pt-2">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Jika anda tidak lulus lebih dari <?= $opt_quiz->max_post_test ?> kali maka nilai maksimal yang dapat Anda peroleh adalah 70</strong>
+                </div>
             </div>
-        </div>
+        <?php } ?>
     </div>
     <div class="row mt-4">
         <div class="col-md-12">
@@ -40,7 +42,7 @@
                                 <td><?= $hi->nama_materi ?></td>
                                 <td><?= $hi->nilai ?></td>
                                 <?php
-                                if ($hi->nilai < 70) { ?>
+                                if ($hi->nilai < $min_nilai->min_nilai) { ?>
                                     <td><span class="badge badge-danger badge-lg">Tidak Lulus</span></td>
                                 <?php } else { ?>
                                     <td><span class="badge badge-success badge-lg">Lulus</span></td>
@@ -56,7 +58,7 @@
                 <div class="col text-right">
                     <?php
                     if (!isset($is_lulus)) { ?>
-                        <a href="<?= site_url('user/quiz/' . $materi->id_materi) ?>" class="btn btn-warning"><i class="fa fa-refresh"></i> Ulangi Test</a>
+                        <a href="<?= site_url('user/quiz/' . $materi->id_materi . '/' . $id_quiz) ?>" class="btn btn-warning"><i class="fa fa-refresh"></i> Ulangi Test</a>
                     <?php  }
                     ?>
                 </div>

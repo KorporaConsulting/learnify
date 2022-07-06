@@ -39,6 +39,9 @@
 <script src="<?= base_url('assets/') ?>vendors/counter-up/jquery.counterup.js"></script>
 <script src="<?= base_url('assets/') ?>js/mail-script.js"></script>
 <script src="<?= base_url('assets/') ?>js/theme.js"></script>
+<script src="<?= base_url('assets/') ?>/mediaelement/to/mediaelement-and-player.min.js"></script>
+<!-- Add any other renderers you need; see Use Renderers for more information -->
+<link rel="stylesheet" href="/path/to/mediaelementplayer.min.css" />
 <script>
     var animateButton = function(e) {
         e.preventDefault;
@@ -69,5 +72,20 @@
         })
     <?php endif; ?>
 </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/62c396d87b967b117998035c/1g760afk6';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
 
 <!-- End Animate On Scroll -->

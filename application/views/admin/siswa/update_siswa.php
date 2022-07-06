@@ -35,13 +35,13 @@ $this->load->view('admin/template_admin/sidebar');
                     <p class="text-center" style="line-height: 5px;">Silahkan isi data dibawah untuk update
                         data, dan upload file diatas untuk update data profile picture</p>
                     <hr>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="nis">Nomer Induk Siswa</label>
                         <input id="nis" readonly type="number" class="form-control" value="<?= $u->nis ?>" name="nis">
                         <?= form_error('nis', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <input type="hidden" name="id_user" value="<?= $u->id_user ?>">
                         <input type="hidden" name="password" value="<?= $u->password ?>">

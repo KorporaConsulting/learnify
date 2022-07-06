@@ -79,9 +79,11 @@
                          <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                              <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
                              <hr style="background-color: white;">
-
-                             <div class="embed-responsive embed-responsive-16by9 plyr__video-embed" id="player">
-                                 <iframe class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                             <div class="plyr__video-embed" id="player">
+                                 <!-- <div class="embed-responsive embed-responsive-16by9" id="player"> -->
+                                 <!-- <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="<? $video->link ?>"></div> -->
+                                 <iframe allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                                 <!-- </div> -->
                              </div>
                              <div class="text-center mt-2">
                                  <h5><?= $video->nama_video ?></h5>
@@ -103,7 +105,7 @@
                              </div>
                          </div>
                      <?php } ?>
-                 <?php } elseif ($file_row->is_tugas == 0 && $file_row->id_tugas != null) { ?>
+                 <?php } elseif ($file_row->is_tugas == 0 && $file_row->id_file != null) { ?>
                      <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                          <div class="jumbotron jumbotron-fluid" style="background: url(<?= base_url('assets/img/modul.jpg') ?>) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
                              <div class="container">
@@ -138,9 +140,9 @@
                          </div>
                      </div>
                  <?php } elseif ($quiz_row->id_soal != null) {
-                        redirect('user/quiz/' . $materi->id_materi)
+                        redirect('user/quiz/' . $materi->id_materi . '/' . $quiz_row->id_quiz)
                     ?>
-                 <?php } elseif ($tugas_row->id_tugas != null) { ?>
+                 <?php } elseif ($list_tugas_row != null) { ?>
                      <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                          <div class="row" style="color: black; font-family: 'poppins';">
                              <div class="col-md-12 mt-1 text-center">

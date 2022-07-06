@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Scripts -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" /> -->
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>plyr/plyr.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/popper.js"></script>
@@ -75,7 +76,7 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user/all_semester') ?>">Course</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Transkrip</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/transkrip') ?>">Transkrip</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="#">Pembayaran</a>
                             </li>

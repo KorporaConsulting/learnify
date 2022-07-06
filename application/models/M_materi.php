@@ -119,9 +119,17 @@ class M_materi extends CI_Model
     public function where_tampil_quiz($id)
     {
         $this->db->select('*');
-        $this->db->from('tb_soal');
-        $this->db->join('materi', 'materi.id_materi = tb_soal.id_materi');
-        $this->db->where('tb_soal.id_materi', $id);
+        $this->db->from('quiz');
+        $this->db->join('materi', 'materi.id_materi = quiz.id_materi');
+        $this->db->where('quiz.id_materi', $id);
+        return  $this->db->get();
+    }
+    public function where_tampil_soal($id)
+    {
+        $this->db->select('*');
+        $this->db->from('quiz');
+        $this->db->join('tb_soal', 'tb_soal.id_quiz = quiz.id_quiz');
+        $this->db->where('tb_soal.id_quiz', $id);
         return  $this->db->get();
     }
     public function where_tampil_file($id)
@@ -497,5 +505,15 @@ class M_materi extends CI_Model
         $this->db->where('file.id_materi', $id);
         $this->db->where('file.is_tugas', 2);
         return  $this->db->get();
+    }
+    public function transkrip($id)
+    {
+        $this->db->select('*, max(transkrip.nilai) as nilai_final');
+        $this->db->from('transkrip');
+        $this->db->join('mapel', 'mapel.id_mapel = transkrip.id_mapel');
+        $this->db->where('transkrip.id_user', $id);
+        $this->db->group_by('transkrip.id_mapel');
+        $this->db->order_by('mapel.id_semester');
+        return $this->db->get();
     }
 }

@@ -11,21 +11,19 @@ $this->load->view('admin/template_admin/sidebar');
                     <h2 class="card-title" style="color: black;">Management Materi</h2>
                 <?php  } else { ?>
                     <h2 class="card-title" style="color: black;">Management Materi <?= $course->nama_mapel ?></h2>
+                    <a href="<?= base_url('admin/data_mapel') ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Kembali </a>
                 <?php } ?>
                 <hr>
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
                 <?php if ($this->uri->segment(3) == "") { ?>
                     <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah
-                        Materi ⭢ </a>
+                        Materi </a>
                 <?php  } else { ?>
                     <a href="<?= base_url('admin/add_materi_course/' . $this->uri->segment(3)) ?>" class="btn btn-success">Tambah
-                        Materi ⭢ </a>
+                        Materi </a>
                     <a href="<?= base_url('admin/sort_materi/' . $this->uri->segment(3)) ?>" class="btn btn-primary">Sort
-                        Materi ⭢ </a>
+                        Materi </a>
                 <?php } ?>
-
-
-
             </div>
         </div>
         <div class="row">
@@ -37,8 +35,7 @@ $this->load->view('admin/template_admin/sidebar');
                                 <tr class="text-center">
                                     <th scope="col">No</th>
                                     <th scope="col">Nama Materi</th>
-                                    <th scope="col">Nama Course</th>
-                                    <th scope="col">Semester</th>
+                                    <th scope="col">Urutan</th>
                                     <th scope="col">Isi Materi</th>
                                     <th scope="col">Option</th>
                                 </tr>
@@ -60,10 +57,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
 
                                         <td>
-                                            <?php echo $u->nama_mapel ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $u->semester ?>
+                                            <?php echo $u->urutan ?>
                                         </td>
 
                                         <td class="text-center">
@@ -71,7 +65,6 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_materi/' . $u->id_materi); ?>" class="btn btn-info">Edit Materi⭢</a>
-
                                             <a onclick="yourConfirm(<?= $u->id_materi ?>,<?= $u->id_mapel ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
 

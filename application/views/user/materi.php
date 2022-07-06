@@ -55,6 +55,15 @@
     <!-- Start Class Card -->
     <div class="container">
         <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+            <?php if ($total_materi == $done_materi) { ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-primary" role="alert">
+                            <strong>Anda dapat melihat nilai transkrip anda </strong> <a href="<?= base_url('user/transkrip') ?>" class="alert-link"><b>Disini</b></a>
+                        </div>
+                    </div>
+                </div>
+            <?php  } ?>
             <div class="row" style="color: black; font-family: 'poppins';">
                 <?php
                 $no = 1;
