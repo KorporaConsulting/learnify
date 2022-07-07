@@ -14,9 +14,9 @@ class Admin extends CI_Controller
         $this->load->library('upload');
         $this->load->helper('download');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        if (!$this->session->userdata('email')) {
-            redirect('welcome/admin');
-        }
+        // if (!$this->session->userdata('email')) {
+        //     redirect('welcome/admin');
+        // }
     }
 
     public function index()
@@ -631,6 +631,23 @@ class Admin extends CI_Controller
 
         echo json_encode([
             'success' => true
+        ]);
+    }
+
+    public function update_sort_materi_kunci()
+    {
+        $this->db->where_in('id_materi', $this->input->post('data'));
+        $this->db->update('status_materi', ['kunci' => 0]);
+
+        $this->db->where('id_materi', $this->input->post('id_materi_open'));
+        $this->db->update('status_materi', ['kunci' => 1]);
+
+        $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
+
+
+
+        echo json_encode([
+            'success' => true,
         ]);
     }
 

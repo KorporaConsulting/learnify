@@ -42,15 +42,11 @@ $this->load->view('admin/template_admin/footer');
 
     $('#sort').click(function() {
         const id_mapel = $('#id_mapel').val();
-        const id_mapel = $('#id_mapel').val();
         const data = [];
         const data_key = [];
-        const kunci_open = [];
-        const kunci_open_key = [];
-
+        let id_materi_open = ''
         for (let i = 0; i < $('.list-group-item').length; i++) {
             data.push($('.list-group-item')[i].dataset.id_materi)
-            kunci_open.push($('.list-group-item')[i].dataset.id_status)
             data_key.push({
                 id_mapel: $('.list-group-item')[i].dataset.id_mapel,
                 id_materi: $('.list-group-item')[i].dataset.id_materi,
@@ -61,60 +57,40 @@ $this->load->view('admin/template_admin/footer');
                 created_at: $('.list-group-item')[i].dataset.created_at,
             })
 
-            if (i == 0)(
-
-                kunci_open_key.push({
-                    id_status: $('.list-group-item')[i].dataset.id_status,
-                    id_materi: $('.list-group-item')[i].dataset.id_materi,
-                    id_user: $('.list-group-item')[i].dataset.id_user,
-                    status: $('.list-group-item')[i].dataset.status,
-                    kunci: 1,
-                    semester_status_materi: $('.list-group-item')[i].dataset.semester_status_materi,
-                    created_at: $('.list-group-item')[i].dataset.created_at,
-                })
-            )
-            else {
-                kunci_open_key.push({
-                    id_status: $('.list-group-item')[i].dataset.id_status,
-                    id_materi: $('.list-group-item')[i].dataset.id_materi,
-                    id_user: $('.list-group-item')[i].dataset.id_user,
-                    status: $('.list-group-item')[i].dataset.status,
-                    kunci: 0,
-                    semester_status_materi: $('.list-group-item')[i].dataset.semester_status_materi,
-                    created_at: $('.list-group-item')[i].dataset.created_at,
-                })
-
+            if (i == 0) {
+                id_materi_open = $('.list-group-item')[i].dataset.id_materi
             }
 
         }
+
+
         $.ajax({
-            url: '<?= site_url('admin/update_kunci_materi/') ?>' + id_mapel,
+            url: '<?= site_url('admin/update_sort_materi/') ?>' + id_mapel,
             method: 'POST',
             data: {
-                kunci_open,
-                kunci_open_key
+                data,
+                data_key
             },
             success: function(res) {
-                location.reload();
+                $.ajax({
+                    url: '<?= site_url('admin/update_sort_materi_kunci/') ?>',
+                    method: 'POST',
+                    data: {
+                        data,
+                        id_materi_open
+                    },
+                    success: function(res) {
+                        location.reload();
+                    },
+                    error: function() {
+
+                    }
+                })
             },
             error: function() {
 
             }
         })
-        // $.ajax({
-        //     url: '<?= site_url('admin/update_sort_materi/') ?>' + id_mapel,
-        //     method: 'POST',
-        //     data: {
-        //         data,
-        //         data_key
-        //     },
-        //     success: function(res) {
-        //         location.reload();
-        //     },
-        //     error: function() {
-
-        //     }
-        // })
         console.log(data);
     })
 </script>

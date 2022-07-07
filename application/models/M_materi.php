@@ -90,6 +90,7 @@ class M_materi extends CI_Model
         $this->db->join('status_materi', 'materi.id_materi = status_materi.id_materi');
         $this->db->where('mapel.id_mapel', $id);
         $this->db->order_by('materi.urutan', 'asc');
+        $this->db->group_by('status_materi.id_materi');
         return  $this->db->get();
     }
 
