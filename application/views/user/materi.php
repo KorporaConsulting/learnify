@@ -11,15 +11,18 @@
                     akses </p>
                 <h3><a href="<?= base_url('user/semester/' . $semester->semester) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Course</a></h3>
             </div>
-            <?php if ($check_absensi == 0) { ?>
-                <div class="col-md-4 mt-1 text-center">
-                    <img class="img-fluid" width="200px" alt="100x100" src="<?= base_url() . $user->qr_code ?>" data-holder-rendered="true">
-                    <h5>QR absensi</h5>
-                    <!-- <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1> -->
-                    <!-- <a href="<?= site_url('user/regenerate_qrcode') ?>" class="btn btn-sm btn-warning">Generate Ulang</a>
+
+            <?php if ($mapel->is_zoom == 1) { ?>
+                <?php if ($check_absensi == 0) { ?>
+                    <div class="col-md-4 mt-1 text-center">
+                        <img class="img-fluid" width="200px" alt="100x100" src="<?= base_url() . $user->qr_code ?>" data-holder-rendered="true">
+                        <h5>QR absensi</h5>
+                        <!-- <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1> -->
+                        <!-- <a href="<?= site_url('user/regenerate_qrcode') ?>" class="btn btn-sm btn-warning">Generate Ulang</a>
                         <a href="<?= base_url($user->qr_code) ?>" class="btn btn-sm btn-info" download>Download</a> -->
-                    <button type="button" class="btn btn-sm btn-primary" onclick="absen()">Absen</button>
-                </div>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="absen()">Absen</button>
+                    </div>
+                <?php } ?>
             <?php } ?>
         </div>
     </div>
@@ -28,69 +31,110 @@
 
 
 <br>
-<?php if ($check_absensi == 0) { ?>
-    <div class="container">
-        <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-            <div class="row" style="color: black; font-family: 'poppins';">
-                <div class="col-md-12 mt-1">
-                    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
-                        <div class="row" style="color: black; font-family: 'poppins';">
-                            <!-- <div class="list-group"> -->
-                            <div class="col-2 text-center">
-                                <img src="<?= base_url('assets/img/icon/ban.png') ?>" class="img-fluid" alt="">
+<?php if ($mapel->is_zoom == 1) { ?>
+    <?php if ($check_absensi == 0) { ?>
+        <div class="container">
+            <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                <div class="row" style="color: black; font-family: 'poppins';">
+                    <div class="col-md-12 mt-1">
+                        <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
+                            <div class="row" style="color: black; font-family: 'poppins';">
+                                <!-- <div class="list-group"> -->
+                                <div class="col-2 text-center">
+                                    <img src="<?= base_url('assets/img/icon/ban.png') ?>" class="img-fluid" alt="">
+                                </div>
+                                <div class="col-10 text-center mt-5">
+                                    <h2>
+                                        Silahkan absen terlebih dahulu untuk membuka Course
+                                    </h2>
+                                </div>
+                                <!-- </div> -->
                             </div>
-                            <div class="col-10 text-center mt-5">
-                                <h2>
-                                    Silahkan absen terlebih dahulu untuk membuka Course
-                                </h2>
-                            </div>
-                            <!-- </div> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } else { ?>
+        <!-- Start Class Card -->
+        <div class="container">
+            <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+
+                <div class="row" style="color: black; font-family: 'poppins';">
+                    <?php
+                    $no = 1;
+                    foreach ($materi as $m) {
+                        $id_mapel = $m->id_mapel;
+                    ?>
+                        <div class="col-md-4 mt-3">
+                            <div class="list-group">
+                                <?php if ($m->kunci == 1) { ?>
+                                    <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi)
+                                                ?>">
+                                    <?php } else { ?>
+                                        <a class="disabled" href="#">
+                                        <?php } ?>
+                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                            <h3>
+                                                <?php if ($m->status == 0 && $m->kunci == 0) { ?>
+                                                    <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                    <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                                <?php } elseif ($m->status == 1 && $m->kunci == 1) { ?>
+                                                    <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
+                                                    <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                                <?php } elseif ($m->status == 0 && $m->kunci == 1) { ?>
+                                                    <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                <?php } ?>
+                                            </h3>
+                                            <div class="card-body">
+                                                <h2 class="card-title" style="color: black;"><?= $m->nama_materi ?></h2>
+                                                <p class="card-text" style="color: black;"><?= substr($m->desk_materi, 0, 20) ?></p>
+                                            </div>
+                                        </div>
+                                        </a>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
 <?php } else { ?>
-    <!-- Start Class Card -->
     <div class="container">
         <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-            <?php if ($total_materi == $done_materi) { ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-primary" role="alert">
-                            <strong>Anda dapat melihat nilai transkrip anda </strong> <a href="<?= base_url('user/transkrip') ?>" class="alert-link"><b>Disini</b></a>
-                        </div>
-                    </div>
-                </div>
-            <?php  } ?>
+
             <div class="row" style="color: black; font-family: 'poppins';">
                 <?php
                 $no = 1;
                 foreach ($materi as $m) {
                     $id_mapel = $m->id_mapel;
                 ?>
-                    <div class="col-md-12 mt-1">
+                    <div class="col-md-4 mt-3">
                         <div class="list-group">
-                            <a style="" href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi) ?>">
-                                <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
-                                    <div class="row" style="color: black; font-family: 'poppins';">
-                                        <div class="col-md-12 mt-1">
-                                            <h2><?php if ($m->status == 0) { ?>
-                                                    <i class="fa fa-circle-thin float-right" style="color:green"></i>
-                                                    <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
-                                                <?php } elseif ($m->status == 1) { ?>
-                                                    <i class="fa fa-check-circle float-right" title="Selesai" style="color:green"></i>
-                                                    <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
-                                                <?php } ?>
-                                            </h2>
-                                            <h1 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
-                                            </h1>
-                                            <p><?= $m->desk_materi ?></p>
+                            <?php if ($m->kunci == 1) { ?>
+                                <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi)
+                                            ?>">
+                                <?php } else { ?>
+                                    <a class="disabled" href="#">
+                                    <?php } ?>
+                                    <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                        <h3>
+                                            <?php if ($m->status == 0 && $m->kunci == 0) { ?>
+                                                <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                            <?php } elseif ($m->status == 1 && $m->kunci == 1) { ?>
+                                                <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
+                                                <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                            <?php } elseif ($m->status == 0 && $m->kunci == 1) { ?>
+                                                <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                            <?php } ?>
+                                        </h3>
+                                        <div class="card-body">
+                                            <h2 class="card-title" style="color: black;"><?= $m->nama_materi ?></h2>
+                                            <p class="card-text" style="color: black;"><?= substr($m->desk_materi, 0, 20) ?></p>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
+                                    </a>
                         </div>
                     </div>
                 <?php } ?>

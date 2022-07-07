@@ -81,7 +81,11 @@
                     <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                         <form action="<?= base_url('user/update_profile') ?>" method="post">
                             <div class="form-group">
-                                <label for="">Nama</label>
+                                <label for="">NIS</label>
+                                <input type="text" class="form-control" readonly required name="nis" value="<?= $profile->nis ?>" id="nis" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Nama Lengkap</label>
                                 <input type="text" class="form-control" required name="nama" value="<?= $profile->nama ?>" id="nama" placeholder="">
                             </div>
                             <div class="form-group">

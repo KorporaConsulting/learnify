@@ -63,6 +63,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/isi_materi/' . $u->id_materi); ?>" class="btn btn-success">Edit isi Materi ⭢</a>
                                         </td>
+
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_materi/' . $u->id_materi); ?>" class="btn btn-info">Edit Materi⭢</a>
                                             <a onclick="yourConfirm(<?= $u->id_materi ?>,<?= $u->id_mapel ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>

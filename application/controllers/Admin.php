@@ -492,6 +492,9 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('guru', 'Guru', 'required', [
             'required' => 'Harap isi kolom mentor.'
         ]);
+        $this->form_validation->set_rules('zoom', 'Type', 'required', [
+            'required' => 'Harap isi kolom Type.'
+        ]);
         $this->form_validation->set_rules('semester', 'Semester', 'required', [
             'required' => 'Harap pilih semester.'
         ]);
@@ -507,7 +510,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/mapel/add_mapel', $data);
         } else {
 
-            $check_urutan = $this->m_materi->check_urutan_mapel($this->input->post('semester', true))->row();
+            $check_urutan = $this->m_materi->check_urutan_mapel($this->input->post('semester', true), $this->input->post('zoom', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
             // var_dump($urutan);
             // die;
@@ -547,10 +550,13 @@ class Admin extends CI_Controller
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                     'slug_mapel' => uniqid($slug),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
+                    'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
+                    'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                     'urutan' =>  $urutan,
+                    'is_zoom' =>  htmlspecialchars($this->input->post('zoom', true)),
                 ];
                 $this->db->insert('mapel', $data);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -608,6 +614,7 @@ class Admin extends CI_Controller
         $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
         $data['materi_row'] = $this->materi->where_sort_data_materi($id)->row();
 
+
         $this->load->view('admin/materi/sort_materi', $data);
     }
 
@@ -619,6 +626,8 @@ class Admin extends CI_Controller
 
         $this->db->insert_batch('materi', $this->input->post('data_key'));
         $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
+
+
 
         echo json_encode([
             'success' => true
@@ -789,6 +798,7 @@ class Admin extends CI_Controller
             $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
             $this->load->view('admin/materi/add_materi', $data);
         } else {
+            $user = $this->m_materi->get_id_user()->result();
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
@@ -812,13 +822,34 @@ class Admin extends CI_Controller
             } else {
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
-                foreach ($id_user as $user) {
-                    $insert[] = array(
-                        "id_materi" => $insert_id,
-                        "id_user" => $user->id_user,
-                        "status" => 0,
-                        "semester_status_materi" => $semester->id_semester
-                    );
+                $check_materi = $this->m_materi->where_tampil_materi($insert_id)->row();
+
+                if ($check_materi->urutan == 1) {
+                    $kunci = 1;
+                } else {
+                    $kunci = 0;
+                }
+
+                if (empty($id_user)) {
+                    foreach ($user as $u) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $u->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
+                } else {
+                    foreach ($id_user as $user) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $user->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
                 }
                 $this->db->insert_batch('status_materi', $insert);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -850,8 +881,6 @@ class Admin extends CI_Controller
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
-            // var_dump($urutan);
-            // die;
             $title = trim(strtolower($this->input->post('nama_materi', true)));
             $out = explode(" ", $title);
             $slug = implode("-", $out);
@@ -869,16 +898,39 @@ class Admin extends CI_Controller
             if ($check_enroll == 0) {
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
             } else {
+                $user = $this->m_materi->get_id_user()->result();
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
+                $check_materi = $this->m_materi->where_tampil_materi($insert_id)->row();
 
-                foreach ($id_user as $user) {
-                    $insert[] = array(
-                        "id_materi" => $insert_id,
-                        "id_user" => $user->id_user,
-                        "status" => 0,
-                        "semester_status_materi" => $semester->id_semester
-                    );
+                // var_dump($check_materi->urutan);
+                // die;
+                if ($check_materi->urutan == 1) {
+                    $kunci = 1;
+                } else {
+                    $kunci = 0;
+                }
+
+                if (empty($id_user)) {
+                    foreach ($user as $u) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $u->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
+                } else {
+                    foreach ($id_user as $user) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $user->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
                 }
                 $this->db->insert_batch('status_materi', $insert);
             }
@@ -1201,6 +1253,7 @@ class Admin extends CI_Controller
                 'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 'id_user' => htmlspecialchars($this->input->post('user', true)),
             ];
+
             $this->db->insert('enroll', $data);
             $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
 
@@ -1208,10 +1261,16 @@ class Admin extends CI_Controller
             if ($check_user == 0) {
                 if ($get_enroll != "") {
                     foreach ($get_enroll as $id_materi) {
+                        if ($id_materi->urutan == 1) {
+                            $kunci = 1;
+                        } else {
+                            $kunci = 0;
+                        }
                         $insert[] = array(
                             "id_materi" => $id_materi->id_materi,
                             "id_user" => $this->input->post('user', true),
                             "status" => 0,
+                            "kunci" => $kunci,
                             "semester_status_materi" => $this->input->post('semester', true),
                         );
                     }
@@ -1230,17 +1289,6 @@ class Admin extends CI_Controller
     }
     public function delete_enroll($id)
     {
-
-        // $check_enroll = $this->m_materi->check_table_enroll_id_user($id)->row();
-
-        // $id_user = $check_enroll->id_user;
-
-        // $where_status = array(
-        //     'id_user' => $id_user,
-        // );
-        // if ($id_user == null) {
-        // }
-        // $this->m_materi->status_materi($where_status, 'status_materi');
         $where = array('id_enroll' => $id);
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
@@ -1448,6 +1496,11 @@ class Admin extends CI_Controller
 
     public function approve_tugas($id_file, $id_materi, $id_user)
     {
+
+        $check_slug = $this->m_materi->where_tampil_materi($id_materi)->row();
+        $id_mapel = $check_slug->id_mapel;
+        $urutan = $check_slug->urutan + 1;
+
         $data = [
             'approve' => 1
         ];
@@ -1473,6 +1526,20 @@ class Admin extends CI_Controller
                 'id_user' => $id_user,
             ];
             $this->m_materi->approve_tugas($where_status, $data_status, 'status_materi');
+
+            $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+
+
+            $where_kunci = [
+                'id_materi' => $get_urutan_materi->id_materi,
+                'id_user' => $id_user
+            ];
+
+            $data_kunci = [
+                'kunci' => 1
+            ];
+            $this->db->where($where_kunci);
+            $this->db->update('status_materi', $data_kunci);
         }
 
         $this->session->set_flashdata('success-approve', 'Tugas telah disetujui');

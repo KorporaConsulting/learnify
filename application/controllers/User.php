@@ -46,6 +46,7 @@ class User extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
+        $data['zoom'] = $this->m_siswa->tampil_data_semester_zoom($semester, $id_user)->result();
 
         $this->load->view('user/course', $data);
         $this->load->view('template/footer');
@@ -59,7 +60,6 @@ class User extends CI_Controller
 
     public function course($slug)
     {
-
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
@@ -357,6 +357,10 @@ class User extends CI_Controller
 
     public function mark_quiz($id)
     {
+        $check_slug = $this->m_materi->where_tampil_materi($id)->row();
+        $id_mapel = $check_slug->id_mapel;
+        $urutan = $check_slug->urutan + 1;
+
         $where = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $id,
@@ -383,6 +387,18 @@ class User extends CI_Controller
 
         $this->db->where($where);
         $this->db->update('status_materi', $data);
+
+        $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+        $where_kunci = [
+            'id_materi' => $get_urutan_materi->id_materi,
+            'id_user' => $this->session->userdata('id_user')
+        ];
+        $data_kunci = [
+            'kunci' => 1
+        ];
+
+        $this->db->where($where_kunci);
+        $this->db->update('status_materi', $data_kunci);
     }
 
     public function mark($id_mapel, $slug)
@@ -390,8 +406,27 @@ class User extends CI_Controller
         $check_slug = $this->m_materi->get_materi($slug)->row();
         $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
         $id_materi = $check_slug->id_materi;
+        $urutan = $check_slug->urutan + 1;
         $slug_mapel = $slug_mapel->slug_mapel;
         $id_user = $this->session->userdata('id_user');
+
+        $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+
+        // var_dump($get_urutan_materi);
+        // die;
+
+        $where_kunci = [
+            'id_materi' => $get_urutan_materi->id_materi,
+            'id_user' => $id_user
+        ];
+
+        $data_kunci = [
+            'kunci' => 1
+        ];
+
+        $this->db->where($where_kunci);
+        $this->db->update('status_materi', $data_kunci);
+
 
         $where = [
             'id_materi' => $id_materi,
@@ -404,7 +439,7 @@ class User extends CI_Controller
 
         $this->db->where($where);
         $this->db->update('status_materi', $data);
-        $this->session->set_flashdata('success-mark', 'berhasil');
+        $this->session->set_flashdata('success-mark', 'Berhasil');
         redirect('user/materi/' . $id_mapel . '/' . $slug);
     }
 

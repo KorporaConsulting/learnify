@@ -24,6 +24,22 @@
             // 'fullscreen',
         ]
     });
+    player.on('ended', event => {
+        $.ajax({
+            url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',
+            method: 'POST',
+            success: function(res) {
+                location.reload();
+                swal("Berhasil!", "Materi telah selesai!", "success");
+            },
+            error: function() {
+
+            }
+        })
+    });
+</script>
+<script type="text/javascript">
+
 </script>
 <!-- Start Animate On Scroll -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -39,9 +55,6 @@
 <script src="<?= base_url('assets/') ?>vendors/counter-up/jquery.counterup.js"></script>
 <script src="<?= base_url('assets/') ?>js/mail-script.js"></script>
 <script src="<?= base_url('assets/') ?>js/theme.js"></script>
-<script src="<?= base_url('assets/') ?>/mediaelement/to/mediaelement-and-player.min.js"></script>
-<!-- Add any other renderers you need; see Use Renderers for more information -->
-<link rel="stylesheet" href="/path/to/mediaelementplayer.min.css" />
 <script>
     var animateButton = function(e) {
         e.preventDefault;

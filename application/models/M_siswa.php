@@ -17,6 +17,20 @@ class M_siswa extends CI_Model
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
         $this->db->where('semester.semester', $semester);
         $this->db->where('user.id_user', $id_user);
+        $this->db->where('mapel.is_zoom', 0);
+        $this->db->order_by("mapel.urutan", "asc");
+        return  $this->db->get();
+    }
+    public function tampil_data_semester_zoom($semester, $id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->where('semester.semester', $semester);
+        $this->db->where('user.id_user', $id_user);
+        $this->db->where('mapel.is_zoom', 1);
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }
@@ -318,6 +332,7 @@ class M_siswa extends CI_Model
         $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
         $this->db->where('user.id_user',  $this->session->userdata('id_user'));
+        $this->db->where('mapel.is_zoom', 1);
         $query =  $this->db->get();
         return $query->num_rows();
     }
@@ -381,6 +396,7 @@ class M_siswa extends CI_Model
         $this->db->from('transkrip');
         $this->db->join('mapel', 'mapel.id_mapel = transkrip.id_mapel');
         $this->db->where('transkrip.id_user', $this->session->userdata('id_user'));
+        $this->db->where('mapel.is_zoom', 0);
         $this->db->group_by('transkrip.id_mapel');
         $this->db->order_by('mapel.id_semester');
         return $this->db->get();
