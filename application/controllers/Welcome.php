@@ -42,7 +42,7 @@ class Welcome extends CI_Controller
 
     public function logout()
     {
-        $this->session->unset_userdata('email');
+        $this->session->sess_destroy();
         $this->session->set_flashdata('success-logout', 'Berhasil!');
         redirect(base_url('welcome'));
     }

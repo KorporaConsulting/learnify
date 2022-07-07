@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
-
 class Admin extends CI_Controller
 {
     public function __construct()
@@ -30,10 +28,6 @@ class Admin extends CI_Controller
     // Management Siswa
     public function add_new_siswa()
     {
-        $this->form_validation->set_rules('nis', 'NIS', 'required|trim|is_unique[user.nis]', [
-            'is_unique' => 'NIS ini telah digunakan!',
-            'required' => 'Harap isi kolom NIS.',
-        ]);
 
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'Email ini telah digunakan!',
@@ -78,9 +72,10 @@ class Admin extends CI_Controller
             } else {
                 $image = 'nill.svg';
             }
+            $nis = 'SUS-' . strtotime($this->input->post('ttl', true)) . rand(111, 999);
 
             $data = [
-                'nis' => htmlspecialchars($this->input->post('nis', true)),
+                'nis' => $nis,
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
@@ -179,7 +174,6 @@ class Admin extends CI_Controller
             $id = $this->input->post('id_user');
 
             $data = array(
-                'nis' => htmlspecialchars($this->input->post('nis', true)),
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'no_telp' => htmlspecialchars($this->input->post('no_telp', true)),
                 'jk' => htmlspecialchars($this->input->post('jk', true)),
@@ -498,6 +492,9 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('guru', 'Guru', 'required', [
             'required' => 'Harap isi kolom mentor.'
         ]);
+        $this->form_validation->set_rules('zoom', 'Type', 'required', [
+            'required' => 'Harap isi kolom Type.'
+        ]);
         $this->form_validation->set_rules('semester', 'Semester', 'required', [
             'required' => 'Harap pilih semester.'
         ]);
@@ -513,7 +510,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/mapel/add_mapel', $data);
         } else {
 
-            $check_urutan = $this->m_materi->check_urutan_mapel($this->input->post('semester', true))->row();
+            $check_urutan = $this->m_materi->check_urutan_mapel($this->input->post('semester', true), $this->input->post('zoom', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
             // var_dump($urutan);
             // die;
@@ -541,14 +538,25 @@ class Admin extends CI_Controller
                 $title = trim(strtolower($this->input->post('nama_mapel', true)));
                 $out = explode(" ", $title);
                 $slug = implode("-", $out);
+
+                $get_last_kode = $this->db->select('id_mapel')->get('mapel')->num_rows();
+
+                $kode_mapel =  $get_last_kode + 1;
+                $kode_mapel = str_pad($kode_mapel, 4, "0", STR_PAD_LEFT);
+                $kode_mapel =  'SU' . $kode_mapel;
+
                 $data = [
+                    'kode_mapel' => $kode_mapel,
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                     'slug_mapel' => uniqid($slug),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
+                    'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
+                    'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                     'urutan' =>  $urutan,
+                    'is_zoom' =>  htmlspecialchars($this->input->post('zoom', true)),
                 ];
                 $this->db->insert('mapel', $data);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -606,6 +614,7 @@ class Admin extends CI_Controller
         $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
         $data['materi_row'] = $this->materi->where_sort_data_materi($id)->row();
 
+
         $this->load->view('admin/materi/sort_materi', $data);
     }
 
@@ -617,6 +626,8 @@ class Admin extends CI_Controller
 
         $this->db->insert_batch('materi', $this->input->post('data_key'));
         $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
+
+
 
         echo json_encode([
             'success' => true
@@ -745,7 +756,6 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
         $data['user'] = $this->m_materi->tampil_data_materi_course($id)->result();
         $data['course'] = $this->m_materi->get_mapel($id)->row();
-
         $data['materi'] = $id;
         $this->load->view('admin/materi/data_materi', $data);
     }
@@ -788,6 +798,7 @@ class Admin extends CI_Controller
             $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
             $this->load->view('admin/materi/add_materi', $data);
         } else {
+            $user = $this->m_materi->get_id_user()->result();
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
@@ -811,13 +822,34 @@ class Admin extends CI_Controller
             } else {
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
-                foreach ($id_user as $user) {
-                    $insert[] = array(
-                        "id_materi" => $insert_id,
-                        "id_user" => $user->id_user,
-                        "status" => 0,
-                        "semester_status_materi" => $semester->id_semester
-                    );
+                $check_materi = $this->m_materi->where_tampil_materi($insert_id)->row();
+
+                if ($check_materi->urutan == 1) {
+                    $kunci = 1;
+                } else {
+                    $kunci = 0;
+                }
+
+                if (empty($id_user)) {
+                    foreach ($user as $u) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $u->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
+                } else {
+                    foreach ($id_user as $user) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $user->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
                 }
                 $this->db->insert_batch('status_materi', $insert);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -849,8 +881,6 @@ class Admin extends CI_Controller
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
-            // var_dump($urutan);
-            // die;
             $title = trim(strtolower($this->input->post('nama_materi', true)));
             $out = explode(" ", $title);
             $slug = implode("-", $out);
@@ -868,16 +898,39 @@ class Admin extends CI_Controller
             if ($check_enroll == 0) {
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
             } else {
+                $user = $this->m_materi->get_id_user()->result();
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
+                $check_materi = $this->m_materi->where_tampil_materi($insert_id)->row();
 
-                foreach ($id_user as $user) {
-                    $insert[] = array(
-                        "id_materi" => $insert_id,
-                        "id_user" => $user->id_user,
-                        "status" => 0,
-                        "semester_status_materi" => $semester->id_semester
-                    );
+                // var_dump($check_materi->urutan);
+                // die;
+                if ($check_materi->urutan == 1) {
+                    $kunci = 1;
+                } else {
+                    $kunci = 0;
+                }
+
+                if (empty($id_user)) {
+                    foreach ($user as $u) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $u->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
+                } else {
+                    foreach ($id_user as $user) {
+                        $insert[] = array(
+                            "id_materi" => $insert_id,
+                            "id_user" => $user->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                            "semester_status_materi" => $semester->id_semester
+                        );
+                    }
                 }
                 $this->db->insert_batch('status_materi', $insert);
             }
@@ -889,7 +942,6 @@ class Admin extends CI_Controller
     {
         $where = array('id_materi' => $id);
         $data['user'] = $this->m_materi->update_materi($where, 'materi')->row();
-        $data['mapel'] = $this->m_materi->tampil_data_mapel()->result();
         $this->load->view('admin/materi/update_materi', $data);
     }
 
@@ -913,7 +965,7 @@ class Admin extends CI_Controller
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
                 'slug_materi' => uniqid($slug),
                 'desk_materi' => htmlspecialchars($this->input->post('desk_materi', true)),
-                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                // 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
             $where = array(
                 'id_materi' => $this->input->post('id_materi'),
@@ -921,7 +973,7 @@ class Admin extends CI_Controller
 
             $this->m_materi->update_data_materi($where, $data, 'materi');
             $this->session->set_flashdata('success-edit', 'berhasil');
-            redirect('admin/data_materi');
+            redirect('admin/data_materi_course/' . $this->input->post('id_mapel', true));
         }
     }
     public function delete_materi($id, $id_mapel)
@@ -948,7 +1000,7 @@ class Admin extends CI_Controller
 
 
         $this->session->set_flashdata('materi-delete', 'berhasil');
-        redirect('admin/data_materi');
+        redirect('admin/data_materi_course/' . $id_mapel);
     }
 
     public function isi_materi($id)
@@ -967,7 +1019,7 @@ class Admin extends CI_Controller
         // var_dump($data['quiz_row']);
         // var_dump($data['file_row']);
         // var_dump($data['video_row']);
-        // var_dump($data['tugas']);
+        // var_dump($data['materi']);
         // die;
         $this->load->view('admin/materi/isi_materi', $data);
     }
@@ -1140,19 +1192,21 @@ class Admin extends CI_Controller
         redirect(base_url('admin/isi_materi/' . $id_materi));
     }
 
-    public function insert_quiz()
-    {
-        $id_materi = $this->input->post('id_materi', true);
-        $data = [
-            'nama_file' => htmlspecialchars($this->input->post('nama_file', true)),
-            'desk_file' => htmlspecialchars($this->input->post('desk_file', true)),
-            'link' => htmlspecialchars($this->input->post('link', true)),
-            'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
-        ];
-        $this->db->insert('file', $data);
-        $this->session->set_flashdata('success-file', 'Berhasil!');
-        redirect(base_url('admin/isi_materi/' . $id_materi));
-    }
+
+
+    // public function insert_quiz()
+    // {
+    //     $id_materi = $this->input->post('id_materi', true);
+    //     $data = [
+    //         'nama_file' => htmlspecialchars($this->input->post('nama_file', true)),
+    //         'desk_file' => htmlspecialchars($this->input->post('desk_file', true)),
+    //         'link' => htmlspecialchars($this->input->post('link', true)),
+    //         'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+    //     ];
+    //     $this->db->insert('file', $data);
+    //     $this->session->set_flashdata('success-file', 'Berhasil!');
+    //     redirect(base_url('admin/isi_materi/' . $id_materi));
+    // }
 
     public function data_enroll()
     {
@@ -1199,6 +1253,7 @@ class Admin extends CI_Controller
                 'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 'id_user' => htmlspecialchars($this->input->post('user', true)),
             ];
+
             $this->db->insert('enroll', $data);
             $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
 
@@ -1206,10 +1261,16 @@ class Admin extends CI_Controller
             if ($check_user == 0) {
                 if ($get_enroll != "") {
                     foreach ($get_enroll as $id_materi) {
+                        if ($id_materi->urutan == 1) {
+                            $kunci = 1;
+                        } else {
+                            $kunci = 0;
+                        }
                         $insert[] = array(
                             "id_materi" => $id_materi->id_materi,
                             "id_user" => $this->input->post('user', true),
                             "status" => 0,
+                            "kunci" => $kunci,
                             "semester_status_materi" => $this->input->post('semester', true),
                         );
                     }
@@ -1228,17 +1289,6 @@ class Admin extends CI_Controller
     }
     public function delete_enroll($id)
     {
-
-        // $check_enroll = $this->m_materi->check_table_enroll_id_user($id)->row();
-
-        // $id_user = $check_enroll->id_user;
-
-        // $where_status = array(
-        //     'id_user' => $id_user,
-        // );
-        // if ($id_user == null) {
-        // }
-        // $this->m_materi->status_materi($where_status, 'status_materi');
         $where = array('id_enroll' => $id);
         $this->m_enroll->delete_enroll($where, 'enroll');
         $this->session->set_flashdata('enroll-delete', 'berhasil');
@@ -1251,52 +1301,90 @@ class Admin extends CI_Controller
         $this->load->view('admin/soal/detail_soal', $data);
     }
 
-    public function tambah_soal()
+    public function tambah_quiz()
     {
-
-        $config['upload_path'] = './assets/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['encrypt_name'] = true;
-        $config['max_size']     = '2048';
-
-        $this->load->library('upload', $config);
-
+        $id_materi = $this->input->post('id_materi', true);
+        $data = [
+            'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
+            'judul' => htmlspecialchars($this->input->post('judul', true)),
+            'type' => htmlspecialchars($this->input->post('type', true)),
+            'min_nilai' => htmlspecialchars($this->input->post('min_nilai', true)),
+        ];
+        $this->db->insert('quiz', $data);
+        $this->session->set_flashdata('success-quiz', 'Berhasil!');
         $this->session->set_flashdata('tab', $this->input->post('tab'));
         $this->session->set_flashdata('nav-link', $this->input->post('nav-link'));
-
-        if ($_FILES['file']['error'] != 4) {
-            if (!$this->upload->do_upload('file')) {
-                $error = array('error' => $this->upload->display_errors());
-
-                $this->session->set_flashdata('modal', $this->input->post('modal'));
-                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
-            }
-        } else {
-            $data = array('upload_data' => $this->upload->data());
-            $this->db->insert('tb_soal', [
-                'id_materi' => $this->input->post('id_materi'),
-                'soal' => $this->input->post('soal'),
-                'opsi_a' => $this->input->post('opsi_a'),
-                'opsi_b' => $this->input->post('opsi_b'),
-                'opsi_c' => $this->input->post('opsi_c'),
-                'opsi_d' => $this->input->post('opsi_d'),
-                'jawaban' => $this->input->post('jawaban')
-            ]);
-        }
-
-        redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+        redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+    public function edit_quiz($id_quiz)
+    {
+        $data['quiz'] = $this->db->where('id_quiz', $id_quiz)->get('quiz')->row();
+        $this->load->view('admin/quiz/edit_quiz', $data);
     }
 
-    public function delete_soal($id_soal, $id_materi)
+    public function update_quiz($id_quiz)
     {
-        $this->db->where('id_soal', $id_soal)->delete('tb_soal');
-
-        $this->session->set_flashdata('success', 'Berhasil menghapus soal');
+        $data = [
+            'judul' => $this->input->post('judul'),
+            'type' => $this->input->post('type'),
+            'min_nilai' => htmlspecialchars($this->input->post('min_nilai', true)),
+        ];
+        $this->db->where('id_quiz', $id_quiz)->update('quiz', $data);
+        $update_type_nilai = [
+            'type' => $this->input->post('type')
+        ];
+        $this->db->where('id_materi', $this->input->post('id_materi'))->update('nilai', $update_type_nilai);
 
         $this->session->set_flashdata('tab', 'contact3');
         $this->session->set_flashdata('nav-link', 'contact-tab3');
 
+        $this->session->set_flashdata('success-edit-quiz', 'Berhasil mengupdate Quiz');
+
+        redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+    }
+    public function delete_quiz($id_quiz, $id_materi)
+    {
+        $this->db->where('id_quiz', $id_quiz)->delete('quiz');
+        $this->session->set_flashdata('success-delete', 'Berhasil menghapus Quiz');
+        $this->session->set_flashdata('tab', 'contact3');
+        $this->session->set_flashdata('nav-link', 'contact-tab3');
         redirect('admin/isi_materi/' . $id_materi);
+    }
+
+
+    public function view_soal($id)
+    {
+        $data['quiz'] = $this->m_materi->where_tampil_soal($id)->result();
+        $data['materi'] = $this->db->select('id_materi')->where('id_quiz', $id)->get('quiz')->row();
+        $this->load->view('admin/soal/tambah_soal', $data);
+    }
+
+    public function tambah_soal()
+    {
+        $this->session->set_flashdata('tab', $this->input->post('tab'));
+        $this->session->set_flashdata('nav-link', $this->input->post('nav-link'));
+
+        $data = array('upload_data' => $this->upload->data());
+        $this->db->insert('tb_soal', [
+            'id_quiz' => $this->input->post('id_quiz'),
+            'soal' => $this->input->post('soal'),
+            'opsi_a' => $this->input->post('opsi_a'),
+            'opsi_b' => $this->input->post('opsi_b'),
+            'opsi_c' => $this->input->post('opsi_c'),
+            'opsi_d' => $this->input->post('opsi_d'),
+            'jawaban' => $this->input->post('jawaban')
+        ]);
+        $this->session->set_flashdata('success', 'Berhasil menambah soal');
+        redirect('admin/view_soal/' . $this->input->post('id_quiz'));
+    }
+
+    public function delete_soal($id_soal, $id_quiz)
+    {
+        $this->db->where('id_soal', $id_soal)->delete('tb_soal');
+
+        $this->session->set_flashdata('success-delete', 'Berhasil menghapus soal');
+
+        redirect('admin/view_soal/' . $id_quiz);
     }
 
     public function edit_soal($id_soal)
@@ -1308,27 +1396,6 @@ class Admin extends CI_Controller
 
     public function update_soal($id_soal)
     {
-        $config['upload_path'] = './assets/img';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['encrypt_name'] = true;
-        $config['max_size']     = '2048';
-        $this->load->library('upload', $config);
-
-        if ($_FILES['file']['error'] != 4) {
-            if (!$this->upload->do_upload('file')) {
-                $error = array('error' => $this->upload->display_errors());
-
-                $this->session->set_flashdata('modal', $this->input->post('modal'));
-                $this->session->set_flashdata('fileValidate', $this->upload->display_errors());
-
-                redirect('admin/isi_materi/' . $this->input->post('id_materi'));
-            }
-
-            $data = $this->upload->data();
-            $filename = $data['file_name'];
-        } else {
-            $filename = $this->input->post('oldFile');
-        }
 
         $data = [
             'soal' => $this->input->post('soal'),
@@ -1336,8 +1403,7 @@ class Admin extends CI_Controller
             'opsi_a' => $this->input->post('opsi_a'),
             'opsi_b' => $this->input->post('opsi_b'),
             'opsi_c' => $this->input->post('opsi_c'),
-            'opsi_d' => $this->input->post('opsi_d'),
-            'file' => $filename
+            'opsi_d' => $this->input->post('opsi_d')
         ];
 
         $this->db->where('id_soal', $id_soal)->update('tb_soal', $data);
@@ -1345,9 +1411,9 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('tab', 'contact3');
         $this->session->set_flashdata('nav-link', 'contact-tab3');
 
-        $this->session->set_flashdata('success', 'Berhasil mengupdate soal');
+        $this->session->set_flashdata('success-edit', 'Berhasil mengupdate soal');
 
-        redirect('admin/isi_materi/' . $this->input->post('id_materi'));
+        redirect('admin/view_soal/' . $this->input->post('id_quiz'));
     }
 
 
@@ -1376,7 +1442,7 @@ class Admin extends CI_Controller
             'desk_tugas' => htmlspecialchars($this->input->post('desk_tugas', true)),
             'due_date' => htmlspecialchars($this->input->post('due_date', true)),
             'id_materi' => htmlspecialchars($this->input->post('id_materi', true)),
-            'approve' => 0,
+            // 'approve' => 0,
         ];
         $this->db->insert('tugas', $data);
         $this->session->set_flashdata('tab', 'contact4');
@@ -1430,6 +1496,11 @@ class Admin extends CI_Controller
 
     public function approve_tugas($id_file, $id_materi, $id_user)
     {
+
+        $check_slug = $this->m_materi->where_tampil_materi($id_materi)->row();
+        $id_mapel = $check_slug->id_mapel;
+        $urutan = $check_slug->urutan + 1;
+
         $data = [
             'approve' => 1
         ];
@@ -1455,6 +1526,20 @@ class Admin extends CI_Controller
                 'id_user' => $id_user,
             ];
             $this->m_materi->approve_tugas($where_status, $data_status, 'status_materi');
+
+            $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+
+
+            $where_kunci = [
+                'id_materi' => $get_urutan_materi->id_materi,
+                'id_user' => $id_user
+            ];
+
+            $data_kunci = [
+                'kunci' => 1
+            ];
+            $this->db->where($where_kunci);
+            $this->db->update('status_materi', $data_kunci);
         }
 
         $this->session->set_flashdata('success-approve', 'Tugas telah disetujui');
@@ -1545,5 +1630,124 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('nav-link', 'home-tab2');
         $this->session->set_flashdata('success-zoom', 'Berhasil!');
         redirect(base_url('admin/isi_materi/' . $id_materi));
+    }
+
+    public function opt_quiz()
+    {
+        $data['opt_quiz'] = $this->db->select('*')->get('opt_quiz')->row();
+        $this->load->view('admin/setting/opt_quiz', $data);
+    }
+
+    public function update_opt_quiz()
+    {
+        $data = [
+            'max_post_test' => htmlspecialchars($this->input->post('max_post_test', true)),
+        ];
+
+        $where = array(
+            'id_opt_quiz' => 1,
+        );
+
+        $this->m_materi->update_data_file($where, $data, 'opt_quiz');
+        $this->session->set_flashdata('success-opt-quiz', 'Berhasil!');
+        redirect(base_url('admin/opt_quiz'));
+    }
+
+    public function opt_course()
+    {
+        $data['opt_course'] = $this->db->select('*')->where('id_persentase_nilai', 1)->get('persentase_nilai')->row();
+        $data['opt_course_tugas'] = $this->db->select('*')->where('id_persentase_nilai', 2)->get('persentase_nilai')->row();
+        $this->load->view('admin/setting/opt_course', $data);
+    }
+
+    public function update_opt_course()
+    {
+        $total = $this->input->post('post_test', true) + $this->input->post('test_quiz', true) + $this->input->post('tugas', true) + $this->input->post('absensi', true);
+
+        if ($total != 100) {
+            $this->session->set_flashdata('error-opt-course', 'Gagal!');
+            redirect(base_url('admin/opt_course'));
+        }
+
+        if ($this->input->post('tugas', true) == 0) {
+            $id = 2;
+        } else {
+            $id = 1;
+        }
+
+        $data = [
+            'post_test' => htmlspecialchars($this->input->post('post_test', true)),
+            'test_quiz' => htmlspecialchars($this->input->post('test_quiz', true)),
+            'tugas' => htmlspecialchars($this->input->post('tugas', true)),
+            'absensi' => htmlspecialchars($this->input->post('absensi', true)),
+        ];
+
+        $where = array(
+            'id_persentase_nilai' => $id,
+        );
+
+        $this->m_materi->update_data_file($where, $data, 'persentase_nilai');
+        $this->session->set_flashdata('success-opt-course', 'Berhasil!');
+        redirect(base_url('admin/opt_course'));
+    }
+
+    public function opt_transkrip()
+    {
+        $data['opt_transkrip'] = $this->db->select('*')->get('mutu')->result();
+        $this->load->view('admin/setting/opt_transkrip', $data);
+    }
+
+    public function edit_transkrip($id)
+    {
+        $data['opt_edit_transkrip'] = $this->db->select('*')->where('id_mutu', $id)->get('mutu')->row();
+        $this->load->view('admin/setting/opt_edit_transkrip', $data);
+    }
+
+    public function update_opt_transkrip()
+    {
+        $min = $this->input->post('min', true);
+        $max = $this->input->post('max', true);
+
+        $data = [
+            'nilai' => $min . '-' . $max
+        ];
+
+        $where = array(
+            'id_mutu' => $this->input->post('id_mutu'),
+        );
+
+        $this->m_materi->update_data_file($where, $data, 'mutu');
+        $this->session->set_flashdata('success-opt-transkrip', 'Berhasil!');
+        redirect(base_url('admin/opt_transkrip'));
+    }
+
+    public function opt_tugas()
+    {
+        $data['opt_tugas'] = $this->db->select('*')->get('opt_tugas')->row();
+        $this->load->view('admin/setting/opt_tugas', $data);
+    }
+
+    public function update_opt_tugas()
+    {
+        $data = [
+            'kurang_due_date' => htmlspecialchars($this->input->post('kurang_due_date', true)),
+            'pas_due_date' => htmlspecialchars($this->input->post('pas_due_date', true)),
+            'lebih_due_date' => htmlspecialchars($this->input->post('lebih_due_date', true))
+        ];
+
+        $where = array(
+            'id_opt_tugas' => 1,
+        );
+
+        $this->m_materi->update_data_file($where, $data, 'opt_tugas');
+        $this->session->set_flashdata('success-opt-tugas', 'Berhasil!');
+        redirect(base_url('admin/opt_tugas'));
+    }
+    public function transkrip($id)
+    {
+        $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
+        $data['mutu'] = $this->db->select('*')->get('mutu')->result();
+        $data['transkrip'] = $this->m_materi->transkrip($id)->result();
+        $this->load->view('admin/transkrip/data_transkrip', $data);
     }
 }

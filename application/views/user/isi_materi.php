@@ -6,12 +6,6 @@
          <div class="col-6 mt-5">
              <h3><a href="<?= base_url('user/course/' . $file_row->slug_mapel) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Materi</a></h3>
          </div>
-         <div class="col-6 mt-5  text-right">
-             <?php
-                if ($status_materi->status != 1) { ?>
-                 <h3><a href="<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>" class="badge badge-primary"><i class="fa fa-check"></i> MARK AS COMPLETE</a></h3>
-             <?php } ?>
-         </div>
      </div>
      <div class="row mt-4">
          <div class="col-md-3 mt-5 mb-4 d-none d-lg-block overflow-auto " style="max-height:100vh ;">
@@ -19,25 +13,32 @@
                 $no = 1;
                 foreach ($side_materi as $m) { ?>
                  <div class="list-group">
-                     <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi) ?>">
-                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px; <?= ($m->slug_materi == $this->uri->segment(4)) ? 'style="border-color: #1bdbde; border: 5px solid;"' : ""  ?>>
-                             <div class="row" style="color: black; font-family: 'poppins';">
-                                 <div class="col-md-12 mt-1">
-                                     <h2><?php if ($m->status == 0) { ?>
-                                             <i class="fa fa-circle-thin float-right" style="color:green"></i>
-                                             <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
-                                         <?php } elseif ($m->status == 1) { ?>
-                                             <i class="fa fa-check-circle float-right" title="Selesai" style="color:green"></i>
-                                             <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
-                                         <?php } ?>
-                                     </h2>
-                                     <h5 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
-                                     </h5>
-                                     <p><?= $m->desk_materi ?></p>
+                     <?php if ($m->kunci == 1) { ?>
+                         <a href="<?= base_url('user/materi/' . $m->id_mapel . '/' . $m->slug_materi)
+                                    ?>">
+                         <?php } else { ?>
+                             <a class="disabled" href="#">
+                             <?php } ?>
+                             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px; <?= ($m->slug_materi == $this->uri->segment(4)) ? 'style="border-color: #1bdbde; border: 5px solid;"' : ""  ?>>
+                                 <div class="row" style="color: black; font-family: 'poppins';">
+                                     <div class="col-md-12 mt-1">
+                                         <h2><?php if ($m->status == 0 && $m->kunci == 0) { ?>
+                                                 <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                 <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                             <?php } elseif ($m->status == 1 && $m->kunci == 1) { ?>
+                                                 <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
+                                                 <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                             <?php } elseif ($m->status == 0 && $m->kunci == 1) { ?>
+                                                 <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                             <?php } ?>
+                                         </h2>
+                                         <h5 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
+                                         </h5>
+                                         <p><?= $m->desk_materi ?></p>
+                                     </div>
                                  </div>
                              </div>
-                         </div>
-                     </a>
+                             </a>
                  </div>
              <?php } ?>
          </div>
@@ -79,9 +80,10 @@
                          <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                              <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
                              <hr style="background-color: white;">
-
-                             <div class="embed-responsive embed-responsive-16by9 plyr__video-embed" id="player">
-                                 <iframe class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                             <div class="plyr__video-embed" id="player">
+                                 <!-- <div id="vid"></div> -->
+                                 <iframe id="existing-iframe-example" allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                                 <!-- <iframe id="existing-iframe-example" width="640" height="360" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
                              </div>
                              <div class="text-center mt-2">
                                  <h5><?= $video->nama_video ?></h5>
@@ -103,7 +105,7 @@
                              </div>
                          </div>
                      <?php } ?>
-                 <?php } elseif ($file_row->is_tugas == 0 && $file_row->id_tugas != null) { ?>
+                 <?php } elseif ($file_row->is_tugas == 0 && $file_row->id_file != null) { ?>
                      <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                          <div class="jumbotron jumbotron-fluid" style="background: url(<?= base_url('assets/img/modul.jpg') ?>) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
                              <div class="container">
@@ -117,7 +119,7 @@
                              <div class="row">
                                  <?php foreach ($file as $files) { ?>
                                      <div class="col-md-4 mb-4">
-                                         <a href="<?php echo $files->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center"><i class="fa fa-download"></i> Modul <?= $files->nama_file ?></a>
+                                         <a id="mark" href="<?php echo $files->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center"><i class="fa fa-download"></i> Modul <?= $files->nama_file ?></a>
                                      </div>
                                  <?php } ?>
                              </div>
@@ -138,9 +140,9 @@
                          </div>
                      </div>
                  <?php } elseif ($quiz_row->id_soal != null) {
-                        redirect('user/quiz/' . $materi->id_materi)
+                        redirect('user/quiz/' . $materi->id_materi . '/' . $quiz_row->id_quiz)
                     ?>
-                 <?php } elseif ($tugas_row->id_tugas != null) { ?>
+                 <?php } elseif ($list_tugas_row != null) { ?>
                      <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                          <div class="row" style="color: black; font-family: 'poppins';">
                              <div class="col-md-12 mt-1 text-center">
@@ -221,7 +223,7 @@
                              <h4 class="card-title display-5"><?= $zoom_row->desk_file ?></h4>
                              <hr style="background-color: white;">
                              <div class="btn btn-block">
-                                 <a href="<?= $zoom_row->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center">Memulai Kelas Live</a>
+                                 <a id="mark" href="<?= $zoom_row->link ?>" target="_blank" class="btn btn-icon btn-lg btn-primary float-center">Memulai Kelas Live</a>
                              </div>
 
                              <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
@@ -289,6 +291,17 @@
      </div>
  </div>
  <script>
+     <?php if ($this->session->flashdata('success-mark')) : ?>
+         Swal.fire({
+             icon: 'success',
+             title: '<?php echo $this->session->flashdata('success-mark'); ?>',
+             text: 'Materi telah selesai',
+             showConfirmButton: false,
+             timer: 2500
+         })
+     <?php endif; ?>
+ </script>
+ <script>
      <?php if ($this->session->flashdata('sukses-tugas')) : ?>
          Swal.fire({
              icon: 'success',
@@ -328,5 +341,25 @@
          })
      }
  </script>
+ <script>
+     $('#mark').click(function() {
+         $.ajax({
+             url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',
+             method: 'POST',
+             success: function(res) {
+                 location.reload();
+                 swal("Berhasil!", "Materi telah selesai!", "success");
+             },
+             error: function() {
+
+             }
+         })
+     })
+ </script>
+ <!-- <div id="player"></div> -->
+
+ <script src="https://www.youtube.com/player_api"></script>
+
+
  <!-- End Lesson Cards -->
  <?php $this->load->view('user/template_user/footer'); ?>

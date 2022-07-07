@@ -87,8 +87,9 @@ class M_materi extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'materi.id_materi = status_materi.id_materi');
         $this->db->where('mapel.id_mapel', $id);
-        $this->db->order_by('materi.urutan');
+        $this->db->order_by('materi.urutan', 'asc');
         return  $this->db->get();
     }
 
@@ -119,9 +120,17 @@ class M_materi extends CI_Model
     public function where_tampil_quiz($id)
     {
         $this->db->select('*');
-        $this->db->from('tb_soal');
-        $this->db->join('materi', 'materi.id_materi = tb_soal.id_materi');
-        $this->db->where('tb_soal.id_materi', $id);
+        $this->db->from('quiz');
+        $this->db->join('materi', 'materi.id_materi = quiz.id_materi');
+        $this->db->where('quiz.id_materi', $id);
+        return  $this->db->get();
+    }
+    public function where_tampil_soal($id)
+    {
+        $this->db->select('*');
+        $this->db->from('quiz');
+        $this->db->join('tb_soal', 'tb_soal.id_quiz = quiz.id_quiz');
+        $this->db->where('tb_soal.id_quiz', $id);
         return  $this->db->get();
     }
     public function where_tampil_file($id)
@@ -253,7 +262,7 @@ class M_materi extends CI_Model
     }
     public function get_list_materi($id_semester)
     {
-        $this->db->select('materi.id_materi');
+        $this->db->select('materi.id_materi,materi.urutan');
         $this->db->from('mapel');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
         // $this->db->join('semester', 'semester.id_semester = mapel.id_semester', 'left');
@@ -396,6 +405,13 @@ class M_materi extends CI_Model
         return $this->db->get();
     }
 
+    public function get_id_user()
+    {
+        $this->db->select('id_user');
+        $this->db->from('user');
+        return $this->db->get();
+    }
+
     public function check_user($id_user, $semester)
     {
         $query = $this->db->query('SELECT * FROM status_materi WHERE id_user =' . $id_user . ' and semester_status_materi =' . $semester);
@@ -467,10 +483,11 @@ class M_materi extends CI_Model
         return $this->db->get();
     }
 
-    public function check_urutan_mapel($id_semester)
+    public function check_urutan_mapel($id_semester, $is_zoom)
     {
         $this->db->select_max('urutan');
         $this->db->where('id_semester', $id_semester);
+        $this->db->where('is_zoom', $is_zoom);
         return $this->db->get('mapel');
     }
     public function check_urutan_mapel_delete($id, $id_semester)
@@ -497,5 +514,24 @@ class M_materi extends CI_Model
         $this->db->where('file.id_materi', $id);
         $this->db->where('file.is_tugas', 2);
         return  $this->db->get();
+    }
+    public function transkrip($id)
+    {
+        $this->db->select('*, max(transkrip.nilai) as nilai_final');
+        $this->db->from('transkrip');
+        $this->db->join('mapel', 'mapel.id_mapel = transkrip.id_mapel');
+        $this->db->where('transkrip.id_user', $id);
+        $this->db->group_by('transkrip.id_mapel');
+        $this->db->order_by('mapel.id_semester');
+        return $this->db->get();
+    }
+
+    public function cek_urutan_materi($id_mapel, $urutan)
+    {
+        $this->db->select('*');
+        $this->db->from('materi');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->where('urutan', $urutan);
+        return $this->db->get();
     }
 }

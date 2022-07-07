@@ -72,7 +72,7 @@
                                     if ($total_absen <= 0) $total_absen = 1;
                                     $absen_progres  = ($absen / $total_absen) * 100;
                                     ?>
-                                    <div class="progress-bar" role="progressbar" style="width:<?= ($absen_progres) ? $absen_progres : 0  ?> %" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="kehadiran"><?= $absen ?>/<?= $total_absen ?></div>
+                                    <div class="progress-bar" role="progressbar" style="width:<?= $absen_progres ?>%" aria-valuenow="<?= $absen_progres ?>" aria-valuemin="0" aria-valuemax="100" id="kehadiran"><?= $absen ?>/<?= $total_absen ?></div>
                                 </div>
                                 <!-- <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url('assets/img/qr-code-login/qr_icon.svg') ?>" data-holder-rendered="true"> -->
                             </div>

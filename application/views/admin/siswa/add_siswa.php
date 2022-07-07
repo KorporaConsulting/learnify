@@ -30,13 +30,13 @@ $this->load->view('admin/template_admin/sidebar');
 
             <div class="card-body">
                 <form method="POST" action="<?= base_url('admin/add_new_siswa') ?>">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="nis">Nomer Induk Siswa</label>
                         <input id="nis" type="number" class="form-control" value="<?php echo set_value('nis') ?>" name="nis">
                         <?= form_error('nis', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="nama">Nama Lengkap</label>
                         <input id="nama" type="text" class="form-control" value="<?php echo set_value('nama') ?>" name="nama">

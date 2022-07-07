@@ -1,5 +1,6 @@
 <?php
 
+use phpDocumentor\Reflection\Types\This;
 use SebastianBergmann\Environment\Console;
 
 defined('BASEPATH') or exit('No direct script access allowed');
@@ -45,6 +46,7 @@ class User extends CI_Controller
     {
         $id_user = $this->session->userdata('id_user');
         $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
+        $data['zoom'] = $this->m_siswa->tampil_data_semester_zoom($semester, $id_user)->result();
 
         $this->load->view('user/course', $data);
         $this->load->view('template/footer');
@@ -58,13 +60,14 @@ class User extends CI_Controller
 
     public function course($slug)
     {
-
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $data['check_absensi'] = $this->m_siswa->check_absensi($data['mapel']->id_mapel, $this->session->userdata('id_user'));
 
+        $data['total_materi'] = $this->m_siswa->total_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
+        $data['done_materi'] = $this->m_siswa->done_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
 
         setcookie('lastMapel', json_encode([
             'url' => current_url(),
@@ -93,13 +96,12 @@ class User extends CI_Controller
         $data['video'] = $this->m_siswa->tampil_data_video($id_mapel, $slug, $id_user)->row();
         $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
         $data['quiz_row'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->row();
-        $data['quiz'] = $this->m_siswa->tampil_data_quiz($id_mapel, $slug, $id_user)->result();
         $data['tugas_row'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->row();
         $data['tugas'] = $this->m_siswa->tampil_data_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
 
-        // var_dump($data['file_row']);
+        // var_dump($data['tugas_row']);
         // die;
 
         $id_user = $this->session->userdata('id_user');
@@ -114,37 +116,29 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function quiz($id_materi)
+    public function quiz($id_materi, $id_quiz)
     {
         $where = [
             'id_user' => $this->session->userdata('id_user'),
-            'id_materi' => $id_materi,
-            'type' => 'quiz'
-        ];
-
-        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
-        if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan->nilai > 70) {
-                // $data['is_lulus'] = 1;
-                redirect('user/hasil_quiz/' . $id_materi);
-            }
-        }
-
-        // header('Content-type: application/json');
-        // echo json_encode($data);
-        // die;
-        $where = [
             'id_materi' => $id_materi
         ];
 
-        $data['quiz'] = $this->db->get_where('tb_soal', $where)->result();
-        $data['materi'] = $this->db->get_where('materi', $where)->row();
+        $cek_soal_dikerjakan = $this->db->select('type')->select_max('nilai')->where($where)->get('nilai')->row();
+        $data['min_nilai'] = $this->db->select('min_nilai')->where('id_materi', $id_materi)->get('quiz')->row();
 
-        //  header('content-type: application/json');
+        if ($cek_soal_dikerjakan->type == 1) {
+            if (!empty($cek_soal_dikerjakan)) {
+                if ($cek_soal_dikerjakan->nilai > $data['min_nilai']->min_nilai) {
+                    // $data['is_lulus'] = 1;
+                    redirect('user/hasil_quiz/' . $id_materi . '/' . $id_quiz);
+                }
+            }
+        }
 
-        // echo json_encode([
-        //     'data' => $data
-        // ]);
+        $data['quiz'] = $this->db->get_where('tb_soal', ['id_quiz' => $id_quiz])->result();
+        $data['materi'] = $this->db->get_where('materi', ['id_materi' => $id_materi])->row();
+        $data['quiz_type'] = $this->db->get_where('quiz', ['id_quiz' => $id_quiz])->row();
+
 
         $this->load->view('user/quiz/tampil_quiz', $data);
     }
@@ -179,56 +173,86 @@ class User extends CI_Controller
         ];
 
         $cek_soal_dikerjakan = $this->db->select('nilai')->where($where)->get('nilai')->num_rows();
+        $type_quiz = $this->db->select('type')->where('id_materi', $this->input->post('id_materi'))->get('quiz')->row();
+
+
+        $max_post_test = $this->db->select('max_post_test')->get('opt_quiz')->row();
 
         if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan >= 2) {
-                if ($nilai >= 70) {
-                    $nilai = 70;
+            if ($type_quiz->type == 1) {
+                if ($cek_soal_dikerjakan >= $max_post_test->max_post_test) {
+                    if ($nilai >= 70) {
+                        $nilai = 70;
+                    }
                 }
             }
         }
 
-        if ($this->input->post('type') == 0) {
-            $type = 'quiz';
-        } else {
-            $type = 'final';
-        }
         $tb_nilai = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $this->input->post('id_materi'),
-            'type' => $type,
+            'type' => $this->input->post('type'),
             'nilai' => $nilai,
         ];
         $this->db->insert_batch('jawaban', $jawaban_batch);
-        // $id = $this->db->insert_id();
         $this->db->insert('nilai', $tb_nilai);
 
-        redirect('user/hasil_quiz/' . $this->input->post('id_materi'));
+
+
+
+        redirect('user/hasil_quiz/' . $this->input->post('id_materi') . '/' . $this->input->post('id_quiz'));
     }
 
-    public function hasil_quiz($id)
+    public function hasil_quiz($id, $id_quiz)
     {
         $where = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $id,
-            'type' => 'quiz'
         ];
 
-        $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+        $cek_soal_dikerjakan = $this->db->select('type')->select_max('nilai')->where($where)->get('nilai')->row();
+
+        // var_dump($cek_soal_dikerjakan);
+        // die;
+
+        $data['min_nilai'] = $this->db->select('min_nilai')->where('id_materi', $id)->get('quiz')->row();
+
+
+        // var_dump($cek_soal_dikerjakan);
+        // die;
+
+
+
         if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan->nilai >= 70) {
-                $data['is_lulus'] = 1;
+
+            if ($cek_soal_dikerjakan->nilai >= $data['min_nilai']->min_nilai) {
                 $this->mark_quiz($id);
+                if ($cek_soal_dikerjakan->type == 1) {
+                    $data['is_lulus'] = 1;
+                }
             }
         }
         $data['materi'] = $this->db->get_where('materi', ['id_materi' => $id])->row();
         $id_mapel =  $data['materi']->id_mapel;
         $data['mapel'] = $this->db->get_where('mapel', ['id_mapel' => $id_mapel])->row();
         $data['slug_mapel'] = $data['mapel']->slug_mapel;
+        $data['id_quiz'] = $id_quiz;
+        $data['is_final'] = $cek_soal_dikerjakan->type;
         $data['histori'] = $this->m_siswa->histori_nilai($id)->result();
-        // var_dump($data['histori']);
+
+
+        $total_materi = $this->m_siswa->total_status($this->session->userdata('id_user'), $id_mapel);
+        $done_materi = $this->m_siswa->done_status($this->session->userdata('id_user'), $id_mapel);
+
+        // var_dump($total_materi);
+        // var_dump($done_materi);
         // die;
 
+
+        if ($total_materi == $done_materi) {
+            $this->insert_transkrip($this->session->userdata('id_user'), $id_mapel);
+        }
+        $data['opt_quiz'] = $this->db->select('*')->get('opt_quiz')->row();
         $this->load->view('user/quiz/hasil', $data);
     }
 
@@ -333,15 +357,20 @@ class User extends CI_Controller
 
     public function mark_quiz($id)
     {
+        $check_slug = $this->m_materi->where_tampil_materi($id)->row();
+        $id_mapel = $check_slug->id_mapel;
+        $urutan = $check_slug->urutan + 1;
+
         $where = [
             'id_user' => $this->session->userdata('id_user'),
             'id_materi' => $id,
-            'type' => 'quiz'
         ];
 
         $cek_soal_dikerjakan = $this->db->select_max('nilai')->where($where)->get('nilai')->row();
+        $data['min_nilai'] = $this->db->select('min_nilai')->where('id_materi', $id)->get('quiz')->row();
+
         if (!empty($cek_soal_dikerjakan)) {
-            if ($cek_soal_dikerjakan->nilai >= 70) {
+            if ($cek_soal_dikerjakan->nilai >= $data['min_nilai']->min_nilai) {
                 $data = [
                     'status' => 1
                 ];
@@ -358,6 +387,18 @@ class User extends CI_Controller
 
         $this->db->where($where);
         $this->db->update('status_materi', $data);
+
+        $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+        $where_kunci = [
+            'id_materi' => $get_urutan_materi->id_materi,
+            'id_user' => $this->session->userdata('id_user')
+        ];
+        $data_kunci = [
+            'kunci' => 1
+        ];
+
+        $this->db->where($where_kunci);
+        $this->db->update('status_materi', $data_kunci);
     }
 
     public function mark($id_mapel, $slug)
@@ -365,8 +406,27 @@ class User extends CI_Controller
         $check_slug = $this->m_materi->get_materi($slug)->row();
         $slug_mapel = $this->m_materi->get_mapel($id_mapel)->row();
         $id_materi = $check_slug->id_materi;
+        $urutan = $check_slug->urutan + 1;
         $slug_mapel = $slug_mapel->slug_mapel;
         $id_user = $this->session->userdata('id_user');
+
+        $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
+
+        // var_dump($get_urutan_materi);
+        // die;
+
+        $where_kunci = [
+            'id_materi' => $get_urutan_materi->id_materi,
+            'id_user' => $id_user
+        ];
+
+        $data_kunci = [
+            'kunci' => 1
+        ];
+
+        $this->db->where($where_kunci);
+        $this->db->update('status_materi', $data_kunci);
+
 
         $where = [
             'id_materi' => $id_materi,
@@ -379,7 +439,7 @@ class User extends CI_Controller
 
         $this->db->where($where);
         $this->db->update('status_materi', $data);
-        $this->session->set_flashdata('success-mark', 'berhasil');
+        $this->session->set_flashdata('success-mark', 'Berhasil');
         redirect('user/materi/' . $id_mapel . '/' . $slug);
     }
 
@@ -593,35 +653,114 @@ class User extends CI_Controller
         echo 'Absen successfully.';
     }
 
+    public function insert_transkrip($id_user, $id_mapel)
+    {
+
+        $check_tugas = $this->m_siswa->check_tugas($id_mapel);
+
+        if ($check_tugas == 0) {
+            $p_nilai = $this->db->select('*')->where('id_persentase_nilai', 2)->get('persentase_nilai')->row();
+        } else {
+            $p_nilai = $this->db->select('*')->where('id_persentase_nilai', 1)->get('persentase_nilai')->row();
+        }
+
+        $data_nilai_quiz = $this->m_siswa->nilai_quiz()->result();
+        $nilai_quiz_tampung = 0;
+        $total_nilai_quiz = count($data_nilai_quiz);
+        foreach ($data_nilai_quiz as $key => $value) {
+            $nilai_quiz_tampung += $value->nilai_quiz;
+        }
+        $nilai_quiz = ($nilai_quiz_tampung / $total_nilai_quiz) * ($p_nilai->test_quiz / 100); //Nilai All Quiz
+
+        $post_test = $this->m_siswa->nilai_final($id_mapel)->row();
+        $nilai_final = $post_test->nilai_final * ($p_nilai->post_test / 100); // Nilai Post Test
+
+        $where_absensi = [
+            'id_user' => $this->session->userdata('id_user'),
+            'id_mapel' => $id_mapel,
+            'status_absensi' => 1,
+        ];
+
+        $total_absensi = $this->db->select('id_user, status_absensi')->where($where_absensi)->get('absensi')->num_rows();
+
+        if (!empty($total_absensi)) { //absensi
+            $nilai_absensi = $p_nilai->absensi;
+        } else {
+            $nilai_absensi = 0;
+        }
+
+        $total_absensi = $this->db->select('id_user, status_absensi')->where($where_absensi)->get('absensi')->num_rows();
+
+        $data_nilai_tugas = $this->m_siswa->nilai_tugas($id_mapel)->result();
+
+
+        if (!empty($data_nilai_tugas)) {
+            $total_tugas = count($data_nilai_tugas);
+        } else {
+            $total_tugas = 0;
+        }
+        $point = 0;
+        foreach ($data_nilai_tugas as $key => $value) {
+            $ngumpulin = date_create($value->kumpul);
+            $due_date = date_create($value->due_date);
+            if (strtotime(date_format($ngumpulin, 'Y-m-d')) == strtotime(date_format($due_date, 'Y-m-d'))) {
+                $point_tugas = 85;
+            } elseif (strtotime(date_format($ngumpulin, 'Y-m-d')) <= strtotime(date_format($due_date, 'Y-m-d'))) {
+                $point_tugas = 100;
+            } elseif (strtotime(date_format($ngumpulin, 'Y-m-d')) >= strtotime(date_format($due_date, 'Y-m-d'))) {
+                $point_tugas = 70;
+            }
+            $point += $point_tugas;
+        }
+
+
+        if (!empty($data_nilai_tugas)) {
+            $nilai_tugas = ($point / $total_tugas) * ($p_nilai->tugas / 100);
+        } else {
+            $nilai_tugas = 0;
+        }
+        $total = $nilai_quiz + $nilai_final  + $nilai_absensi + $nilai_tugas;
+
+        $detail = [
+            'post_test' => $post_test->nilai_final . 'x' . $p_nilai->post_test . '%',
+            'nilai_quiz' => '(' . $nilai_quiz_tampung . '/' . $total_nilai_quiz . ') x' . $p_nilai->test_quiz . '%',
+            'tugas' => '(' . $point . '/' . $total_tugas . ') x' . $p_nilai->tugas . '%',
+            'absensi' =>  1 . 'x' . $p_nilai->absensi . '%',
+            'nilai' =>   $total,
+            'id_mapel' =>   $id_mapel,
+            'id_user' =>   $this->session->userdata('id_user'),
+        ];
+        $this->db->insert('detail_transkrip', $detail);
+
+        $data = [
+            'id_user' => $id_user,
+            'id_mapel' => $id_mapel,
+            'nilai' => $total,
+        ];
+        $this->db->insert('transkrip', $data);
+    }
+
     public function transkrip()
     {
-        $data['nilai_quiz'] = $this->m_siswa->nilai_quiz()->result();
-        // $data['nilai_final'] = $this->m_siswa->nilai_final()->result();
+        $data['mutu'] = $this->db->select('*')->get('mutu')->result();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
-
-
-        //get the highest value from multi dimenstion array in php
-        //get the max value from multi dimenstion array in php
-        $array = [[100, 200, 600], [205, 108, 849, 456], [548, 149, 7840]];
-        $max = 0;
-        for ($i = 0; $i < count($array); $i++) {
-            for ($j = 0; $j < count($array[$i]); $j++) {
-                if ($array[$i][$j] > $max) {
-                    $max = $array[$i][$j];
-                }
-            }
-        }
-        print $max;
-
-        // $row = [];
-        // $lastNilai = 0;
-        // foreach ($data['nilai_quiz'] as $key => $value) {
-        //     if ($value->nilai > $lastNilai) {
-        //         $lastNilai = $value->nilai;
-        //         $row = $value;
-        //     }
-        // }
-        die;
+        $data['transkrip'] = $this->m_siswa->transkrip()->result();
         $this->load->view('user/transkrip', $data);
+    }
+    public function detail_transkrip()
+    {
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        $data['detail'] = $this->m_siswa->detail_transkrip()->result();
+        $this->load->view('user/detail_transkrip', $data);
+    }
+
+    public function print_transkrip()
+    {
+        $this->load->library('pdf');
+        $data['mutu'] = $this->db->select('*')->get('mutu')->result();
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        $data['transkrip'] = $this->m_siswa->transkrip()->result();
+        $this->pdf->setFileName('Traskrip_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->load_view('user/print_transkrip', $data);
     }
 }

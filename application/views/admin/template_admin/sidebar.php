@@ -69,10 +69,10 @@
                                 <li><a class="nav-link" href="<?= base_url('admin/data_mapel') ?>">Data Course</a>
                                 </li>
                             </ul>
-                            <ul class="dropdown-menu">
+                            <!-- <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_materi') ?>">Data Materi</a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/list_tugas_user') ?>">List Tugas User</a>
                                 </li>
@@ -83,6 +83,35 @@
                             </ul>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_enroll') ?>">Enroll User</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-comment-alt"></i>
+                                <span>Live Chat</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a target="_blank" class="nav-link" href="https://dashboard.tawk.to/#/dashboard/62c396d87b967b117998035c">Live Chat</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i>
+                                <span>Pengaturan</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_course') ?>">Course</a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_quiz') ?>">Quiz</a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_tugas') ?>">Tugas</a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_transkrip') ?>">Transkrip</a>
                                 </li>
                             </ul>
                         </li>

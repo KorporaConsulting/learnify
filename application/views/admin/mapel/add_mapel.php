@@ -46,17 +46,29 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="invalid-feedback">
                         </div>
                     </div>
-
                     <div class="form-group">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select class="form-control select2" name="zoom" id="zoom">
+                                <option disabled selected>Pilih Type</option>
+                                <option value="0">Course</option>
+                                <option value="1">Live Class</option>
+                            </select>
+                            <?= form_error('type', '<small class="text-danger">', '</small>'); ?>
+                            <div class="invalid-feedback">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group tgl" style="display:none ;">
                         <label>Tanggal Mulai</label>
-                        <input type="date" class="form-control" name="tgl_mulai">
+                        <input type="datetime-local" class="form-control" name="tgl_mulai">
                         <?= form_error('tgl_mulai', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group tgl" style="display:none ;">
                         <label>Tanggal Selesai</label>
-                        <input type="date" class="form-control" name="tgl_selesai">
+                        <input type="datetime-local" class="form-control" name="tgl_selesai">
                         <?= form_error('tgl_selesai', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
@@ -72,6 +84,7 @@ $this->load->view('admin/template_admin/sidebar');
                         <div class="invalid-feedback">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <div class="form-group">
                             <label>Mentor Course</label>
@@ -116,7 +129,17 @@ $this->load->view('admin/template_admin/sidebar');
 </div>
 <!-- End Main Content -->
 
-
+<script>
+    $(document).ready(function() {
+        $('#zoom').on('change', function() {
+            if (this.value == 1) {
+                $(".tgl").show();
+            } else {
+                $(".tgl").hide();
+            }
+        });
+    });
+</script>
 <?php
 $this->load->view('admin/template_admin/footer');
 ?>

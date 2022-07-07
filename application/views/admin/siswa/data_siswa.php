@@ -54,8 +54,17 @@ $this->load->view('admin/template_admin/sidebar');
                                             <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_user; ?>">
                                         </td>
                                         <td class="text-center">
-                                            <a href="<?php echo site_url('admin/detail_siswa/' . $u->id_user); ?>" class="btn btn-success">Detail User ⭢</a>
-                                            <a href="<?php echo site_url('admin/progres_course_siswa/' . $u->id_user); ?>" class="btn btn-primary">Progress User ⭢</a>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <a href="<?php echo site_url('admin/detail_siswa/' . $u->id_user); ?>" class="btn btn-success">Detail User ⭢</a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="<?php echo site_url('admin/progres_course_siswa/' . $u->id_user); ?>" class="btn btn-primary">Progress User ⭢</a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="<?php echo site_url('admin/transkrip/' . $u->id_user); ?>" class="btn btn-warning">Transkrip User ⭢</a>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_siswa/' . $u->id_user); ?>" class="btn btn-info">Update ⭢</a>

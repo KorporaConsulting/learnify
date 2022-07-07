@@ -24,10 +24,20 @@ class ComposerStaticInitd357eeb707b4a08904b813dc13c7ed86
         array (
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Svg\\' => 4,
+            'Sabberworm\\CSS\\' => 15,
         ),
         'P' => 
         array (
             'Prophecy\\' => 9,
+        ),
+        'M' => 
+        array (
+            'Masterminds\\' => 12,
+        ),
+        'F' => 
+        array (
+            'FontLib\\' => 8,
         ),
         'E' => 
         array (
@@ -35,6 +45,7 @@ class ComposerStaticInitd357eeb707b4a08904b813dc13c7ed86
         ),
         'D' => 
         array (
+            'Dompdf\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
             'DASPRiD\\Enum\\' => 13,
@@ -64,13 +75,33 @@ class ComposerStaticInitd357eeb707b4a08904b813dc13c7ed86
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
+        'Svg\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
+        ),
+        'Sabberworm\\CSS\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
+        ),
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
+        'Masterminds\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
+        'FontLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
+        ),
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qr-code/src',
+        ),
+        'Dompdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -102,6 +133,7 @@ class ComposerStaticInitd357eeb707b4a08904b813dc13c7ed86
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',

@@ -46,7 +46,6 @@ $this->load->view('admin/template_admin/footer');
         for (let i = 0; i < $('.list-group-item').length; i++) {
             data.push($('.list-group-item')[i].dataset.id)
 
-
             data_key.push({
                 id_mapel: $('.list-group-item')[i].dataset.id,
                 nama_mapel: $('.list-group-item')[i].dataset.nama_mapel,

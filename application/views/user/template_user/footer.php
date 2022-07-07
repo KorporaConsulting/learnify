@@ -24,6 +24,22 @@
             // 'fullscreen',
         ]
     });
+    player.on('ended', event => {
+        $.ajax({
+            url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',
+            method: 'POST',
+            success: function(res) {
+                location.reload();
+                swal("Berhasil!", "Materi telah selesai!", "success");
+            },
+            error: function() {
+
+            }
+        })
+    });
+</script>
+<script type="text/javascript">
+
 </script>
 <!-- Start Animate On Scroll -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -69,5 +85,20 @@
         })
     <?php endif; ?>
 </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/62c396d87b967b117998035c/1g760afk6';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
 
 <!-- End Animate On Scroll -->

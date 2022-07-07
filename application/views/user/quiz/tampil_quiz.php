@@ -56,7 +56,6 @@ $totalQuiz = count($quiz);
                                         </label>
                                     </div>
                                     <input type="hidden" name="answer_key<?= $key ?>" value="opsi_<?= $val->jawaban ?>">
-                                    <input type="hidden" name="type" value="<?= $val->final_test ?>">
                                 </div>
                                 <div class="panel-footer">
                                     <?php if ($totalQuiz == $key + 1) { ?>
@@ -74,6 +73,8 @@ $totalQuiz = count($quiz);
 
                         <?php endforeach; ?>
                     </div>
+                    <input type="hidden" name="type" value="<?= $quiz_type->type ?>">
+                    <input type="hidden" name="id_quiz" value="<?= $quiz_type->id_quiz ?>">
                 </form>
             </div>
         </div>
