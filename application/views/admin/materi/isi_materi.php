@@ -386,6 +386,13 @@ $this->load->view('admin/template_admin/sidebar');
                     <input type="hidden" name="id_materi" value="<?= $materi->id_materi ?>">
                     <input type="hidden" name="modal" value="quiz">
                     <div class="form-group">
+                        <label for="link_template">Link Template</label>
+                        <input required id="link_template" type="text" class="form-control" value="<?php echo set_value('link_template') ?>" name="link_template">
+                        <?= form_error('link_template', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="nama_tugas">Nama Tugas</label>
                         <input required id="nama_tugas" type="text" class="form-control" value="<?php echo set_value('nama_tugas') ?>" name="nama_tugas">
                         <?= form_error('nama_tugas', '<small class="text-danger">', '</small>'); ?>

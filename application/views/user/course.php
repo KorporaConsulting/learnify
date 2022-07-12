@@ -35,16 +35,30 @@
                         foreach ($course as $c) {
                         ?>
                             <div class="col-md-4 ">
-                                <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
-                                    <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-                                        <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title" style="color: black;"><?= $c->nama_mapel ?></h5>
-                                            <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>
+                                <?php if ($c->kunci == 1) { ?>
+                                    <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
+                                    <?php } else { ?>
+                                        <a class="disabled" href="#">
+                                        <?php } ?>
+                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                            <h2><?php if ($c->status == 0 && $c->kunci == 0) { ?>
+                                                    <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                    <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
+                                                <?php } elseif ($c->status == 1 && $c->kunci == 1) { ?>
+                                                    <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
+                                                    <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
+                                                <?php } elseif ($c->status == 0 && $c->kunci == 1) { ?>
+                                                    <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                <?php } ?>
+                                            </h2>
+                                            <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title" style="color: black;"><?= $c->nama_mapel ?></h5>
+                                                <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>
+                                            </div>
+                                            <a class="btn btn-block card-footer" href="<?= base_url('user/course/' . $c->slug_mapel) ?>">Pilih Course</a>
                                         </div>
-                                        <a class="btn btn-block card-footer" href="<?= base_url('user/course/' . $c->slug_mapel) ?>">Pilih Course</a>
-                                    </div>
-                                </a>
+                                        </a>
                             </div>
                         <?php } ?>
                     </div>
@@ -64,14 +78,24 @@
                     <div class="row mt-4 mb-5 justify-content-center">
                         <?php
                         foreach ($zoom as $c) {
-                            $date = date_create($c->tgl_mulai);
+                            $date_mulai = date_create($c->tgl_mulai);
+                            $date_selesai = date_create($c->tgl_selesai);
                         ?>
                             <div class="col-md-4 ">
                                 <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
                                     <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                         <div class="d-flex justify-content-between">
-                                            <h5 style="color:#33b5e5"><i class="fa fa-calendar-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date, 'd F Y')  ?></h5>
-                                            <h5 style="color:#33b5e5"><i class="fa fa-clock-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date, 'H:i')  ?></h5>
+                                            <?php
+                                            if (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
+                                                <h5 style="color:green"> Sedang Berlangsung </h5>
+                                            <?php  } elseif (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
+                                                <h5 style="color:red"> Sudah lewat </h5>
+                                            <?php  } elseif (strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
+                                                <h5 style="color:#33b5e5"><i class="fa fa-calendar-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date_mulai, 'd F Y')  ?></h5>
+                                                <h5 style="color:#33b5e5"><i class="fa fa-clock-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date_mulai, 'H:i')  ?></h5>
+                                            <?php  }
+                                            ?>
+
                                         </div>
                                         <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
                                         <div class="card-body">

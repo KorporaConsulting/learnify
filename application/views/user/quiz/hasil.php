@@ -56,16 +56,12 @@
             </div>
             <div class="row">
                 <div class="col text-right">
-                    <?php
-                    if (!isset($is_lulus)) { ?>
+                    <?php if (!isset($is_lulus)) { ?>
                         <a href="<?= site_url('user/quiz/' . $materi->id_materi . '/' . $id_quiz) ?>" class="btn btn-warning"><i class="fa fa-refresh"></i> Ulangi Test</a>
-                    <?php  }
-                    ?>
+                    <?php  } ?>
                 </div>
             </div>
-
         </div>
-
     </div>
     <script src="https://cdn.jsdelivr.net/npm/selectric@1.13.0/public/jquery.selectric.min.js" integrity="sha256-FEyhf2150teujGP4O8fW1UwKlodqIsIPSXvwvu1VGmE=" crossorigin="anonymous"></script>
     <script>

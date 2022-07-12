@@ -76,7 +76,7 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user/all_semester') ?>">Course</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/transkrip') ?>">Transkrip</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/penilaian') ?>">Penilaian</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="#">Pembayaran</a>
                             </li>
