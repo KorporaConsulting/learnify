@@ -42,7 +42,7 @@ $this->load->view('admin/template_admin/footer');
     $('#sort').click(function() {
         const data = [];
         const data_key = [];
-
+        let id_mapel_open = ''
         for (let i = 0; i < $('.list-group-item').length; i++) {
             data.push($('.list-group-item')[i].dataset.id)
 
@@ -58,8 +58,12 @@ $this->load->view('admin/template_admin/footer');
                 image: $('.list-group-item')[i].dataset.image,
                 id_semester: $('.list-group-item')[i].dataset.semester,
             })
-        }
 
+            if (i == 0) {
+                id_mapel_open = $('.list-group-item')[i].dataset.id
+            }
+        }
+        
         $.ajax({
             url: '<?= site_url('admin/update_sort_mapel') ?>',
             method: 'POST',
@@ -68,7 +72,21 @@ $this->load->view('admin/template_admin/footer');
                 data_key
             },
             success: function(res) {
-                location.reload();
+                $.ajax({
+                    url: '<?= site_url('admin/update_sort_mapel_kunci/') ?>',
+                    method: 'POST',
+                    data: {
+                        data,
+                        id_mapel_open
+                    },
+                    success: function(res) {
+                        location.reload();
+                    },
+                    error: function() {
+
+                    }
+                })
+                // location.reload();
             },
             error: function() {
 
