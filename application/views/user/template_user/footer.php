@@ -55,6 +55,13 @@
 <script src="<?= base_url('assets/') ?>vendors/counter-up/jquery.counterup.js"></script>
 <script src="<?= base_url('assets/') ?>js/mail-script.js"></script>
 <script src="<?= base_url('assets/') ?>js/theme.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
+</script>
 <script>
     var animateButton = function(e) {
         e.preventDefault;

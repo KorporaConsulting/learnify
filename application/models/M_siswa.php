@@ -15,9 +15,11 @@ class M_siswa extends CI_Model
         $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
         $this->db->join('user', 'user.id_user = enroll.id_user');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('status_mapel', 'status_mapel.id_mapel = mapel.id_mapel');
         $this->db->where('semester.semester', $semester);
-        $this->db->where('user.id_user', $id_user);
+        $this->db->where('status_mapel.id_user', $id_user);
         $this->db->where('mapel.is_zoom', 0);
+        $this->db->group_by("mapel.id_mapel");
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }
@@ -90,13 +92,15 @@ class M_siswa extends CI_Model
         $this->db->select('*');
         $this->db->from('enroll');
         $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
-        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        // $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'left');
         $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
         $this->db->where('mapel.id_mapel', $id_mapel);
         $this->db->where('materi.slug_materi', $slug);
-        $this->db->where('user.id_user', $id_user);
+        $this->db->where('enroll.id_user', $id_user);
+        $this->db->group_by('status_materi.id_materi');
         return  $this->db->get();
     }
 
@@ -108,6 +112,7 @@ class M_siswa extends CI_Model
         $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user', 'left');
         $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
         $this->db->where('mapel.id_mapel', $id_mapel);
         $this->db->where('materi.slug_materi', $slug);
@@ -124,10 +129,11 @@ class M_siswa extends CI_Model
         $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user', 'left');
         $this->db->join('video', 'video.id_materi = materi.id_materi', 'left');
         $this->db->where('mapel.id_mapel', $id_mapel);
         $this->db->where('materi.slug_materi', $slug);
-        $this->db->where('user.id_user', $id_user);
+        $this->db->where('status_materi.id_user', $id_user);
         return  $this->db->get();
     }
     public function tampil_data_quiz($id_mapel, $slug, $id_user)
@@ -135,11 +141,12 @@ class M_siswa extends CI_Model
         $this->db->select('*');
         $this->db->from('mapel');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'left');
         $this->db->join('quiz', 'quiz.id_materi = materi.id_materi', 'left');
         $this->db->join('tb_soal', 'tb_soal.id_quiz = quiz.id_quiz', 'left');
         $this->db->where('mapel.id_mapel', $id_mapel);
         $this->db->where('materi.slug_materi', $slug);
-        // $this->db->where('user.id_user', $id_user);
+        $this->db->where('status_materi.id_user', $id_user);
         return  $this->db->get();
     }
     public function tampil_data_tugas($id_mapel, $slug, $id_user)
@@ -150,6 +157,7 @@ class M_siswa extends CI_Model
         $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
         $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->join('status_materi', 'status_materi.id_materi = materi.id_materi', 'status_materi.id_user = user.id_user', 'left');
         $this->db->join('tugas', 'tugas.id_materi = materi.id_materi', 'left');
         // $this->db->join('file', 'file.id_materi = materi.id_materi', 'left');
         $this->db->where('mapel.id_mapel', $id_mapel);
@@ -230,6 +238,7 @@ class M_siswa extends CI_Model
         $this->db->join('materi', 'materi.id_materi = nilai.id_materi');
         $this->db->where('nilai.id_materi', $id);
         $this->db->where('nilai.id_user', $this->session->userdata('id_user'));
+        $this->db->order_by('nilai.id_nilai', 'desc');
         return $this->db->get();
     }
     public function get_materi($slug)
@@ -437,5 +446,29 @@ class M_siswa extends CI_Model
         $this->db->group_by('detail_transkrip.id_mapel');
         $this->db->order_by('mapel.id_semester');
         return $this->db->get();
+    }
+    public function ujian()
+    {
+        $this->db->select('*, max(nilai.nilai) as nilai_final');
+        $this->db->from('nilai');
+        $this->db->join('materi', 'materi.id_materi = nilai.id_materi', 'left');
+        $this->db->join('quiz', 'quiz.id_materi = materi.id_materi', 'left');
+        $this->db->join('mapel', 'materi.id_mapel = mapel.id_mapel', 'left');
+        $this->db->where('nilai.id_user', $this->session->userdata('id_user'));
+        $this->db->group_by('nilai.id_materi');
+        $this->db->order_by('nilai.id_nilai', 'desc');
+        return $this->db->get();
+    }
+    public function tugas()
+    {
+        $this->db->select('file.id_user,file.id_file, file.nama_file, desk_file, file.link, file.id_materi, file.approve');
+        $this->db->from('file');
+        $this->db->join('materi', 'materi.id_materi = file.id_materi', 'left');
+        $this->db->join('mapel', 'mapel.id_mapel = materi.id_mapel', 'left');
+        $this->db->join('tugas', 'tugas.id_materi = materi.id_materi', 'left');
+        $this->db->where('file.is_tugas', 1);
+        $this->db->where('file.id_user', $this->session->userdata('id_user'));
+        $this->db->group_by('file.id_file');
+        return  $this->db->get();
     }
 }

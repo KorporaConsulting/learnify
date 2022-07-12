@@ -90,6 +90,24 @@ class Admin extends CI_Controller
             $this->load->library('qrcode');
             $data['qr_code'] = $this->qrcode->generate($this->input->post('email', true));
             $this->db->insert('user', $data);
+            // $id_user = $this->db->insert_id();
+
+            // $materi = $this->m_materi->tampil_data_materi()->result();
+            // foreach ($materi as $user) {
+            //     if ($user->urutan == 1) {
+            //         $kunci = 1;
+            //     } else {
+            //         $kunci = 0;
+            //     }
+            //     $insert[] = array(
+            //         "id_materi" => $user->id_materi,
+            //         "id_user" => $id_user,
+            //         "status" => 0,
+            //         "kunci" => $kunci,
+            //         "semester_status_materi" => $user->id_semester
+            //     );
+            // }
+            // $this->db->insert_batch('status_materi', $insert);
 
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -559,6 +577,32 @@ class Admin extends CI_Controller
                     'is_zoom' =>  htmlspecialchars($this->input->post('zoom', true)),
                 ];
                 $this->db->insert('mapel', $data);
+                $insert_id = $this->db->insert_id();
+                $check_enroll = $this->m_materi->check_table_enroll();
+
+
+                if ($check_enroll == 0) {
+                    $this->session->set_flashdata('success-reg', 'Berhasil!');
+                    redirect(base_url('admin/data_mapel'));
+                } else {
+                    $id_user = $this->m_materi->get_status_mapel()->result();
+                    $check_materi = $this->m_materi->where_tampil_mapel($insert_id)->row();
+
+                    if ($check_materi->urutan == 1) {
+                        $kunci = 1;
+                    } else {
+                        $kunci = 0;
+                    }
+                    foreach ($id_user as $user) {
+                        $insert[] = array(
+                            "id_mapel" => $insert_id,
+                            "id_user" => $user->id_user,
+                            "status" => 0,
+                            "kunci" => $kunci,
+                        );
+                    }
+                    $this->db->insert_batch('status_mapel', $insert);
+                }
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
                 redirect(base_url('admin/data_mapel'));
             } else {
@@ -573,6 +617,7 @@ class Admin extends CI_Controller
     {
         $this->load->model('m_materi');
         $data['user'] = $this->m_materi->tampil_data_mapel()->result();
+        $data['live'] = $this->m_materi->tampil_data_mapel_live()->result();
         $this->load->view('admin/mapel/data_mapel', $data);
     }
 
@@ -711,6 +756,8 @@ class Admin extends CI_Controller
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                     'slug_mapel' => uniqid($slug),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
+                    'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
+                    'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
@@ -750,6 +797,8 @@ class Admin extends CI_Controller
                         'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                         'slug_mapel' => uniqid($slug),
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
+                        'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
+                        'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                         'id_semester' => htmlspecialchars($this->input->post('semester', true)),
@@ -852,6 +901,7 @@ class Admin extends CI_Controller
             $insert_id = $this->db->insert_id();
             $check_enroll = $this->m_materi->check_table_enroll();
 
+
             if ($check_enroll == 0) {
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
                 redirect(base_url('admin/data_materi'));
@@ -865,27 +915,14 @@ class Admin extends CI_Controller
                 } else {
                     $kunci = 0;
                 }
-
-                if (empty($id_user)) {
-                    foreach ($user as $u) {
-                        $insert[] = array(
-                            "id_materi" => $insert_id,
-                            "id_user" => $u->id_user,
-                            "status" => 0,
-                            "kunci" => $kunci,
-                            "semester_status_materi" => $semester->id_semester
-                        );
-                    }
-                } else {
-                    foreach ($id_user as $user) {
-                        $insert[] = array(
-                            "id_materi" => $insert_id,
-                            "id_user" => $user->id_user,
-                            "status" => 0,
-                            "kunci" => $kunci,
-                            "semester_status_materi" => $semester->id_semester
-                        );
-                    }
+                foreach ($id_user as $user) {
+                    $insert[] = array(
+                        "id_materi" => $insert_id,
+                        "id_user" => $user->id_user,
+                        "status" => 0,
+                        "kunci" => $kunci,
+                        "semester_status_materi" => $semester->id_semester
+                    );
                 }
                 $this->db->insert_batch('status_materi', $insert);
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
@@ -934,39 +971,26 @@ class Admin extends CI_Controller
             if ($check_enroll == 0) {
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
             } else {
-                $user = $this->m_materi->get_id_user()->result();
+                // $user = $this->m_materi->get_id_user()->result();
                 $id_user = $this->m_materi->get_status_materi()->result();
                 $semester = $this->m_materi->where_sort_data_materi($this->input->post('mapel', true))->row();
                 $check_materi = $this->m_materi->where_tampil_materi($insert_id)->row();
 
-                // var_dump($check_materi->urutan);
-                // die;
+
                 if ($check_materi->urutan == 1) {
                     $kunci = 1;
                 } else {
                     $kunci = 0;
                 }
 
-                if (empty($id_user)) {
-                    foreach ($user as $u) {
-                        $insert[] = array(
-                            "id_materi" => $insert_id,
-                            "id_user" => $u->id_user,
-                            "status" => 0,
-                            "kunci" => $kunci,
-                            "semester_status_materi" => $semester->id_semester
-                        );
-                    }
-                } else {
-                    foreach ($id_user as $user) {
-                        $insert[] = array(
-                            "id_materi" => $insert_id,
-                            "id_user" => $user->id_user,
-                            "status" => 0,
-                            "kunci" => $kunci,
-                            "semester_status_materi" => $semester->id_semester
-                        );
-                    }
+                foreach ($id_user as $user) {
+                    $insert[] = array(
+                        "id_materi" => $insert_id,
+                        "id_user" => $user->id_user,
+                        "status" => 0,
+                        "kunci" => $kunci,
+                        "semester_status_materi" => $semester->id_semester
+                    );
                 }
                 $this->db->insert_batch('status_materi', $insert);
             }
@@ -1292,9 +1316,26 @@ class Admin extends CI_Controller
 
             $this->db->insert('enroll', $data);
             $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
+            $get_enroll_mapel = $this->m_materi->get_kunci_mapel($this->input->post('semester', true))->result();
 
             $check_user = $this->m_materi->check_user($this->input->post('user'), $this->input->post('semester'));
+
             if ($check_user == 0) {
+                foreach ($get_enroll_mapel as $mapel) {
+                    if ($mapel->urutan == 1) {
+                        $kunci_mapel = 1;
+                    } else {
+                        $kunci_mapel = 0;
+                    }
+                    $insert_status_mapel[] = array(
+                        "id_mapel" => $mapel->id_mapel,
+                        "id_user" => $this->input->post('user', true),
+                        "status" => 0,
+                        "kunci" => $kunci_mapel,
+                    );
+                }
+                $this->db->insert_batch('status_mapel', $insert_status_mapel);
+
                 if ($get_enroll != "") {
                     foreach ($get_enroll as $id_materi) {
                         if ($id_materi->urutan == 1) {
@@ -1310,6 +1351,7 @@ class Admin extends CI_Controller
                             "semester_status_materi" => $this->input->post('semester', true),
                         );
                     }
+
                     $this->db->insert_batch('status_materi', $insert);
                 } else {
                     $data['semester'] = $this->m_materi->tampil_data_semester()->result();
@@ -1474,6 +1516,7 @@ class Admin extends CI_Controller
     {
         $id_materi = $this->input->post('id_materi', true);
         $data = [
+            'link_template' => htmlspecialchars($this->input->post('link_template', true)),
             'nama_tugas' => htmlspecialchars($this->input->post('nama_tugas', true)),
             'desk_tugas' => htmlspecialchars($this->input->post('desk_tugas', true)),
             'due_date' => htmlspecialchars($this->input->post('due_date', true)),

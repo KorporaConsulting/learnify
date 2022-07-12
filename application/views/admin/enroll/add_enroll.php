@@ -48,7 +48,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <select class="form-control select2" name="user">
                                 <option disabled selected>Pilih User</option>
                                 <?php foreach ($user as $u) { ?>
-                                    <option value="<?= $u->id_user ?>" <?php echo set_select('user', $u->id_user); ?>><?= $u->nama ?></option>
+                                    <option value="<?= $u->id_user ?>" <?php echo set_select('user', $u->id_user); ?>><?= $u->nama ?> (<?= $u->email ?>)</option>
                                 <?php } ?>
                             </select>
                             <?= form_error('user', '<small class="text-danger">', '</small>'); ?>

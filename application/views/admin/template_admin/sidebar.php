@@ -98,18 +98,18 @@
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i>
                                 <span>Pengaturan</span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <!-- <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_course') ?>">Course</a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_quiz') ?>">Quiz</a>
                                 </li>
                             </ul>
-                            <ul class="dropdown-menu">
+                            <!-- <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_tugas') ?>">Tugas</a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_transkrip') ?>">Transkrip</a>
                                 </li>
