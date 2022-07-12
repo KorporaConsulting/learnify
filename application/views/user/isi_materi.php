@@ -193,86 +193,74 @@
                      <?php } else {
                             redirect('user/quiz/' . $materi->id_materi . '/' . $quiz_row->id_quiz);
                         } ?>
-                 <?php } elseif ($list_tugas_row != null) { ?>
-                     <?php if ($list_tugas_row->kunci == 0) { ?>
-                         <div class="jumbotron mt-5 mb-5 pt-5 pb-5">
-                             <img src="<?= base_url('assets/') ?>img/denied.svg" width="300px" class="img-fluid" alt="Responsive image">
-                             <h1 class="display-4">Tidak Diizinkan</h1>
-                             <p class="lead">Mohon maaf materi yang anda akses tidak diizinkan</p>
-                             <p class="lead">Silahkan selesaikan materi sebelumnya</p>
-                             <hr class="my-4">
-                             <p></p>
-                         </div>
-                     <?php } else {
-                        ?>
-                         <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                             <div class="row" style="color: black; font-family: 'poppins';">
-                                 <div class="col-md-12 mt-1 text-center">
-                                     <!-- <img class="rounded-circle" width="100px" alt="100x100" src="<?= base_url('assets/profile_picture/' . $this->session->userdata('image_user')) ?>" data-holder-rendered="true"> -->
-                                     <h1 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="400">Tugas</h1>
-                                     <!-- <h5><?= $this->session->userdata('nama') ?></h5> -->
-                                 </div>
+                 <?php } elseif ($list_tugas_row != 0) { ?>
+                     <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                         <div class="row" style="color: black; font-family: 'poppins';">
+                             <div class="col-md-12 mt-1 text-center">
+                                 <!-- <img class="rounded-circle" width="100px" alt="100x100" src="<?= base_url('assets/profile_picture/' . $this->session->userdata('image_user')) ?>" data-holder-rendered="true"> -->
+                                 <h1 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="400">Tugas</h1>
+                                 <!-- <h5><?= $this->session->userdata('nama') ?></h5> -->
                              </div>
                          </div>
-                         <?php
-                            if ($list_tugas_row != 0) { ?>
-                             <div class="card shadow bg-white mx-auto p-4 buat-text mt-3" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                                 <div class="container">
-                                     <h2 class="display-5" style="color: black ;"><?= $tugas_row->nama_tugas ?></h2>
-                                     <p class="lead"><?= $tugas_row->desk_tugas ?></p>
-                                 </div>
-                                 <div class="row justify-content-center">
-                                     <div class="col-md-12">
-                                         <div class="row" style="color: black; font-family: 'poppins';">
-                                             <div class="col-md-12 mt-1 text-center">
-                                                 <div class="table-responsive">
-                                                     <table class="table">
-                                                         <thead>
+                     </div>
+                     <?php
+                        if ($list_tugas_row != 0) { ?>
+                         <div class="card shadow bg-white mx-auto p-4 buat-text mt-3" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                             <div class="container">
+                                 <h2 class="display-5" style="color: black ;"><?= $tugas_row->nama_tugas ?></h2>
+                                 <p class="lead"><?= $tugas_row->desk_tugas ?></p>
+                             </div>
+                             <div class="row justify-content-center">
+                                 <div class="col-md-12">
+                                     <div class="row" style="color: black; font-family: 'poppins';">
+                                         <div class="col-md-12 mt-1 text-center">
+                                             <div class="table-responsive">
+                                                 <table class="table">
+                                                     <thead>
+                                                         <tr>
+                                                             <th>No</th>
+                                                             <th>Nama File</th>
+                                                             <th>Notes</th>
+                                                             <th>File</th>
+                                                             <th>Status</th>
+                                                             <th>Action</th>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <?php
+                                                            $no = 1;
+                                                            foreach ($list_tugas as $t) { ?>
                                                              <tr>
-                                                                 <th>No</th>
-                                                                 <th>Nama File</th>
-                                                                 <th>Notes</th>
-                                                                 <th>File</th>
-                                                                 <th>Status</th>
-                                                                 <th>Action</th>
+                                                                 <td><?= $no++ ?></td>
+                                                                 <td><?= $t->nama_file ?></td>
+                                                                 <td><?= $t->desk_file ?></td>
+                                                                 <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
+                                                                 <td>
+                                                                     <?php
+                                                                        if ($t->approve == 0) { ?>
+                                                                         <span class="badge badge-warning">Menunggu diperiksa</span>
+                                                                     <?php } else { ?>
+                                                                         <span class="badge badge-success">Telah Diperiksa</span>
+                                                                     <?php  } ?>
+                                                                 </td>
+                                                                 <td>
+                                                                     <?php
+                                                                        if ($t->approve == 0) { ?>
+                                                                         <a href="#" class="btn btn-danger" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
+                                                                     <?php } else { ?>
+                                                                         <a href="#" class="btn btn-danger disabled" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
+                                                                     <?php  } ?>
+                                                                 </td>
                                                              </tr>
-                                                         </thead>
-                                                         <tbody>
-                                                             <?php
-                                                                $no = 1;
-                                                                foreach ($list_tugas as $t) { ?>
-                                                                 <tr>
-                                                                     <td><?= $no++ ?></td>
-                                                                     <td><?= $t->nama_file ?></td>
-                                                                     <td><?= $t->desk_file ?></td>
-                                                                     <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
-                                                                     <td>
-                                                                         <?php
-                                                                            if ($t->approve == 0) { ?>
-                                                                             <span class="badge badge-warning">Menunggu diperiksa</span>
-                                                                         <?php } else { ?>
-                                                                             <span class="badge badge-success">Telah Diperiksa</span>
-                                                                         <?php  } ?>
-                                                                     </td>
-                                                                     <td>
-                                                                         <?php
-                                                                            if ($t->approve == 0) { ?>
-                                                                             <a href="#" class="btn btn-danger" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
-                                                                         <?php } else { ?>
-                                                                             <a href="#" class="btn btn-danger disabled" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
-                                                                         <?php  } ?>
-                                                                     </td>
-                                                                 </tr>
-                                                             <?php } ?>
-                                                         </tbody>
-                                                     </table>
-                                                 </div>
+                                                         <?php } ?>
+                                                     </tbody>
+                                                 </table>
                                              </div>
                                          </div>
                                      </div>
                                  </div>
                              </div>
-                         <?php } ?>
+                         </div>
                      <?php } ?>
                  <?php } elseif ($zoom_row != null) { ?>
                      <?php if ($zoom_row->kunci == 0) { ?>
@@ -353,7 +341,7 @@
                                  </div>
                                  <div class="container">
                                      <h4 style="color: black ;">Silahkan download template tugas disini</h4>
-                                     <a class="btn btn-info" href="<?= $t->link_template ?>"><i class="fa fa-download"></i> Download Template Tugas</a>
+                                     <a target="_blank" class="btn btn-info" href="<?= $t->link_template ?>"><i class="fa fa-download"></i> Download Template Tugas</a>
                                  </div>
                                  <div class="row mt-5 justify-content-center">
                                      <div class="col-md-10">

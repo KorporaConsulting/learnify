@@ -105,7 +105,7 @@ class User extends CI_Controller
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
 
-        // var_dump($data['quiz_row']);
+        // var_dump($data['list_tugas']);
         // die;
 
         $id_user = $this->session->userdata('id_user');
@@ -487,7 +487,6 @@ class User extends CI_Controller
 
     public function upload_tugas()
     {
-
         $id_materi = $this->m_siswa->get_materi($this->input->post('slug_materi'))->row();
         $id_mapel = $this->input->post('id_mapel');
         $slug_materi = $this->input->post('slug_materi');

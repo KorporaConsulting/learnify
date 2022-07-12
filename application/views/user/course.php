@@ -42,13 +42,13 @@
                                         <?php } ?>
                                         <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                             <h2><?php if ($c->status == 0 && $c->kunci == 0) { ?>
-                                                    <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                    <i class="fa fa-lock float-right" title="Terkunci" style="color:red"></i>
                                                     <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
                                                 <?php } elseif ($c->status == 1 && $c->kunci == 1) { ?>
                                                     <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
                                                     <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
                                                 <?php } elseif ($c->status == 0 && $c->kunci == 1) { ?>
-                                                    <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                    <i class="fa fa-circle-o float-right" title="Dikerjakan" style="color:green"></i>
                                                 <?php } ?>
                                             </h2>
                                             <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">

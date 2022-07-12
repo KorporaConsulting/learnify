@@ -461,7 +461,7 @@ class M_siswa extends CI_Model
     }
     public function tugas()
     {
-        $this->db->select('file.id_user,file.id_file, file.nama_file, desk_file, file.link, file.id_materi, file.approve');
+        $this->db->select('file.id_user,file.id_file, file.nama_file, desk_file, file.link, file.id_materi, file.approve, mapel.nama_mapel');
         $this->db->from('file');
         $this->db->join('materi', 'materi.id_materi = file.id_materi', 'left');
         $this->db->join('mapel', 'mapel.id_mapel = materi.id_mapel', 'left');

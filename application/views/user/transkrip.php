@@ -73,6 +73,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Nama Tugas</th>
                             <th>Nama File</th>
                             <th>Notes</th>
                             <th>File</th>
@@ -85,6 +86,7 @@
                         foreach ($tugas as $t) { ?>
                             <tr>
                                 <td><?= $no++ ?></td>
+                                <td><?= $t->nama_mapel ?></td>
                                 <td><?= $t->nama_file ?></td>
                                 <td><?= $t->desk_file ?></td>
                                 <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
