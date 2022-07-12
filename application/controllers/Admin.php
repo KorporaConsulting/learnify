@@ -590,6 +590,10 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
 
         $data['user'] = $this->m_materi->tampil_sort_mapel($this->input->post('semester'))->result();
+        // header('Content-type:application/json');
+        // echo json_encode($data);
+        // die;
+
         $data['semester'] = $this->input->post('semester');
         $this->load->view('admin/mapel/sort_mapel', $data);
     }
@@ -604,6 +608,22 @@ class Admin extends CI_Controller
 
         echo json_encode([
             'success' => true
+        ]);
+    }
+
+    public function update_sort_mapel_kunci()
+    {
+        $this->db->where_in('id_mapel', $this->input->post('data'));
+        $this->db->update('status_mapel', ['status' => 0, 'kunci' => 0]);
+
+        $this->db->where('id_mapel', $this->input->post('id_mapel_open'));
+        $this->db->update('status_mapel', ['kunci' => 1]);
+
+        $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
+
+        echo json_encode([
+            'success' => true,
+            'data' => $this->input->post('id_mapel_open')
         ]);
     }
 
@@ -644,11 +664,10 @@ class Admin extends CI_Controller
 
         $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
 
-
-
         echo json_encode([
             'success' => true,
         ]);
+        
     }
 
     public function update_mapel($id)

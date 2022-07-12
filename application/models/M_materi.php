@@ -59,8 +59,10 @@ class M_materi extends CI_Model
         $this->db->from('mapel');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
         $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
-        $this->db->where('mapel.id_semester', $id);
+        // $this->db->join('status_mapel', 'status_mapel.id_mapel= mapel.id_mapel');
+        $this->db->where(['mapel.id_semester' => $id, 'is_zoom' => 0]);
         $this->db->order_by('urutan');
+        // $this->db->group_by('mapel.id_mapel');
         return  $this->db->get();
     }
     public function tampil_data_materi_course($id)
