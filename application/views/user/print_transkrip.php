@@ -40,7 +40,9 @@
          <tr>
              <td scope="row" class="noBorder text-center">Ketepatan Absen</td>
              <td class="noBorder"> : </td>
-             <?php $ketepatan  = ($akurasi->akurasi / $total_absen); ?>
+             <?php
+                if ($total_absen <= 0) $total_absen = 1;
+                $ketepatan  = ($akurasi->akurasi / $total_absen); ?>
              <td class="noBorder"><?= $ketepatan ?>%</td>
          </tr>
      </tbody>

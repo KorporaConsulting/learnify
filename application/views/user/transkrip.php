@@ -98,6 +98,7 @@
                         <tr>
                             <th colspan="4" class="text-right">Total persentase ketepatan waktu</th>
                             <?php
+                            if ($total_absen <= 0) $total_absen = 1;
                             $total = $akurasi->akurasi / $total_absen;
                             ?>
                             <td><b style="color:black"><?= $total ?>%</b></td>
@@ -145,7 +146,7 @@
                     <div class="col-md-12 ">
                         <div class="d-flex">
                             <!-- <a class="btn btn-sm btn-info justify-content-between mb-3" href="<?= base_url('user/detail_transkrip') ?>">Detail</a> -->
-                            <a class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_transkrip') ?>"><i class="fa fa-print"></i> Cetak</a>
+                            <a target="_blank" class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_transkrip') ?>"><i class="fa fa-print"></i> Cetak</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table">
