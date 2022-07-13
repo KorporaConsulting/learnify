@@ -40,7 +40,6 @@ $this->load->view('admin/template_admin/sidebar');
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <?php
                                 $no = 1;

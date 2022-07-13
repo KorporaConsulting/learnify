@@ -33,7 +33,8 @@ class User extends CI_Controller
         $data['total_absen'] = $this->m_siswa->get_total_absen();
         $data['absen'] = $this->m_siswa->get_absen();
 
-        // var_dump($data['total_absen']);
+        $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
+        // var_dump($data['akurasi']);
         // die;
 
         // header('Content-type: application/json');
@@ -670,15 +671,29 @@ class User extends CI_Controller
         $email = $this->input->post('qr_code', true);
         // $encrypted_string = openssl_encrypt($email, "AES-128-ECB", $password);
 
-        $cek_time_mapel = $this->m_materi->get_mapel($this->input->post('id_mapel'));
+        $cek_time_mapel = $this->m_materi->get_mapel($this->input->post('id_mapel'))->row();
 
-        $date_mulai =  strtotime(date_format($cek_time_mapel->tgl_mulai, 'Y-m-d H:i:s'));
-        $date_selesai = strtotime(date_format($cek_time_mapel->tgl_selesai, 'Y-m-d H:i:s'));
-        $date_now = strtotime(date('Y-m-d H:i:s'));
+        $date_mulai = date_create($cek_time_mapel->tgl_mulai);
+        $date_selesai = date_create($cek_time_mapel->tgl_selesai);
 
-        // if ($date_now >= ) {
-        //     $ketepatan_absen = "";
-        // }
+
+        $date_mulai =  strtotime(date_format($date_mulai, 'H:i:s'));
+        $date_selesai = strtotime(date_format($date_selesai, 'H:i:s'));
+        $date_now = strtotime(date('H:i:s'));
+        $akurasi = $date_now - $date_mulai;
+
+        if ($akurasi <= 0) {
+            $ketepatan_absen = "100";
+        } elseif ($akurasi >= 1 && $akurasi <= 600) {
+            $ketepatan_absen = "97";
+        } elseif ($akurasi >= 601 && $akurasi <= 1200) {
+            $ketepatan_absen = "80";
+        } elseif ($akurasi >= 1201 && $akurasi <= 1800) {
+            $ketepatan_absen = "60";
+        } elseif ($akurasi >= 1801) {
+            $ketepatan_absen = "0";
+        }
+
 
         $decrypted_string = openssl_decrypt($email, "AES-128-ECB", $password);
 
@@ -691,7 +706,8 @@ class User extends CI_Controller
         $data = array(
             'id_user' => $this->input->post('id_user'),
             'id_mapel' => $this->input->post('id_mapel'),
-            'status_absensi' => $this->input->post('status_absensi')
+            'status_absensi' => $this->input->post('status_absensi'),
+            'ketepatan_absensi' =>  $ketepatan_absen
         );
         $this->db->insert('absensi', $data);
         echo 'Absen successfully.';
@@ -783,6 +799,11 @@ class User extends CI_Controller
         $data['transkrip'] = $this->m_siswa->transkrip()->result();
         $data['ujian'] = $this->m_siswa->ujian()->result();
         $data['tugas'] = $this->m_siswa->tugas()->result();
+        $data['absensi'] = $this->m_siswa->get_all_absensi()->result();
+        $data['total_absen'] = $this->m_siswa->get_total_absen();
+        $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
+        // var_dump($data['absensi']);
+        // die;
         $this->load->view('user/transkrip', $data);
     }
     public function detail_transkrip()
@@ -798,7 +819,27 @@ class User extends CI_Controller
         $data['mutu'] = $this->db->select('*')->get('mutu')->result();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $data['transkrip'] = $this->m_siswa->transkrip()->result();
+        $data['absensi'] = $this->m_siswa->get_all_absensi()->result();
+        $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
+        $data['total_absen'] = $this->m_siswa->get_total_absen();
+        $data['absen'] = $this->m_siswa->get_absen();
         $this->pdf->setFileName('Traskrip_SU_' . $this->session->userdata('nama') . '.pdf');
         $this->pdf->load_view('user/print_transkrip', $data);
+    }
+
+    public function jadwal()
+    {
+        $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+        $this->load->view('user/jadwal', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function print_jadwal()
+    {
+        $this->load->library('pdf');
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+        $this->pdf->setFileName('Jadwal_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->load_view('user/print_jadwal', $data);
     }
 }

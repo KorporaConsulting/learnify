@@ -21,6 +21,9 @@
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Ujian</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab1" data-toggle="pill" href="#pills-profile1" role="tab" aria-controls="pills-profile1" aria-selected="false">Absensi</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Tugas</a>
             </li>
             <li class="nav-item">
@@ -67,6 +70,40 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile1" role="tabpanel" aria-labelledby="pills-profile-tab1">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Course</th>
+                            <th>Waktu Absensi</th>
+                            <th>Waktu Kelas Live</th>
+                            <th>Persentase ketepatan waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $no = 1;
+                        foreach ($absensi as $t) {
+                        ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $t->nama_mapel ?></td>
+                                <td><?= $t->waktu_masuk ?></td>
+                                <td><?= $t->tgl_mulai ?></td>
+                                <td><?= $t->ketepatan_absensi ?>%</td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <th colspan="4" class="text-right">Total persentase ketepatan waktu</th>
+                            <?php
+                            $total = $akurasi->akurasi / $total_absen;
+                            ?>
+                            <td><b style="color:black"><?= $total ?>%</b></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                 <table class="table">

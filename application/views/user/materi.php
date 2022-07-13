@@ -15,6 +15,7 @@
             <?php if ($mapel->is_zoom == 1) {
                 $date_mulai = date_create($mapel->tgl_mulai);
                 $date_selesai = date_create($mapel->tgl_selesai);
+
             ?>
                 <?php if (strtotime(date('Y-m-d')) >= strtotime(date_format($date_mulai, 'Y-m-d')) && strtotime(date('Y-m-d')) <= strtotime(date_format($date_selesai, 'Y-m-d'))) { ?>
                     <?php if (strtotime(date('H:i:s')) >= strtotime(date_format($date_mulai, 'H:i:s')) - 600 && strtotime(date('H:i:s')) <= strtotime(date_format($date_selesai, 'H:i:s'))) { ?>

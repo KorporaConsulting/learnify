@@ -353,6 +353,15 @@ class M_siswa extends CI_Model
         $query =  $this->db->get();
         return $query->num_rows();
     }
+
+    public function get_akurasi_absen()
+    {
+        $this->db->select('*, sum(ketepatan_absensi) as akurasi');
+        $this->db->from('absensi');
+        $this->db->where('id_user',  $this->session->userdata('id_user'));
+        return  $this->db->get();
+    }
+
     public function nilai_quiz()
     {
         $this->db->select('mapel.nama_mapel,materi.nama_materi, max(nilai.nilai) as nilai_quiz');
@@ -469,6 +478,29 @@ class M_siswa extends CI_Model
         $this->db->where('file.is_tugas', 1);
         $this->db->where('file.id_user', $this->session->userdata('id_user'));
         $this->db->group_by('file.id_file');
+        return  $this->db->get();
+    }
+    public function jadwal_zoom()
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('file', 'file.id_materi = materi.id_materi');
+        $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        $this->db->where('enroll.id_user', $this->session->userdata('id_user'));
+        $this->db->where('mapel.is_zoom', 1);
+        $this->db->where('file.is_tugas', 2);
+        $this->db->order_by("mapel.urutan", "asc");
+        return  $this->db->get();
+    }
+    public function get_all_absensi()
+    {
+        $this->db->select('*, absensi.created_at as waktu_masuk');
+        $this->db->from('absensi');
+        $this->db->join('mapel', 'absensi.id_mapel = mapel.id_mapel');
+        $this->db->where('id_user',  $this->session->userdata('id_user'));
         return  $this->db->get();
     }
 }

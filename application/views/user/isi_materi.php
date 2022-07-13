@@ -129,15 +129,15 @@
                          </div>
                      <?php } else {
                         ?>
-                         <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
+                         <div class="card shadow bg-white mx-auto p-2" data-aos-duration="400" style="width: 100%; border-radius:15px;">
                              <div class="jumbotron jumbotron-fluid">
-                                 <img src="<?= base_url('assets/img/modul.svg') ?>" width="300px" class="img-fluid" alt="Responsive image">
+                                 <img src="<?= base_url('assets/img/modul.svg') ?>" width="200px" class="img-fluid" alt="Responsive image">
                                  <div class="container">
                                      <h1 class="display-4" style="color: black ;">Download Modul</h1>
                                      <p class="lead" style="color: black ;"><b>Silahkan download modul dibawah ini.</b></p>
                                  </div>
                              </div>
-                             <div class="card-body p-5">
+                             <div class="card-body">
                                  <h4 class="card-title display-5">Modul</h4>
                                  <hr style="background-color: white;">
                                  <div class="row">
