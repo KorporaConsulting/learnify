@@ -3,7 +3,7 @@
 
 <!-- Start Greetings Card -->
 <div class="container">
-    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+    <div class="card shadow bg-white mx-auto p-4 buat-text " data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
         <div class="row" style="color: black; font-family: 'poppins';">
             <div class="col-md-8 mt-1">
                 <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Materi Course <?= $mapel->nama_mapel ?>
@@ -79,7 +79,7 @@
                                     <?php } else { ?>
                                         <a class="disabled" href="#">
                                         <?php } ?>
-                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
                                             <h3>
                                                 <?php if ($m->status == 0 && $m->kunci == 0) { ?>
                                                     <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>

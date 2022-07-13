@@ -670,6 +670,16 @@ class User extends CI_Controller
         $email = $this->input->post('qr_code', true);
         // $encrypted_string = openssl_encrypt($email, "AES-128-ECB", $password);
 
+        $cek_time_mapel = $this->m_materi->get_mapel($this->input->post('id_mapel'));
+
+        $date_mulai =  strtotime(date_format($cek_time_mapel->tgl_mulai, 'Y-m-d H:i:s'));
+        $date_selesai = strtotime(date_format($cek_time_mapel->tgl_selesai, 'Y-m-d H:i:s'));
+        $date_now = strtotime(date('Y-m-d H:i:s'));
+
+        // if ($date_now >= ) {
+        //     $ketepatan_absen = "";
+        // }
+
         $decrypted_string = openssl_decrypt($email, "AES-128-ECB", $password);
 
 

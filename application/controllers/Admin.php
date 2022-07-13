@@ -679,7 +679,8 @@ class Admin extends CI_Controller
         $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
         $data['materi_row'] = $this->materi->where_sort_data_materi($id)->row();
 
-
+        // var_dump($data['materi_row']->id_materi);
+        // die;
         $this->load->view('admin/materi/sort_materi', $data);
     }
 
@@ -712,7 +713,6 @@ class Admin extends CI_Controller
         echo json_encode([
             'success' => true,
         ]);
-        
     }
 
     public function update_mapel($id)

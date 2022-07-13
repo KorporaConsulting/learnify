@@ -16,7 +16,7 @@ $this->load->view('admin/template_admin/sidebar');
                             <div class="card-body">
                                 <ol id="list" class="list-group mb-4">
                                     <?php foreach ($user as $u) : ?>
-                                        <li style="cursor: pointer;" data-id="<?= $u->id_mapel ?>" data-nama_mapel="<?= $u->nama_mapel ?>" data-slug_mapel="<?= $u->slug_mapel ?>" data-desk="<?= $u->desk ?>" data-tgl_mulai="<?= $u->tgl_mulai ?>" data-tgl_selesai="<?= $u->tgl_selesai ?>" data-image="<?= $u->image ?>" data-id_guru="<?= $u->id_guru ?>" data-semester="<?= $u->id_semester ?>" class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> </li>
+                                        <li style="cursor: pointer;" data-id="<?= $u->id_mapel ?>" data-nama_mapel="<?= $u->nama_mapel ?>" data-slug_mapel="<?= $u->slug_mapel ?>" data-desk="<?= $u->desk ?>" data-tgl_mulai="<?= $u->tgl_mulai ?>" data-kode_mapel="<?= $u->kode_mapel ?>" data-tgl_selesai="<?= $u->tgl_selesai ?>" data-image="<?= $u->image ?>" data-id_guru="<?= $u->id_guru ?>" data-semester="<?= $u->id_semester ?>" class="list-group-item"><?= $u->nama_mapel ?> | <?= $u->nama_guru ?> </li>
                                     <?php endforeach; ?>
                                 </ol>
                                 <a href="<?= base_url('admin/data_sort_semester') ?>" type="button" class="btn btn-info">Kembali</a>
@@ -49,6 +49,7 @@ $this->load->view('admin/template_admin/footer');
             data_key.push({
                 id_mapel: $('.list-group-item')[i].dataset.id,
                 nama_mapel: $('.list-group-item')[i].dataset.nama_mapel,
+                kode_mapel: $('.list-group-item')[i].dataset.kode_mapel,
                 slug_mapel: $('.list-group-item')[i].dataset.slug_mapel,
                 desk: $('.list-group-item')[i].dataset.desk,
                 id_guru: $('.list-group-item')[i].dataset.id_guru,
@@ -63,7 +64,7 @@ $this->load->view('admin/template_admin/footer');
                 id_mapel_open = $('.list-group-item')[i].dataset.id
             }
         }
-        
+
         $.ajax({
             url: '<?= site_url('admin/update_sort_mapel') ?>',
             method: 'POST',
