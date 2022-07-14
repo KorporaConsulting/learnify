@@ -21,6 +21,9 @@
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Ujian</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab1" data-toggle="pill" href="#pills-profile1" role="tab" aria-controls="pills-profile1" aria-selected="false">Absensi</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Tugas</a>
             </li>
             <li class="nav-item">
@@ -68,11 +71,47 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="pills-profile1" role="tabpanel" aria-labelledby="pills-profile-tab1">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Course</th>
+                            <th>Waktu Absensi</th>
+                            <th>Waktu Kelas Live</th>
+                            <th>Persentase ketepatan waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $no = 1;
+                        foreach ($absensi as $t) {
+                        ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $t->nama_mapel ?></td>
+                                <td><?= $t->waktu_masuk ?></td>
+                                <td><?= $t->tgl_mulai ?></td>
+                                <td><?= $t->ketepatan_absensi ?>%</td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <th colspan="4" class="text-right">Total persentase ketepatan waktu</th>
+                            <?php
+                            if ($total_absen <= 0) $total_absen = 1;
+                            $total = $akurasi->akurasi / $total_absen;
+                            ?>
+                            <td><b style="color:black"><?= $total ?>%</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Nama Tugas</th>
                             <th>Nama File</th>
                             <th>Notes</th>
                             <th>File</th>
@@ -85,6 +124,7 @@
                         foreach ($tugas as $t) { ?>
                             <tr>
                                 <td><?= $no++ ?></td>
+                                <td><?= $t->nama_mapel ?></td>
                                 <td><?= $t->nama_file ?></td>
                                 <td><?= $t->desk_file ?></td>
                                 <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
@@ -106,7 +146,7 @@
                     <div class="col-md-12 ">
                         <div class="d-flex">
                             <!-- <a class="btn btn-sm btn-info justify-content-between mb-3" href="<?= base_url('user/detail_transkrip') ?>">Detail</a> -->
-                            <a class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_transkrip') ?>"><i class="fa fa-print"></i> Cetak</a>
+                            <a target="_blank" class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_transkrip') ?>"><i class="fa fa-print"></i> Cetak</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table">

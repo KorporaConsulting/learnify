@@ -30,7 +30,7 @@ class Pdf extends Dompdf
         $html = $this->ci()->load->view($view, $data, TRUE);
         $this->load_html($html);
         $this->set_option('isRemoteEnabled', true);
-        $this->setPaper('A4', 'landscape');
+        $this->setPaper('A4', 'portrait');
         // Render the PDF
         $this->render();
         // Output the generated PDF to Browser

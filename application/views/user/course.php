@@ -42,13 +42,13 @@
                                         <?php } ?>
                                         <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                             <h2><?php if ($c->status == 0 && $c->kunci == 0) { ?>
-                                                    <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                    <i class="fa fa-lock float-right" title="Terkunci" style="color:red"></i>
                                                     <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
                                                 <?php } elseif ($c->status == 1 && $c->kunci == 1) { ?>
                                                     <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
                                                     <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
                                                 <?php } elseif ($c->status == 0 && $c->kunci == 1) { ?>
-                                                    <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                    <i class="fa fa-circle-o float-right" title="Dikerjakan" style="color:green"></i>
                                                 <?php } ?>
                                             </h2>
                                             <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
@@ -84,20 +84,21 @@
                             <div class="col-md-4 ">
                                 <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
                                     <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+
                                         <div class="d-flex justify-content-between">
                                             <?php
                                             if (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
                                                 <h5 style="color:green"> Sedang Berlangsung </h5>
                                             <?php  } elseif (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
-                                                <h5 style="color:red"> Sudah lewat </h5>
+                                                <h5 style="color:red">Berakhir</h5>
                                             <?php  } elseif (strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
                                                 <h5 style="color:#33b5e5"><i class="fa fa-calendar-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date_mulai, 'd F Y')  ?></h5>
-                                                <h5 style="color:#33b5e5"><i class="fa fa-clock-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date_mulai, 'H:i')  ?></h5>
+                                                <h5 style="color:#33b5e5"><i class="fa fa-clock-o" title="Selesai" style="color:#33b5e5"></i> <?= date_format($date_mulai, 'H:i')  ?> WIB</h5>
                                             <?php  }
                                             ?>
-
                                         </div>
                                         <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
+                                        <h4><span class="badge bg-info"><b style="color: white;">Live Kelas</b></span></h4>
                                         <div class="card-body">
                                             <h5 class="card-title" style="color: black;"><?= $c->nama_mapel ?></h5>
                                             <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>

@@ -3,7 +3,7 @@
 
 <!-- Start Greetings Card -->
 <div class="container">
-    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+    <div class="card shadow bg-white mx-auto p-4 buat-text " data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
         <div class="row" style="color: black; font-family: 'poppins';">
             <div class="col-md-8 mt-1">
                 <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Materi Course <?= $mapel->nama_mapel ?>
@@ -15,6 +15,7 @@
             <?php if ($mapel->is_zoom == 1) {
                 $date_mulai = date_create($mapel->tgl_mulai);
                 $date_selesai = date_create($mapel->tgl_selesai);
+
             ?>
                 <?php if (strtotime(date('Y-m-d')) >= strtotime(date_format($date_mulai, 'Y-m-d')) && strtotime(date('Y-m-d')) <= strtotime(date_format($date_selesai, 'Y-m-d'))) { ?>
                     <?php if (strtotime(date('H:i:s')) >= strtotime(date_format($date_mulai, 'H:i:s')) - 600 && strtotime(date('H:i:s')) <= strtotime(date_format($date_selesai, 'H:i:s'))) { ?>
@@ -79,7 +80,7 @@
                                     <?php } else { ?>
                                         <a class="disabled" href="#">
                                         <?php } ?>
-                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
                                             <h3>
                                                 <?php if ($m->status == 0 && $m->kunci == 0) { ?>
                                                     <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>

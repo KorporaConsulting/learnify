@@ -679,7 +679,8 @@ class Admin extends CI_Controller
         $data['materi'] = $this->materi->where_sort_data_materi($id)->result();
         $data['materi_row'] = $this->materi->where_sort_data_materi($id)->row();
 
-
+        // var_dump($data['materi_row']->id_materi);
+        // die;
         $this->load->view('admin/materi/sort_materi', $data);
     }
 
@@ -1574,7 +1575,6 @@ class Admin extends CI_Controller
 
     public function approve_tugas($id_file, $id_materi, $id_user)
     {
-
         $check_slug = $this->m_materi->where_tampil_materi($id_materi)->row();
         $id_mapel = $check_slug->id_mapel;
         $urutan = $check_slug->urutan + 1;
@@ -1607,7 +1607,6 @@ class Admin extends CI_Controller
 
             $get_urutan_materi = $this->m_materi->cek_urutan_materi($id_mapel, $urutan)->row();
 
-
             $where_kunci = [
                 'id_materi' => $get_urutan_materi->id_materi,
                 'id_user' => $id_user
@@ -1618,6 +1617,13 @@ class Admin extends CI_Controller
             ];
             $this->db->where($where_kunci);
             $this->db->update('status_materi', $data_kunci);
+        }
+
+        $total_materi = $this->m_siswa->total_status($id_user, $id_mapel);
+        $done_materi = $this->m_siswa->done_status($id_user, $id_mapel);
+
+        if ($total_materi == $done_materi) {
+            $this->mark_mapel($id_mapel, $id_user);
         }
 
         $this->session->set_flashdata('success-approve', 'Tugas telah disetujui');
@@ -1862,5 +1868,43 @@ class Admin extends CI_Controller
         $this->db->delete('payment_setting', ['id' => $id]);
         $this->session->set_flashdata('success', "Berhasil menghapus opsi");
         redirect('admin/opt_payment');
+
+    }
+    
+    public function mark_mapel($id_mapel, $id_user)
+    {
+        $mapel = $this->m_materi->get_mapel($id_mapel)->row();
+        $semester = $this->m_materi->get_kunci_mapel($mapel->id_semester)->row();
+        $urutan = $mapel->urutan + 1;
+
+        $get_urutan_mapel = $this->m_materi->cek_urutan_mapel($semester->id_semester, $urutan)->row();
+
+        // var_dump($get_urutan_mapel);
+        // die;
+
+        $where_kunci = [
+            'id_mapel' => $get_urutan_mapel->id_mapel,
+            'id_user' => $id_user
+        ];
+
+        $data_kunci = [
+            'kunci' => 1
+        ];
+
+        $this->db->where($where_kunci);
+        $this->db->update('status_mapel', $data_kunci);
+
+
+        $where = [
+            'id_mapel' => $id_mapel,
+            'id_user' => $id_user
+        ];
+
+        $data = [
+            'status' => 1
+        ];
+
+        $this->db->where($where);
+        $this->db->update('status_mapel', $data);
     }
 }

@@ -53,8 +53,12 @@
                             </div>
                             <div class="col-md-12 mt-1">
                                 <h5 class="text-center">Ketepatan Absen</h5>
+                                <?php
+                                if ($total_absen <= 0) $total_absen = 1;
+                                $ketepatan  = ($akurasi->akurasi / $total_absen);
+                                ?>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">90%</div>
+                                    <div class="progress-bar" role="progressbar" style="width:<?= $ketepatan ?>%" aria-valuenow="<?= $ketepatan ?>" aria-valuemin="0" aria-valuemax="100"><?= $ketepatan ?>%</div>
                                 </div>
                                 <!-- <img class="img-fluid" width="100px" alt="100x100" src="<?= base_url('assets/img/qr-code-login/qr_icon.svg') ?>" data-holder-rendered="true"> -->
                             </div>
@@ -114,6 +118,7 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <!-- Modal Absen -->
 <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -192,5 +197,7 @@
         });
     }
 </script>
+=======
+>>>>>>> 7419e4b002a14b45ba9bfb90f5c7934e6e00498d
 <!-- End Class Card -->
 <?php $this->load->view('user/template_user/footer'); ?>

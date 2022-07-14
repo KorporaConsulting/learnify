@@ -13,8 +13,8 @@ $this->load->view('admin/template_admin/sidebar');
                 <!-- <a href="<?= base_url('admin/data_mapel') ?>" class="btn btn-success"><i class="fa fa-arrow-left"></i> Kembali </a> -->
                 <a href="<?= base_url('admin/add_mapel') ?>" class="btn btn-success">Tambah
                     Data Course</a>
-                <!-- <a href="<?= base_url('admin/data_sort_semester') ?>" class="btn btn-primary">
-                    Sort Course</a> -->
+                <a href="<?= base_url('admin/data_sort_semester') ?>" class="btn btn-primary">
+                    Sort Course</a>
             </div>
         </div>
         <div class="row ">

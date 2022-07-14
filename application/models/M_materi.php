@@ -112,12 +112,12 @@ class M_materi extends CI_Model
     public function where_sort_data_materi($id)
     {
         $this->db->select('*');
-        $this->db->from('mapel');
-        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
-        // $this->db->join('status_materi', 'materi.id_materi = status_materi.id_materi');
-        $this->db->where('mapel.id_mapel', $id);
+        $this->db->from('materi');
+        $this->db->join('mapel', 'materi.id_mapel = mapel.id_mapel');
+        $this->db->join('status_materi', 'materi.id_materi = status_materi.id_materi');
+        $this->db->where('materi.id_mapel', $id);
         $this->db->order_by('materi.urutan', 'asc');
-        // $this->db->group_by('status_materi.id_materi');
+        $this->db->group_by('status_materi.id_materi');
         return  $this->db->get();
     }
 

@@ -1,4 +1,4 @@
- <title>Sales University - Print Transkrip</title>
+ <title>Sales University - Jadwal Live Kelas</title>
  <?php
     $path = base_url("assets/img/cover.png");
     $type = pathinfo($path, PATHINFO_EXTENSION);
@@ -6,8 +6,8 @@
     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     ?>
  <img src="<?php echo $base64 ?>" style="width:100%" />
- <h4 style="text-align: center;">TRANSKRIP NILAI</h4>
- <table class="table" style="margin-bottom:5px ; width:100%;">
+ <h4 style="text-align: center;">JADWAL KELAS ONLINE</h4>
+ <table class="table" style="margin-bottom:50px ;">
      <tbody>
          <tr>
              <td scope="row" class="noBorder text-center">Nama</td>
@@ -26,24 +26,6 @@
                 $ttl = date_create($user->ttl);
                 ?>
              <td class="noBorder"><?= date_format($ttl, 'd F Y')  ?></td>
-         </tr>
-     </tbody>
- </table>
- <hr>
- <table class="table" style="margin-bottom:5px ;">
-     <tbody>
-         <tr>
-             <td class="noBorder">Absensi</td>
-             <td class="noBorder"> : </td>
-             <td class="noBorder"><?= $absen ?>/<?= $total_absen ?></td>
-         </tr>
-         <tr>
-             <td scope="row" class="noBorder text-center">Ketepatan Absen</td>
-             <td class="noBorder"> : </td>
-             <?php
-                if ($total_absen <= 0) $total_absen = 1;
-                $ketepatan  = ($akurasi->akurasi / $total_absen); ?>
-             <td class="noBorder"><?= $ketepatan ?>%</td>
          </tr>
      </tbody>
  </table>
@@ -103,33 +85,25 @@
      <thead>
          <tr>
              <th class="tg-0lax">No</th>
-             <th class="tg-0lax">Semester</th>
-             <th class="tg-0lax">Kode Course</th>
-             <th class="tg-0lax">Course</th>
-             <th class="tg-0lax">Nilai</th>
-             <th class="tg-0lax">Grade</th>
+             <th class="tg-0lax">Topik</th>
+             <th class="tg-0lax">Mentor</th>
+             <th class="tg-0lax">Mulai</th>
+             <th class="tg-0lax">Selesai</th>
          </tr>
      </thead>
      <tbody>
          <?php
             $no = 1;
-            foreach ($transkrip as $t) { ?>
+            foreach ($jadwal as $t) {
+                $mulai = date_create($t->tgl_mulai);
+                $selesai = date_create($t->tgl_selesai);
+            ?>
              <tr>
                  <td class="tg-0lax"><?= $no++ ?></td>
-                 <td class="tg-0lax"><?= $t->id_semester ?></td>
-                 <td class="tg-0lax"><?= $t->kode_mapel ?></td>
-                 <td class="tg-0lax"><?= $t->nama_mapel ?></td>
-                 <td class="tg-0lax"><?= $t->nilai_final ?></td>
-                 <?php foreach ($mutu as $mu) { ?>
-                     <?php
-                        $pisah = explode("-", $mu->nilai);
-                        ?>
-                     <?php if ($t->nilai_final >= $pisah[0] && $t->nilai_final <= $pisah[1]) { ?>
-                         <td class="tg-0lax"><b style="color: black;"><?= $mu->mutu ?></b></td>
-                     <?php
-                            break;
-                        } ?>
-                 <?php } ?>
+                 <td class="tg-0lax"><?= $t->nama_file ?></td>
+                 <td class="tg-0lax"><?= $t->nama_guru ?></td>
+                 <td class="tg-0lax"><b style="color: black;"> <?= date_format($mulai, 'd F Y H:i')  ?></b></td>
+                 <td class="tg-0lax"><b style="color: black;"><?= date_format($selesai, 'd F Y H:i') ?></b></td>
              </tr>
          <?php  } ?>
      </tbody>
