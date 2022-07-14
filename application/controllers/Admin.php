@@ -1827,6 +1827,43 @@ class Admin extends CI_Controller
         $data['transkrip'] = $this->m_materi->transkrip($id)->result();
         $this->load->view('admin/transkrip/data_transkrip', $data);
     }
+
+    public function opt_payment()
+    {
+        $data['setting'] = $this->db->get('payment_setting')->result();
+
+        $this->load->view('admin/setting/opt_payment', $data);
+    }
+
+    public function payment_active($id_payment)
+    {
+        $this->db->update('payment_setting', ['is_active' => 0]);
+
+        $this->db->where('id', $id_payment)->update('payment_setting', ['is_active' => 1]);
+
+        $this->session->set_flashdata('success', "Berhasil mengganti opsi");
+
+        redirect('admin/opt_payment');
+    }
+    public function add_payment_setting()
+    {
+        $this->db->insert('payment_setting', $this->input->post());
+
+        header('Content-type: application/json');
+        $this->session->set_flashdata('success', "Berhasil menambah opsi");
+        echo json_encode([
+            'success' => true
+        ]);
+    }
+
+    public function delete_opt_payment ($id)
+    {
+        $this->db->delete('payment_setting', ['id' => $id]);
+        $this->session->set_flashdata('success', "Berhasil menghapus opsi");
+        redirect('admin/opt_payment');
+
+    }
+    
     public function mark_mapel($id_mapel, $id_user)
     {
         $mapel = $this->m_materi->get_mapel($id_mapel)->row();

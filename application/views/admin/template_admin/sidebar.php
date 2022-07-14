@@ -114,6 +114,10 @@
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_transkrip') ?>">Transkrip</a>
                                 </li>
                             </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_payment') ?>">Payment</a>
+                                </li>
+                            </ul>
                         </li>
                 </aside>
             </div>

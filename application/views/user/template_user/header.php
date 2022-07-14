@@ -40,13 +40,15 @@
     <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/popper.js"></script>
     <script src="<?= base_url('assets/') ?>js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- or -->
     <script type="text/javascript">
         $(document).ready(() => {
             $("#nav<?= $this->uri->segment(2); ?>").addClass('active')
 
         })
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     <!-- <style>
         /* Handle */
@@ -82,7 +84,7 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" href="<?= base_url('user/penilaian') ?>">Penilaian</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Pembayaran</a>
+                            <li class="nav-item"><a class="nav-link" href="<?= base_url('user/pembayaran') ?>">Pembayaran</a>
                             </li>
                             <!-- <li class="nav-item"><a class="nav-link" href="<?= base_url('user/profile') ?>">Profile</a>
                             </li> -->

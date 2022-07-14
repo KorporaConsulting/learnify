@@ -13,7 +13,10 @@
 	"require": {
 		"php": ">=5.3.7",
 		"endroid/qr-code": "^4.4",
-		"dompdf/dompdf": "^2.0"
+		"dompdf/dompdf": "^2.0",
+		"php-ffmpeg/php-ffmpeg": "^0.19.0",
+		"duitkupg/duitku-php": "dev-master",
+		"guzzlehttp/guzzle": "^7.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
