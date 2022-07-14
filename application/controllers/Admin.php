@@ -566,7 +566,7 @@ class Admin extends CI_Controller
                 $data = [
                     'kode_mapel' => $kode_mapel,
                     'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                    'slug_mapel' => uniqid($slug),
+                    'slug_mapel' => url_title($this->input->post('nama_mapel'), 'dash', TRUE),
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
                     'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
@@ -692,7 +692,6 @@ class Admin extends CI_Controller
 
         $this->db->insert_batch('materi', $this->input->post('data_key'));
         $this->session->set_flashdata('success', 'Berhasil mengurutkan Materi');
-
 
 
         echo json_encode([
@@ -887,12 +886,9 @@ class Admin extends CI_Controller
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
-            $title = trim(strtolower($this->input->post('nama_materi', true)));
-            $out = explode(" ", $title);
-            $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => uniqid($slug),
+                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
@@ -954,12 +950,9 @@ class Admin extends CI_Controller
             $check_urutan = $this->m_materi->check_urutan($this->input->post('mapel', true))->row();
             $urutan = ($check_urutan->urutan) + 1;
 
-            $title = trim(strtolower($this->input->post('nama_materi', true)));
-            $out = explode(" ", $title);
-            $slug = implode("-", $out);
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => uniqid($slug),
+                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
