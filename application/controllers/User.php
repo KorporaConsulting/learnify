@@ -27,9 +27,22 @@ class User extends CI_Controller
     {
 
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
-        if (isset($_COOKIE['lastMapel'])) {
-            $data['aktifitas_belajar'] = json_decode($_COOKIE['lastMapel']);
-        }
+ 
+        $data['aktifitas_belajar'] = $this->db
+            ->where('id_user', $this->session->userdata('id_user'))
+            ->where('type', 'course')
+            ->limit(5)
+            ->group_by('nama_activity')    
+            ->get('activity')->result();
+
+        $data['recent_video'] = $this->db
+            ->join('video', 'video.id_video = activity.id_join', 'left')
+            ->where('id_user', $this->session->userdata('id_user'))
+            ->where('type', 'video')
+            ->limit(5)
+            ->group_by('nama_activity')    
+            ->get('activity')->result();
+
         $data['total_absen'] = $this->m_siswa->get_total_absen();
         $data['absen'] = $this->m_siswa->get_absen();
 
@@ -41,6 +54,15 @@ class User extends CI_Controller
         // die;
         $this->load->view('user/index', $data);
         $this->load->view('template/footer');
+    }
+
+    public function test ()
+    {
+        $this->load->library('CoverVideo');
+        $this->CoverVideo->generate();
+
+
+        
     }
 
     public function semester($semester)
@@ -73,10 +95,19 @@ class User extends CI_Controller
         $data['total_materi'] = $this->m_siswa->total_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
         $data['done_materi'] = $this->m_siswa->done_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
 
-        setcookie('lastMapel', json_encode([
+        // setcookie('lastMapel', json_encode([
+        //     'url' => current_url(),
+        //     'data' => $data['mapel']
+        // ]), 0, '/');
+
+        $this->db->insert('activity', [
+            'id_user' => $this->session->userdata('id_user'),
+            'nama_activity' => $data['mapel']->nama_mapel,
             'url' => current_url(),
-            'data' => $data['mapel']
-        ]), 0, '/');
+            'type' => 'course'
+        ]);
+
+        
 
         // var_dump($data['semester']);
         // die;
@@ -105,6 +136,17 @@ class User extends CI_Controller
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
 
+        if($data['video']->id_video != null){
+            if($data['video']->kunci == 1){
+                $this->db->insert('activity', [
+                    'id_user' => $this->session->userdata('id_user'),
+                    'id_join' => $data['video']->id_video,
+                    'nama_activity' => $data['video']->nama_materi,
+                    'type' => 'video',
+                    'url' => current_url()
+                ]);
+            }
+        }
         // var_dump($data['quiz_row']);
         // die;
 
@@ -791,5 +833,67 @@ class User extends CI_Controller
         $data['transkrip'] = $this->m_siswa->transkrip()->result();
         $this->pdf->setFileName('Traskrip_SU_' . $this->session->userdata('nama') . '.pdf');
         $this->pdf->load_view('user/print_transkrip', $data);
+    }
+
+    public function pembayaran ()
+    {
+        // $this->load->view('user/template_user/header');
+        $this->load->view('user/payment');
+    }
+
+    public function pay_with_installment()
+    {
+        header('Content-type: application/json');
+        $this->load->library('paymentlib');
+
+
+        $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
+
+        $data = $this->paymentlib->pay($payment_setting, $this->input->post('nama_product'), $this->session->userdata());
+
+        if($data['success']){
+
+            $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
+
+            $num = $count + 1;
+            $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+
+            $this->db->insert('transaksi', [
+                'id_user' => $this->session->userdata('id_user'),
+                'kode_transaksi' =>  $kode,
+                'nama_transaksi' => $this->input->post('nama_product'),
+            ]);
+
+            echo json_encode([
+                'duitku' => $data['data'],
+                'success' => true,
+                'id_transaksi' => $this->db->insert_id()
+            ]);
+            die;
+
+        }
+        echo json_encode([
+            'success' => false,
+        ]);
+    }
+
+    public function pay_without_installment()
+    {
+
+    }
+
+    public function update_status_transaksi($id_transaksi)
+    {
+        header('Content-type: application/json');
+
+        $data = [
+            'status' => 'success'
+        ];
+
+        $this->db->where('id_transaksi', $id_transaksi)->update('transaksi', $data);
+
+        echo json_encode([
+            'success' => true 
+        ]);
     }
 }

@@ -8,7 +8,7 @@
          </div>
      </div>
      <div class="row mt-4">
-         <div class="col-md-3 mt-5 mb-4 d-none d-lg-block overflow-auto " style="max-height:100vh ;">
+         <div class="col-md-3 mt-5 mb-4 d-none d-lg-block overflow-auto" id="side-scroll" style="height: 100vh;">
              <?php
                 $no = 1;
                 foreach ($side_materi as $m) { ?>
@@ -42,7 +42,7 @@
                  </div>
              <?php } ?>
          </div>
-         <div class="col-md-9 w-150 mb-4">
+         <div class="col-md-9 w-150 mb-4" id="article">
              <div class="card materi mt-2 border-0">
                  <?php
                     if ($file_row->id_file == null && $quiz_row->id_soal == null && $video->id_video == null && $tugas_row->id_tugas == null && $zoom_row == null) { ?>
@@ -82,6 +82,7 @@
                          </div>
                      <?php } else {
                         ?>
+                        
                          <style>
                              .ytp-title-channel {
                                  display: none !important;
@@ -447,6 +448,8 @@
      }
  </script>
  <script>
+
+
      $('#mark').click(function() {
          $.ajax({
              url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',

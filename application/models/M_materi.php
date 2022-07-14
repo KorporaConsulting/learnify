@@ -64,6 +64,8 @@ class M_materi extends CI_Model
         return $this->db->get('semester')->num_rows();
     }
 
+    
+
     public function tampil_sort_mapel($id)
     {
         $this->db->select('*');

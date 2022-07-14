@@ -25,32 +25,7 @@
         <a class="btn btn-primary btn-lg" href="<?= base_url('user/all_semester') ?>" role="button">Course</a>
     </div>
     <div class="row">
-        <?php if (isset($aktifitas_belajar)) : ?>
-            <div class="col-lg-6">
-                <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                    <div class="card-header">
-                        Aktivitas Belajar
-                    </div>
-                    <div class="card-body">
-                        <div class="alert bg-light">
-                            <div><small><b>Sedang dipelajari</b></small></div>
-                            <div class="d-flex justify-content-between">
-                                <span>
-                                    <?= $aktifitas_belajar->data->nama_mapel ?>
-                                </span>
-                                <span>
-                                    <a href="<?= $aktifitas_belajar->url ?>">Lanjutkan</a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="text-right mt-5">
-                            <a href="<?= site_url('user/detail_activity_learn') ?>" class="text-dark" style="text-decoration: underline;">Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-3">
             <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                 <div class="card-header">
                     Absensi
@@ -89,6 +64,53 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6 mb-3">
+            <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                <div class="card-header">
+                    Aktivitas Belajar
+                </div>
+                <div class="card-body">
+                    <?php foreach ($aktifitas_belajar as $value) : ?>
+                        <div class="alert bg-light">
+                            <div><small><b>Sedang dipelajari</b></small></div>
+                            <div class="d-flex justify-content-between">
+                                <span>
+                                    <?= $value->nama_activity ?>
+                                </span>
+                                <span>
+                                    <a href="<?= $value->url ?>">Lanjutkan</a>
+                                </span>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="text-right mt-5">
+                        <a href="<?= site_url('user/detail_activity_learn') ?>" class="text-dark" style="text-decoration: underline;">Selengkapnya</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php foreach ($recent_video as $value) : ?>
+
+            <div class="col-lg-6 mb-3">
+                <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                    <div class="card-header">
+                        Recent Video
+                    </div>
+                    <div class="card-body">
+                        <div class="alert bg-light">
+                            <a href="<?= $value->url ?>">
+                                <img src="https://img.youtube.com/vi/<?= $value->link ?>/0.jpg" alt="<?= $value->nama_activity ?>" class="img-fluid mb-3">
+                            </a>
+                            <div><small><b>Sedang dipelajari</b></small></div>
+                            <div class="">
+                                <?= $value->nama_activity ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
     </div>
 </div>
 
@@ -137,7 +159,7 @@
                             } // Optional, if you want bounded box UI
                         },
                         (decodedText, decodedResult) => {
-                            
+
                             $('#absenModal').modal('hide');
                             $('#kehadiran').html('76/100');
 
