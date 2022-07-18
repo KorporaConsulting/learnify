@@ -570,6 +570,7 @@ class Admin extends CI_Controller
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
                     'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
+                    'link' => htmlspecialchars($this->input->post('link', true)),
                     'image' => $gambar,
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
@@ -757,6 +758,7 @@ class Admin extends CI_Controller
                     'desk' => htmlspecialchars($this->input->post('desk', true)),
                     'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
                     'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
+                    'link' => htmlspecialchars($this->input->post('link', true)),
                     'image' => htmlspecialchars($this->input->post('image', true)),
                     'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                     'id_semester' => htmlspecialchars($this->input->post('semester', true)),
@@ -798,6 +800,7 @@ class Admin extends CI_Controller
                         'desk' => htmlspecialchars($this->input->post('desk', true)),
                         'tgl_mulai' => htmlspecialchars($this->input->post('tgl_mulai', true)),
                         'tgl_selesai' => htmlspecialchars($this->input->post('tgl_selesai', true)),
+                        'link' => htmlspecialchars($this->input->post('link', true)),
                         'image' => $gambar,
                         'id_guru' => htmlspecialchars($this->input->post('guru', true)),
                         'id_semester' => htmlspecialchars($this->input->post('semester', true)),
@@ -1856,14 +1859,13 @@ class Admin extends CI_Controller
         ]);
     }
 
-    public function delete_opt_payment ($id)
+    public function delete_opt_payment($id)
     {
         $this->db->delete('payment_setting', ['id' => $id]);
         $this->session->set_flashdata('success', "Berhasil menghapus opsi");
         redirect('admin/opt_payment');
-
     }
-    
+
     public function mark_mapel($id_mapel, $id_user)
     {
         $mapel = $this->m_materi->get_mapel($id_mapel)->row();

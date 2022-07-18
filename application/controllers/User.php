@@ -27,12 +27,12 @@ class User extends CI_Controller
     {
 
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
- 
+
         $data['aktifitas_belajar'] = $this->db
             ->where('id_user', $this->session->userdata('id_user'))
             ->where('type', 'course')
             ->limit(5)
-            ->group_by('nama_activity')    
+            ->group_by('nama_activity')
             ->get('activity')->result();
 
         $data['recent_video'] = $this->db
@@ -40,15 +40,21 @@ class User extends CI_Controller
             ->where('id_user', $this->session->userdata('id_user'))
             ->where('type', 'video')
             ->limit(5)
-            ->group_by('nama_activity')    
+            ->group_by('nama_activity')
             ->get('activity')->result();
+
+
+        $tgl = date_create(date("Y-m-d"));
+        $tgl_start = date_format($tgl, "Y-m-d H:i:s");
+        $tgl2 = date_create(date("Y-m-d") . '23:59:59');
+        $tgl_end = date_format($tgl2, "Y-m-d H:i:s");
+        $data['jadwal'] = $this->m_siswa->jadwal_zoom_home($tgl_start, $tgl_end)->result();
 
         $data['total_absen'] = $this->m_siswa->get_total_absen();
         $data['absen'] = $this->m_siswa->get_absen();
 
         $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
-        // var_dump($data['akurasi']);
-        // die;
+
 
         // header('Content-type: application/json');
         // echo json_encode($data);
@@ -57,13 +63,10 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function test ()
+    public function test()
     {
         $this->load->library('CoverVideo');
         $this->CoverVideo->generate();
-
-
-        
     }
 
     public function semester($semester)
@@ -88,6 +91,7 @@ class User extends CI_Controller
     public function course($slug)
     {
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
+        $data['live'] = $this->m_siswa->tampil_data_live($slug)->result();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
@@ -96,6 +100,9 @@ class User extends CI_Controller
         $data['total_materi'] = $this->m_siswa->total_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
         $data['done_materi'] = $this->m_siswa->done_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
 
+
+        // var_dump($data['live']);
+        // die;
         // setcookie('lastMapel', json_encode([
         //     'url' => current_url(),
         //     'data' => $data['mapel']
@@ -108,7 +115,7 @@ class User extends CI_Controller
             'type' => 'course'
         ]);
 
-        
+
 
         // var_dump($data['semester']);
         // die;
@@ -137,8 +144,8 @@ class User extends CI_Controller
         $data['list_tugas'] = $this->m_siswa->tampil_data_list_tugas($id_mapel, $slug, $id_user)->result();
         $data['list_tugas_row'] = $this->m_siswa->check_tugas_user($id_materi, $id_user);
 
-        if($data['video']->id_video != null){
-            if($data['video']->kunci == 1){
+        if ($data['video']->id_video != null) {
+            if ($data['video']->kunci == 1) {
                 $this->db->insert('activity', [
                     'id_user' => $this->session->userdata('id_user'),
                     'id_join' => $data['video']->id_video,
@@ -869,7 +876,7 @@ class User extends CI_Controller
         $this->pdf->load_view('user/print_transkrip', $data);
     }
 
-    public function pembayaran ()
+    public function pembayaran()
     {
         // $this->load->view('user/template_user/header');
         $this->load->view('user/payment');
@@ -885,7 +892,7 @@ class User extends CI_Controller
 
         $data = $this->paymentlib->pay($payment_setting, $this->input->post('nama_product'), $this->session->userdata());
 
-        if($data['success']){
+        if ($data['success']) {
 
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
 
@@ -904,7 +911,6 @@ class User extends CI_Controller
                 'id_transaksi' => $this->db->insert_id()
             ]);
             die;
-
         }
         echo json_encode([
             'success' => false,
@@ -913,7 +919,6 @@ class User extends CI_Controller
 
     public function pay_without_installment()
     {
-
     }
 
     public function update_status_transaksi($id_transaksi)
@@ -927,12 +932,11 @@ class User extends CI_Controller
         $this->db->where('id_transaksi', $id_transaksi)->update('transaksi', $data);
 
         echo json_encode([
-            'success' => true 
+            'success' => true
         ]);
-
     }
 
-    
+
     public function jadwal()
     {
         $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();

@@ -77,17 +77,24 @@ $this->load->view('admin/template_admin/sidebar');
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group tgl">
                     <label>Tanggal Mulai</label>
                     <input type="datetime_local" class="form-control" name="tgl_mulai" value="<?= $user->tgl_mulai ?>">
                     <?= form_error('tgl_mulai', '<small class="text-danger">', '</small>'); ?>
                     <div class="invalid-feedback">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group tgl">
                     <label>Tanggal Selesai</label>
                     <input type="datetime_local" class="form-control" name="tgl_selesai" value="<?= $user->tgl_selesai ?>">
                     <?= form_error('tgl_selesai', '<small class="text-danger">', '</small>'); ?>
+                    <div class="invalid-feedback">
+                    </div>
+                </div>
+                <div class="form-group tgl">
+                    <label for="link">Link Zoom</label>
+                    <input id="link" type="text" class="form-control" value="<?= $user->link ?>" name="link">
+                    <?= form_error('link', '<small class="text-danger">', '</small>'); ?>
                     <div class="invalid-feedback">
                     </div>
                 </div>

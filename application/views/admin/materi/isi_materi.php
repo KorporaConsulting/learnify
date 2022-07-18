@@ -21,11 +21,6 @@ $this->load->view('admin/template_admin/sidebar');
                     </div> -->
                     <div class="card-body">
                         <ul class="nav nav-pills" id="myTab3" role="tablist">
-                            <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $video_row == null) { ?>
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">Link Zoom</a>
-                                </li>
-                            <?php } ?>
                             <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
                                 <li class="nav-item">
                                     <a class="nav-link" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Video</a>
@@ -48,45 +43,112 @@ $this->load->view('admin/template_admin/sidebar');
                             <?php } ?>
                         </ul>
                         <div class="tab-content" id="myTabContent2">
-                            <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $video_row == null) { ?>
-                                <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab2">
-                                    <?php if ($zoom_row == null) { ?>
-                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".zoom">Tambah Link Zoom ⭢</button>
+                            <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
+                                <div class="tab-pane fade show" id="home3" role="tabpanel" aria-labelledby="home-tab3">
+                                    <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
+                                    <div class="row mt-5">
+                                        <div class="col-12 col-sm-6 col-lg-12">
+                                            <h4>List Video</h4>
+                                            <div class="row">
+                                                <?php foreach ($video as $v) { ?>
+                                                    <div class="col-md-3">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="embed-responsive embed-responsive-4by3">
+                                                                    <iframe class="embed-responsive-item" <?php if ($v->video == null) { ?> src="https://www.youtube.com/embed/<?= $v->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $v->video) ?>" <?php } ?>></iframe>
+                                                                </div>
+                                                                <div class="text-center mt-2">
+                                                                    <h5><?= $v->nama_video ?></h5>
+                                                                    <p><?= $v->desk_video ?></p>
+                                                                </div>
+                                                                <div class="text-center mt-2">
+                                                                    <a href="<?php echo site_url('admin/update_video/' . $v->id_video); ?>" class="btn btn-info">Edit ⭢</a>
+                                                                    <a onclick="video_delete(<?= $v->id_video ?>,<?= $v->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($video_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
+                                <div class="tab-pane fade show" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
+                                    <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
+                                    <div class="row mt-5">
+                                        <div class="col-12 col-sm-6 col-lg-12">
+                                            <h4>List Modul</h4>
+                                            <div class="row">
+                                                <?php foreach ($file as $m) { ?>
+                                                    <div class="col-md-3">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <a href="<?= $m->link ?>" target="_blank" class="btn btn-icon btn-success w-100"><i class="fas fa-file-download w-100"></i></a>
+                                                                <div class="text-center mt-2">
+                                                                    <h5><?= $m->nama_file ?></h5>
+                                                                    <p><?= $m->desk_file ?></p>
+                                                                </div>
+                                                                <div class="text-center mt-2">
+                                                                    <a href="<?php echo site_url('admin/update_file/' . $m->id_file); ?>" class="btn btn-info">Edit ⭢</a>
+                                                                    <a onclick="file_delete(<?= $m->id_file ?>,<?= $m->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($file_row == null && $video_row == null && $tugas_row == null && $zoom_row == null) { ?>
+                                <div class="tab-pane fade show" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
+                                    <?php if ($quiz_row == null) { ?>
+                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Quiz ⭢</button>
+                                        <!-- <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#soal">Tambah Soal ⭢</button> -->
                                     <?php } ?>
                                     <div class="row mt-5">
                                         <div class="col-12 col-sm-6 col-lg-12">
-                                            <h4>Link Zoom Kelas Live</h4>
-                                            <table id="example" class="table align-items-center mt-5">
+                                            <table id="example" class="table align-items-center table-flush mt-5">
                                                 <thead class="thead-light">
                                                     <tr class="text-center">
                                                         <th scope="col">No</th>
-                                                        <th scope="col">Link Zoom</th>
-                                                        <th scope="col">Deskripsi</th>
-                                                        <th scope="col">Tanggal dibuat</th>
+                                                        <th scope="col">Judul Quiz</th>
+                                                        <th scope="col">Type</th>
+                                                        <th scope="col">Soal</th>
                                                         <th scope="col">Option</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     $no = 1;
-                                                    foreach ($zoom as $u) {
+                                                    foreach ($quiz as $u) {
                                                     ?>
                                                         <tr class="text-center">
                                                             <th scope="row">
                                                                 <?php echo $no++ ?>
                                                             </th>
                                                             <td>
-                                                                <a target="_blank" class="btn btn-primary" href="<?php echo $u->link ?>" role="button"><?php echo $u->link ?></a>
+                                                                <?php echo $u->judul ?>
                                                             </td>
-                                                            <td>
-                                                                <?php echo $u->desk_file ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $u->created_at ?>
+                                                            <?php
+                                                            if ($u->type == 0) { ?>
+                                                                <td>
+                                                                    <?php echo "Test Quiz" ?>
+                                                                </td>
+                                                            <?php  } else { ?>
+                                                                <td>
+                                                                    <?php echo "Final Quiz" ?>
+                                                                </td>
+                                                            <?php  } ?>
+                                                            <td class="text-center">
+                                                                <a href="<?php echo site_url('admin/view_soal/' . $u->id_quiz); ?>" class="btn btn-primary">Tambah Soal ⭢</a>
                                                             </td>
                                                             <td class="text-center">
-                                                                <a href="<?php echo site_url('admin/update_zoom/' . $u->id_file); ?>" class="btn btn-info">Edit ⭢</a>
-                                                                <a onclick="zoom_delete(<?= $u->id_file ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                                <a href="<?php echo site_url('admin/edit_quiz/' . $u->id_quiz); ?>" class="btn btn-info">Edit ⭢</a>
+                                                                <a onclick="deletesoal(<?= $u->id_quiz ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                                             </td>
                                                         </tr>
                                                     <?php
@@ -96,171 +158,54 @@ $this->load->view('admin/template_admin/sidebar');
                                             </table>
                                         </div>
                                     </div>
-                                <?php } ?>
                                 </div>
-                                <?php if ($file_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
-                                    <div class="tab-pane fade show" id="home3" role="tabpanel" aria-labelledby="home-tab3">
-                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".video">Tambah Video ⭢</button>
-                                        <div class="row mt-5">
-                                            <div class="col-12 col-sm-6 col-lg-12">
-                                                <h4>List Video</h4>
-                                                <div class="row">
-                                                    <?php foreach ($video as $v) { ?>
-                                                        <div class="col-md-3">
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <div class="embed-responsive embed-responsive-4by3">
-                                                                        <iframe class="embed-responsive-item" <?php if ($v->video == null) { ?> src="https://www.youtube.com/embed/<?= $v->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $v->video) ?>" <?php } ?>></iframe>
-                                                                    </div>
-                                                                    <div class="text-center mt-2">
-                                                                        <h5><?= $v->nama_video ?></h5>
-                                                                        <p><?= $v->desk_video ?></p>
-                                                                    </div>
-                                                                    <div class="text-center mt-2">
-                                                                        <a href="<?php echo site_url('admin/update_video/' . $v->id_video); ?>" class="btn btn-info">Edit ⭢</a>
-                                                                        <a onclick="video_delete(<?= $v->id_video ?>,<?= $v->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <?php if ($video_row == null && $quiz_row == null && $tugas_row == null && $zoom_row == null) { ?>
-                                    <div class="tab-pane fade show" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
-                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".modul">Tambah Modul/File ⭢</button>
-                                        <div class="row mt-5">
-                                            <div class="col-12 col-sm-6 col-lg-12">
-                                                <h4>List Modul</h4>
-                                                <div class="row">
-                                                    <?php foreach ($file as $m) { ?>
-                                                        <div class="col-md-3">
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <a href="<?= $m->link ?>" target="_blank" class="btn btn-icon btn-success w-100"><i class="fas fa-file-download w-100"></i></a>
-                                                                    <div class="text-center mt-2">
-                                                                        <h5><?= $m->nama_file ?></h5>
-                                                                        <p><?= $m->desk_file ?></p>
-                                                                    </div>
-                                                                    <div class="text-center mt-2">
-                                                                        <a href="<?php echo site_url('admin/update_file/' . $m->id_file); ?>" class="btn btn-info">Edit ⭢</a>
-                                                                        <a onclick="file_delete(<?= $m->id_file ?>,<?= $m->id_materi ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <?php if ($file_row == null && $video_row == null && $tugas_row == null && $zoom_row == null) { ?>
-                                    <div class="tab-pane fade show" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                                        <?php if ($quiz_row == null) { ?>
-                                            <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#quiz">Tambah Quiz ⭢</button>
-                                            <!-- <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target="#soal">Tambah Soal ⭢</button> -->
-                                        <?php } ?>
-                                        <div class="row mt-5">
-                                            <div class="col-12 col-sm-6 col-lg-12">
-                                                <table id="example" class="table align-items-center table-flush mt-5">
-                                                    <thead class="thead-light">
-                                                        <tr class="text-center">
-                                                            <th scope="col">No</th>
-                                                            <th scope="col">Judul Quiz</th>
-                                                            <th scope="col">Type</th>
-                                                            <th scope="col">Soal</th>
-                                                            <th scope="col">Option</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
-                                                        $no = 1;
-                                                        foreach ($quiz as $u) {
-                                                        ?>
-                                                            <tr class="text-center">
-                                                                <th scope="row">
-                                                                    <?php echo $no++ ?>
-                                                                </th>
-                                                                <td>
-                                                                    <?php echo $u->judul ?>
-                                                                </td>
-                                                                <?php
-                                                                if ($u->type == 0) { ?>
-                                                                    <td>
-                                                                        <?php echo "Test Quiz" ?>
-                                                                    </td>
-                                                                <?php  } else { ?>
-                                                                    <td>
-                                                                        <?php echo "Final Quiz" ?>
-                                                                    </td>
-                                                                <?php  } ?>
-                                                                <td class="text-center">
-                                                                    <a href="<?php echo site_url('admin/view_soal/' . $u->id_quiz); ?>" class="btn btn-primary">Tambah Soal ⭢</a>
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <a href="<?php echo site_url('admin/edit_quiz/' . $u->id_quiz); ?>" class="btn btn-info">Edit ⭢</a>
-                                                                    <a onclick="deletesoal(<?= $u->id_quiz ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                                                </td>
-                                                            </tr>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <?php if ($file_row == null && $video_row == null && $quiz_row == null && $zoom_row == null) { ?>
-                                    <div class="tab-pane fade show" id="contact4" role="tabpanel" aria-labelledby="contact-tab4">
-                                        <?php if ($tugas_row == null) { ?>
-                                            <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".tugas">Tambah Tugas ⭢</button>
-                                        <?php } ?>
+                            <?php } ?>
+                            <?php if ($file_row == null && $video_row == null && $quiz_row == null && $zoom_row == null) { ?>
+                                <div class="tab-pane fade show" id="contact4" role="tabpanel" aria-labelledby="contact-tab4">
+                                    <?php if ($tugas_row == null) { ?>
+                                        <button type="button" class="btn btn-outline-success mt-5" data-toggle="modal" data-target=".tugas">Tambah Tugas ⭢</button>
+                                    <?php } ?>
 
-                                        <div class="row mt-5">
-                                            <div class="col-12 col-sm-6 col-lg-12">
-                                                <h4>List Tugas</h4>
-                                                <table id="example" class="table align-items-center table-flush mt-5">
-                                                    <thead class="thead-light">
+                                    <div class="row mt-5">
+                                        <div class="col-12 col-sm-6 col-lg-12">
+                                            <h4>List Tugas</h4>
+                                            <table id="example" class="table align-items-center table-flush mt-5">
+                                                <thead class="thead-light">
+                                                    <tr class="text-center">
+                                                        <th scope="col">Tugas</th>
+                                                        <th scope="col">Deskripsi</th>
+                                                        <th scope="col">Due Date</th>
+                                                        <th scope="col">Option</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    foreach ($tugas as $t) {
+                                                    ?>
                                                         <tr class="text-center">
-                                                            <th scope="col">Tugas</th>
-                                                            <th scope="col">Deskripsi</th>
-                                                            <th scope="col">Due Date</th>
-                                                            <th scope="col">Option</th>
+                                                            <td>
+                                                                <?php echo $t->nama_tugas ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php echo $t->desk_tugas ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php echo $t->due_date ?>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <a href="<?php echo site_url('admin/edit_tugas/' . $t->id_tugas); ?>" class="btn btn-info">Edit ⭢</a>
+                                                                <a onclick="deletetugas(<?= $t->id_tugas ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
-                                                        foreach ($tugas as $t) {
-                                                        ?>
-                                                            <tr class="text-center">
-                                                                <td>
-                                                                    <?php echo $t->nama_tugas ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $t->desk_tugas ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $t->due_date ?>
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <a href="<?php echo site_url('admin/edit_tugas/' . $t->id_tugas); ?>" class="btn btn-info">Edit ⭢</a>
-                                                                    <a onclick="deletetugas(<?= $t->id_tugas ?>, '<?= $materi->id_materi ?>');" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
-                                                                </td>
-                                                            </tr>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

@@ -100,7 +100,7 @@
             ?>
              <tr>
                  <td class="tg-0lax"><?= $no++ ?></td>
-                 <td class="tg-0lax"><?= $t->nama_file ?></td>
+                 <td class="tg-0lax"><?= $t->nama_mapel ?></td>
                  <td class="tg-0lax"><?= $t->nama_guru ?></td>
                  <td class="tg-0lax"><b style="color: black;"> <?= date_format($mulai, 'd F Y H:i')  ?></b></td>
                  <td class="tg-0lax"><b style="color: black;"><?= date_format($selesai, 'd F Y H:i') ?></b></td>

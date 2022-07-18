@@ -86,7 +86,6 @@ $this->load->view('admin/template_admin/sidebar');
                                     <th scope="col">Selesai</th>
                                     <th scope="col">Nama Mentor</th>
                                     <th scope="col">Semester</th>
-                                    <th scope="col">Materi</th>
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
@@ -115,9 +114,6 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
                                         <td>
                                             <?php echo $u->semester ?>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/data_materi_course/' . $u->id_mapel); ?>" class="btn btn-success">Materi ⭢</a>
                                         </td>
                                         <td class="text-center">
                                             <a href="<?php echo site_url('admin/update_mapel/' . $u->id_mapel); ?>" class="btn btn-info">Edit ⭢</a>
