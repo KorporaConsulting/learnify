@@ -143,6 +143,8 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+=======
 <!-- Modal Absen -->
 <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -221,5 +223,6 @@
         });
     }
 </script>
+>>>>>>> 3101ac8658998f9f20f34d6c0d7ad9260ce068d9
 <!-- End Class Card -->
 <?php $this->load->view('user/template_user/footer'); ?>

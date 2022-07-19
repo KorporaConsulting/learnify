@@ -886,53 +886,112 @@ class User extends CI_Controller
     {
         header('Content-type: application/json');
         $this->load->library('paymentlib');
+        $price = 3000000 / $this->input->post('loop');
 
+        $product = [
+            'nama' => $this->input->post('name'),
+            'cicilan' => true,
+            'Detail Product' => 'Cicilan Pertama',
+            'price' => $price
+        ];
 
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
-        $data = $this->paymentlib->pay($payment_setting, $this->input->post('nama_product'), $this->session->userdata());
+        $data = $this->paymentlib->pay($payment_setting, $product, $this->session->userdata());
 
         if ($data['success']) {
 
+            $id_transaksi = [];
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
-
-            $num = $count + 1;
-            $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
-
-            $this->db->insert('transaksi', [
-                'id_user' => $this->session->userdata('id_user'),
-                'kode_transaksi' =>  $kode,
-                'nama_transaksi' => $this->input->post('nama_product'),
-            ]);
+            for ($i=0; $i < $this->input->post('loop'); $i++) {
+                $num = $count + 1 + $i;
+                $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+                $this->db->insert('transaksi', [
+                    'id_user' => $this->session->userdata('id_user'),
+                    'kode_transaksi' =>  $kode,
+                    'nama_transaksi' => $this->input->post('nama_product'),
+                    'harga' => $price,
+                ]);   
+                array_push($id_transaksi, $this->db->insert_id());
+            }
 
             echo json_encode([
                 'duitku' => $data['data'],
                 'success' => true,
-                'id_transaksi' => $this->db->insert_id()
+                'id_transaksi' => $id_transaksi
             ]);
             die;
         }
         echo json_encode([
             'success' => false,
+            'err' => $data['data']
         ]);
     }
 
     public function pay_without_installment()
     {
+        header('Content-type: application/json');
+        $this->load->library('paymentlib');
+        $price = 3000000 / $this->input->post('loop');
+
+        $product = [
+            'nama' => $this->input->post('name'),
+            'cicilan' => false,
+            'Detail Product' => 'Cicilan Pertama',
+            'price' => $price
+        ];
+
+        $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
+
+        $data = $this->paymentlib->pay($payment_setting, $product, $this->session->userdata());
+        if ($data['success']) {
+            $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
+            $num = $count + 1;
+            $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+            $this->db->insert('transaksi', [
+                'id_user' => $this->session->userdata('id_user'),
+                'kode_transaksi' =>  $kode,
+                'nama_transaksi' => $this->input->post('nama_product'),
+                'harga' => $price,
+            ]);
+
+            echo json_encode([
+                'duitku' => $data['data'],
+                'success' => true,
+                'id_transaksi' => [$this->db->insert_id()]
+            ]);
+
+            die;
+        }
+
+        echo json_encode([
+            'success' => false,
+            'err' => $data['data']
+        ]);
     }
 
-    public function update_status_transaksi($id_transaksi)
+    public function update_status_transaksi()
     {
         header('Content-type: application/json');
 
+        if(count($this->input->post('id_transaksi')) > 1){
+            
+            $data = [
+                'status' => 'pending'
+            ];
+
+            $this->db->where_in('id_transaksi', $this->input->post('id_transaksi'))->update('transaksi', $data);
+        }
+
         $data = [
-            'status' => 'success'
+            'status' => $this->input->post('status')
         ];
 
-        $this->db->where('id_transaksi', $id_transaksi)->update('transaksi', $data);
+        $this->db->where('id_transaksi', $this->input->post('id_transaksi')[0])->update('transaksi', $data);
 
         echo json_encode([
-            'success' => true
+            'success' => true,
+            'data' => $this->input->post('id_transaksi')
         ]);
     }
 

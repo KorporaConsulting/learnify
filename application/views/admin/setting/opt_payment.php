@@ -6,11 +6,21 @@ $this->load->view('admin/template_admin/sidebar');
 <div class="main-content">
     <div class="card">
         <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#addSetting">
+                        Tambah Opsi
+                    </button>
+                </div>
+                <div>
+                    <?php if ($setting[0]->is_development == 0) : ?>
+                        <span class="badge badge-primary">Development</span>
+                    <?php else : ?>
+                        <span class="badge badge-primary">Production</span>
+                    <?php endif; ?>
+                </div>
+            </div>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#addSetting">
-                Tambah Opsi
-            </button>
-
 
             <table class="table">
                 <thead>
@@ -41,6 +51,7 @@ $this->load->view('admin/template_admin/sidebar');
     </div>
 </div>
 <!-- End Main Content -->
+
 
 <!-- Modal -->
 <div class="modal fade" id="addSetting" tabindex="-1" aria-labelledby="addSettingLabel" aria-hidden="true">
@@ -104,7 +115,7 @@ $this->load->view('admin/template_admin/sidebar');
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.value) {
-                window.location.href = '<?= site_url("admin/delete_opt_payment") ?>/'+id
+                window.location.href = '<?= site_url("admin/delete_opt_payment") ?>/' + id
             }
         })
     }

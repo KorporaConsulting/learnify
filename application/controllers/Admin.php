@@ -1902,7 +1902,6 @@ class Admin extends CI_Controller
         $this->db->where($where);
         $this->db->update('status_mapel', $data);
     }
-
     public function create_slug($name)
     {
         $count = 0;
@@ -1915,6 +1914,15 @@ class Admin extends CI_Controller
             if ($query->num_rows() == 0) break;
             $slug_name = $name . '-' . (++$count);  // Recreate new temp name
         }
-        return $slug_name;      // 
+        return $slug_name;
+    }
+    public function riwayat_transaksi()
+    {
+        $data['transaksi'] = $this->db
+            ->join('user', 'user.id_user=transaksi.id_user')
+            ->get('transaksi')
+            ->result();
+
+        $this->load->view('admin/transaksi/riwayat', $data);
     }
 }
