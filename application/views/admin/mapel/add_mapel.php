@@ -74,6 +74,14 @@ $this->load->view('admin/template_admin/sidebar');
                         </div>
                     </div>
 
+                    <div class="form-group tgl" style="display:none ;">
+                        <label for="link">Link Zoom</label>
+                        <input id="link" type="text" class="form-control" value="<?php echo set_value('link') ?>" name="link">
+                        <?= form_error('link', '<small class="text-danger">', '</small>'); ?>
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="section-title">Gambar Course</div>
                         <div class="custom-file">

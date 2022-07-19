@@ -33,7 +33,7 @@ class M_siswa extends CI_Model
         $this->db->where('semester.semester', $semester);
         $this->db->where('user.id_user', $id_user);
         $this->db->where('mapel.is_zoom', 1);
-        $this->db->order_by("mapel.urutan", "asc");
+        $this->db->order_by("mapel.tgl_mulai", "asc");
         return  $this->db->get();
     }
 
@@ -70,6 +70,21 @@ class M_siswa extends CI_Model
         $this->db->order_by("materi.urutan", "asc");
         return  $this->db->get();
     }
+
+    public function tampil_data_live($slug)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester', 'left');
+        $this->db->join('user', 'user.id_user = enroll.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester', 'left');
+        // $this->db->join('status_materi', 'status_materi.id_user = user.id_user');
+        $this->db->where('mapel.slug_mapel', $slug);
+        $this->db->where('enroll.id_user',  $this->session->userdata('id_user'));
+        $this->db->order_by("mapel.urutan", "asc");
+        return  $this->db->get();
+    }
+
 
     public function tampil_data_isi_materi($id_materi, $id_user)
     {
@@ -486,12 +501,24 @@ class M_siswa extends CI_Model
         $this->db->from('enroll');
         $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
         $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
-        $this->db->join('materi', 'materi.id_mapel = mapel.id_mapel');
-        $this->db->join('file', 'file.id_materi = materi.id_materi');
         $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
         $this->db->where('enroll.id_user', $this->session->userdata('id_user'));
         $this->db->where('mapel.is_zoom', 1);
-        $this->db->where('file.is_tugas', 2);
+        $this->db->order_by("mapel.urutan", "asc");
+        return  $this->db->get();
+    }
+    public function jadwal_zoom_home($tgl_start, $tgl_end)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('guru', 'guru.id_guru = mapel.id_guru');
+        $this->db->where('enroll.id_user', $this->session->userdata('id_user'));
+        $this->db->where('mapel.is_zoom', 1);
+        // $this->db->where('mapel.tgl_mulai', date('Y-m-d 00:00:00'));
+        $this->db->where('mapel.tgl_mulai >=', '2022-07-18 00:00:00');
+        $this->db->where('mapel.tgl_mulai <=', '2022-07-18 23:59:59');
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }

@@ -40,10 +40,9 @@
                         $mulai = date_create($t->tgl_mulai);
                         $selesai = date_create($t->tgl_selesai);
                     ?>
-
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><?= $t->nama_file ?></td>
+                            <td><?= $t->nama_mapel ?></td>
                             <td><?= $t->nama_guru ?></td>
                             <td><b style="color: black;"> <?= date_format($mulai, 'd F Y H:i')  ?></b></td>
                             <td><b style="color: black;"><?= date_format($selesai, 'd F Y H:i') ?></b></td>
@@ -76,7 +75,6 @@
                                 ?>
                             </td>
                         </tr>
-
                     <?php  } ?>
                 </tbody>
             </table>

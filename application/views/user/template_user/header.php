@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/scroll-custom.css">
     <!-- Main CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/style.css">
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/masonary.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
