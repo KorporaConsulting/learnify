@@ -1907,4 +1907,14 @@ class Admin extends CI_Controller
         $this->db->where($where);
         $this->db->update('status_mapel', $data);
     }
+
+    public function riwayat_transaksi ()
+    {
+        $data['transaksi'] = $this->db
+            ->join('user', 'user.id_user=transaksi.id_user')
+            ->get('transaksi')
+            ->result();
+
+        $this->load->view('admin/transaksi/riwayat', $data);
+    }
 }

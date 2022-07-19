@@ -3,16 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PaymentLib {
 
-    public function pay($settingPayment, $productDetails, $buyer)
+    public function pay($settingPayment, $product, $buyer)
     {
 
         $merchantCode = $settingPayment->merchant_code; // dari duitku
         $merchantKey = $settingPayment->merchant_key; // dari duitku
 
         $timestamp = round(microtime(true) * 1000); //in milisecond
-        $paymentAmount = 40000;
         $merchantOrderId = time() . ''; // dari merchant, unique
-        // $productDetails = 'Test Pay with duitku';
+        $productDetails = 'Anjas';
         $email = $buyer['email']; // email pelanggan merchant
         // $phoneNumber = '08123456789'; // nomor tlp pelanggan merchant (opsional)
         $additionalParam = ''; // opsional
@@ -34,40 +33,35 @@ class PaymentLib {
         $postalCode = "11530";
         $countryCode = "ID";
 
-        // $address = array(
-        //     'firstName' => $firstName,
-        //     'lastName' => $lastName,
-        //     'address' => $alamat,
-        //     'city' => $city,
-        //     'postalCode' => $postalCode,
-        //     'phone' => $phoneNumber,
-        //     'countryCode' => $countryCode
-        // );
-
         $customerDetail = array(
             'firstName' => $firstName,
-            // 'lastName' => $lastName,
             'email' => $email,
-            // 'phoneNumber' => $phoneNumber,
-            // 'billingAddress' => $address,
-            // 'shippingAddress' => $address
         );
 
 
-        $item1 = array(
-            'name' => 'Test Item 1',
-            'price' => 10000,
-            'quantity' => 1
-        );
+        $paymentAmount = $product['price'];
+        if($product['cicilan']){
+            $item1 = array(
+                'name' => 'Cicilan 1',
+                'price' => $product['price'],
+                'quantity' => 1,
+            );
+        }else{
+            $item1 = array(
+                'name' => 'Full Pay',
+                'price' => $product['price'],
+                'quantity' => 1
+            );
+        }
 
-        $item2 = array(
-            'name' => 'Test Item 2',
-            'price' => 30000,
-            'quantity' => 3
-        );
+        // $item2 = array(
+        //     'name' => 'Test Item 2',
+        //     'price' => 30000,
+        //     'quantity' => 3
+        // );
 
         $itemDetails = array(
-            $item1, $item2
+            $item1
         );
 
         $params = array(

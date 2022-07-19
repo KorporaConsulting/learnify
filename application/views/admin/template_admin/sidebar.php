@@ -95,6 +95,19 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
+                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-money-bill"></i>
+                            <span>Transaksi</span>
+                            </a>
+                            <!-- <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_course') ?>">Course</a>
+                                </li>
+                            </ul> -->
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/riwayat_transaksi') ?>">Riwayat Transaksi</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i>
                                 <span>Pengaturan</span>
                             </a>
@@ -115,10 +128,12 @@
                                 </li>
                             </ul>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="<?= base_url('admin/opt_payment') ?>">Payment</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/opt_payment
+                                ') ?>">Payment</a>
                                 </li>
                             </ul>
                         </li>
+
                 </aside>
             </div>
             <!-- End Sidebar -->

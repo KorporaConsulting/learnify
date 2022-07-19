@@ -29,7 +29,10 @@
                     </div>
                 </div>
                 <div>
-                    <button data-url="<?= site_url('user/pay_with_installment') ?>" class="btn btn-block btn-primary pay" id="angsuran">Rp. 1.000.000 (3x)</button>
+                    <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="3" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Rp. 1.000.000 (3x)</button>
+                </div>
+                <div>
+                    <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 6x" data-loop="6" class="btn btn-block btn-primary pay" data-price="1000000" data-angsuran="1">Rp. 500.000 (6x)</button>
                 </div>
             </div>
         </div>
@@ -44,7 +47,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="" class="btn btn-block btn-primary pay">Rp. 3.000.000 (1x)</a>
+                    <button data-url="<?= site_url('user/pay_without_installment') ?>" data-name="Kelas Pembayaran Total" data-loop="1" class="btn btn-block btn-primary pay" data-price="3000000" data-angsuran="0">Rp. 3.000.000 (1x)</button>
                 </div>
             </div>
         </div>
@@ -60,21 +63,27 @@
                 url: $(this).data('url'),
                 method: 'POST',
                 data: {
-                    nama_product: 'Kelas Cicilan 3X'
+                    nama_product: $(this).data('name'),
+                    loop: $(this).data('loop'),
                 },
                 success: function(res) {
-                    if(res.success){
+                    console.log(res);
+                    if (res.success) {
                         checkout.process(res.duitku.reference, {
                             defaultLanguage: "id", //opsional pengaturan bahasa
                             successEvent: function(result) {
                                 $.ajax({
-                                    url: '<?= site_url('user/update_status_transaksi') ?>/' + res.id_transaksi,
-                                    method: 'GET',
+                                    url: '<?= site_url('user/update_status_transaksi') ?>',
+                                    method: 'POST',
+                                    data: {
+                                        id_transaksi: res.id_transaksi,
+                                        status: 'success'
+                                    },
                                     success: function(res) {
                                         alert('Transaksi Updated')
                                     },
                                     error: function() {
-                                        
+
                                     }
                                 })
                                 console.log('success');
@@ -82,6 +91,21 @@
                                 alert('Payment Success');
                             },
                             pendingEvent: function(result) {
+                                $.ajax({
+                                    url: '<?= site_url('user/update_status_transaksi') ?>',
+                                    method: 'POST',
+                                    data: {
+                                        id_transaksi: res.id_transaksi,
+                                        status: 'pending'
+                                    },
+                                    success: function(res) {
+                                        console.log(res);
+                                        alert('Transaksi Updated')
+                                    },
+                                    error: function(err) {
+                                        console.log(err)
+                                    }
+                                })
                                 // tambahkan fungsi sesuai kebutuhan anda
                                 console.log('pending');
                                 console.log(result);
