@@ -17,8 +17,8 @@ class PaymentLib {
         $additionalParam = ''; // opsional
         $merchantUserInfo = ''; // opsional
         $customerVaName = $buyer['nama']; // menampilkan nama pelanggan pada tampilan konfirmasi bank
-        $callbackUrl = 'http://localhost/learnify/pembayaran'; // url untuk callback
-        $returnUrl = 'http://localhost/learnify/pembayaran'; //'http://example.com/return'; // url untuk redirect
+        $callbackUrl = 'http://demo.salesuniversity.id/user/payment_callback'; // url untuk callback
+        $returnUrl = 'http://demo.salesuniversity.id/pembayaran'; //'http://example.com/return'; // url untuk redirect
         $expiryPeriod = 10; // untuk menentukan waktu kedaluarsa dalam menit
         $signature = hash('sha256', $merchantCode . $timestamp . $merchantKey);
         //$paymentMethod = 'VC'; //digunakan untuk direksional pembayaran

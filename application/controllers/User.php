@@ -953,13 +953,14 @@ class User extends CI_Controller
                 'kode_transaksi' =>  $kode,
                 'nama_transaksi' => $this->input->post('nama_product'),
                 'harga' => $price,
+                'referenceId' => $data['data']['reference']
             ]);
 
             echo json_encode([
                 'duitku' => $data['data'],
                 'success' => true,
                 'id_transaksi' => [$this->db->insert_id()]
-            ]);
+            ]); 
 
             die;
         }
@@ -995,6 +996,7 @@ class User extends CI_Controller
         ]);
     }
 
+    
 
     public function jadwal()
     {
