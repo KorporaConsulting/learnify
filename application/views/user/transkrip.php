@@ -98,6 +98,7 @@
                         <tr>
                             <th colspan="4" class="text-right">Total persentase ketepatan waktu</th>
                             <?php
+                            echo $total_absen;
                             if ($total_absen <= 0) $total_absen = 1;
                             $total = $akurasi->akurasi / $total_absen;
                             ?>

@@ -891,7 +891,7 @@ class Admin extends CI_Controller
 
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
+                'slug_materi' => $this->create_slug($this->input->post('nama_materi')),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
@@ -955,7 +955,7 @@ class Admin extends CI_Controller
 
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
+                'slug_materi' => $this->create_slug($this->input->post('nama_materi')),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
@@ -1901,5 +1901,20 @@ class Admin extends CI_Controller
 
         $this->db->where($where);
         $this->db->update('status_mapel', $data);
+    }
+
+    public function create_slug($name)
+    {
+        $count = 0;
+        $name = url_title($name);
+        $slug_name = $name;             // Create temp name
+        while (true) {
+            $this->db->select('id_materi');
+            $this->db->where('slug_materi', $slug_name);   // Test temp name
+            $query = $this->db->get('materi');
+            if ($query->num_rows() == 0) break;
+            $slug_name = $name . '-' . (++$count);  // Recreate new temp name
+        }
+        return $slug_name;      // 
     }
 }

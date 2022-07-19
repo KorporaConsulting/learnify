@@ -849,9 +849,9 @@ class User extends CI_Controller
         $data['ujian'] = $this->m_siswa->ujian()->result();
         $data['tugas'] = $this->m_siswa->tugas()->result();
         $data['absensi'] = $this->m_siswa->get_all_absensi()->result();
-        $data['total_absen'] = $this->m_siswa->get_total_absen();
+        $data['total_absen'] = $this->m_siswa->total_absen_penilaian();
         $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
-        // var_dump($data['absensi']);
+        // var_dump($data['total_absen']);
         // die;
         $this->load->view('user/transkrip', $data);
     }

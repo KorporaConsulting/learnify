@@ -360,6 +360,18 @@ class M_siswa extends CI_Model
         $query =  $this->db->get();
         return $query->num_rows();
     }
+
+    public function total_absen_penilaian()
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'user.id_user = absensi.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_mapel = absensi.id_mapel', 'left');
+        $this->db->where('absensi.id_user',  $this->session->userdata('id_user'));
+        $query =  $this->db->get();
+        return $query->num_rows();
+    }
+
     public function get_absen()
     {
         $this->db->select('*');
