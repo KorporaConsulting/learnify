@@ -6,6 +6,7 @@ class Welcome extends CI_Controller
 
     public function payment_callback()
     {
+        $Date = date("Y-m-d");
 
         $user = $this->db
             ->select('*, user.angsuran')
@@ -17,7 +18,7 @@ class Welcome extends CI_Controller
         if ($this->input->post('resultCode') == '00') {
             $status = 'success';
             if ($user->last_status == 0) {
-                if($user->angsuran != null){
+                if ($user->angsuran != null) {
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
@@ -25,22 +26,38 @@ class Welcome extends CI_Controller
                     $this->db->insert_batch('enroll', [
                         [
                             'id_semester' => 1,
-                            'id_user' => $this->session->userdata('id_user'),
-                            'expired_at' => date('Y-m-d',  '+1 months')
+                            'id_user' => $user->id_user,
+                            'expired_at' => date('Y-m-d',  strtotime($Date . ' + 1 month'))
                         ],
                         [
                             'id_semester' => 2,
-                            'id_user' => $this->session->userdata('id_user'),
-                            'expired_at' => date('Y-m-d',  '+1 months')
+                            'id_user' => $user->id_user,
+                            'expired_at' => date('Y-m-d',  strtotime($Date . ' + 1 month'))
                         ]
                     ]);
-                }else{
-                    $data['angsuran'] = $user->angsuran + 1;
+                } else {
+                    $data['last_status'] = 1;
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
+                    $this->db->insert_batch('enroll', [
+                        [
+                            'id_semester' => 1,
+                            'id_user' => $user->id_user,
+                        ],
+                        [
+                            'id_semester' => 2,
+                            'id_user' => $user->id_user,
+                        ]
+                    ]);
                 }
+            } else {
+                $data['angsuran'] = $user->angsuran + 1;
+                $this->db->where('id_user', $user->id_user)->update('user', $data);
 
-            }else{
-
+                $enroll = $this->db->where('id_user', $user->id_user)->get('enroll')->row();
+                $this->db->where('id_user', $user->id_user)->update('enroll', [
+                    'expired_at' => date('Y-m-d',  strtotime($enroll->expired_at . ' + 1 month'))
+                ]);
+                echo date('Y-m-d',  strtotime($enroll->expired_at . ' + 1 month'));
             }
         } else {
             $status = 'failed';
@@ -48,9 +65,9 @@ class Welcome extends CI_Controller
 
         $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => $status]);
 
-        echo json_encode([
-            'data' => $user
-        ]);
+        // echo json_encode([
+        //     'data' => $user
+        // ]);
     }
 
     public function __construct()
