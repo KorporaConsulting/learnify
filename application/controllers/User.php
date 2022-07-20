@@ -914,7 +914,9 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
             array_push($id_transaksi, $this->db->insert_id());
-
+            $this->db->where('id-user', $this->session->userdata('id_user'))->update([
+                'angsuran' => 0
+            ]);
 
             echo json_encode([
                 'duitku' => $data['data'],
@@ -958,6 +960,10 @@ class User extends CI_Controller
                 'nama_transaksi' => $this->input->post('nama_product'),
                 'harga' => $price,
                 'referenceId' => $data['data']['reference']
+            ]);
+
+            $this->db->where('id-user', $this->session->userdata('id_user'))->update([
+                'angsuran' => NULL
             ]);
 
             echo json_encode([
