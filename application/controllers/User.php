@@ -903,29 +903,22 @@ class User extends CI_Controller
 
             $id_transaksi = [];
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
-            for ($i = 0; $i < $this->input->post('loop'); $i++) {
-                $num = $count + 1 + $i;
-                $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+            $num = $count + 1;
+            $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
 
-                if ($i == 0) {
-                    $this->db->insert('transaksi', [
-                        'id_user' => $this->session->userdata('id_user'),
-                        'kode_transaksi' =>  $kode,
-                        'nama_transaksi' => $this->input->post('nama_product'),
-                        'harga' => $price,
-                        'angsuran' => 1,
-                        'referenceId' => $data['data']['reference']
-                    ]);
-                } else {
-                    $this->db->insert('transaksi', [
-                        'id_user' => $this->session->userdata('id_user'),
-                        'kode_transaksi' =>  $kode,
-                        'nama_transaksi' => $this->input->post('nama_product'),
-                        'harga' => $price,
-                    ]);
-                }
-                array_push($id_transaksi, $this->db->insert_id());
-            }
+            $this->db->insert('transaksi', [
+                'id_user' => $this->session->userdata('id_user'),
+                'kode_transaksi' =>  $kode,
+                'nama_transaksi' => $this->input->post('nama_product'),
+                'harga' => $price,
+                'referenceId' => $data['data']['reference']
+            ]);
+            array_push($id_transaksi, $this->db->insert_id());
+
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', [
+                'angsuran' => $this->input->post('loop') 
+            ]);
+
 
             echo json_encode([
                 'duitku' => $data['data'],

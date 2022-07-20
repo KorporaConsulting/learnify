@@ -6,7 +6,43 @@ class Welcome extends CI_Controller
 
     public function payment_callback()
     {
-        $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => 'success']);
+
+        $user = $this->db->where('referenceId', $this->input->post('reference'))
+            ->join('transaksi', 'transaksi.id_user = user.id_user')
+            ->get('user')
+            ->row();
+
+        if ($this->input->post('resultCode') == '00') {
+            $status = 'success';
+            if ($user->last_status == 0) {
+                if($user->angsuran != null){
+                    $data['last_status'] = 1;
+                    $data['angsuran'] = $user->angsuran + 1;
+                    $this->db->where('id_user', $user->id_user)->update('user', $data);
+                    $this->db->insert_batch('enroll', [
+                        [
+                            'id_semester' => 1,
+                            'id_user' => $this->session->userdata('id_user'),
+                            'expired_at' => date('Y-m-d',  '+1 months')
+                        ],
+                        [
+                            'id_semester' => 2,
+                            'id_user' => $this->session->userdata('id_user'),
+                            'expired_at' => date('Y-m-d',  '+1 months')
+                        ]
+                    ]);
+                }else{
+                    
+                }
+
+            }else{
+
+            }
+        } else {
+            $status = 'failed';
+        }
+
+        $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => $status]);
     }
 
     public function __construct()
