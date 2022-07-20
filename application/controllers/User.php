@@ -928,10 +928,7 @@ class User extends CI_Controller
         ]);
     }
 
-    public function payment_callback()
-    {
-        $this->db->update('transaksi', ['status' => 'success']);
-    }
+   
 
     public function pay_without_installment()
     {

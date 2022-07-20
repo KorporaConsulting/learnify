@@ -25,7 +25,7 @@ class Duitku
             $additionalParam = ''; // opsional
             $merchantUserInfo = ''; // opsional
             $customerVaName = $buyer['nama']; // menampilkan nama pelanggan pada tampilan konfirmasi bank
-            $callbackUrl = 'https://demo.salesuniversity.id/user/payment_callback'; // url untuk callback
+            $callbackUrl = 'https://demo.salesuniversity.id/welcome/payment_callback'; // url untuk callback
             $returnUrl = 'https://demo.salesuniversity.id/user/pembayaran'; //'http://example.com/return'; // url untuk redirect
             $expiryPeriod = 10; // untuk menentukan waktu kedaluarsa dalam menit
             $signature = hash('sha256', $merchantCode . $timestamp . $merchantKey);
