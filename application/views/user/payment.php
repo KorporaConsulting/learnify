@@ -69,63 +69,9 @@
                 success: function(res) {
                     console.log(res);
                     if (res.success) {
-                        window.location.href = res.duitku.paymentUrl
-                        // checkout.process(res.duitku.reference, {
-                        //     defaultLanguage: "id", //opsional pengaturan bahasa
-                        //     successEvent: function(result) {
-                        //         $.ajax({
-                        //             url: '<?= site_url('user/update_status_transaksi') ?>',
-                        //             method: 'POST',
-                        //             data: {
-                        //                 id_transaksi: res.id_transaksi,
-                        //                 status: 'success'
-                        //             },
-                        //             success: function(res) {
-                        //                 alert('Transaksi Updated')
-                        //             },
-                        //             error: function() {
-
-                        //             }
-                        //         })
-                        //         console.log('success');
-                        //         console.log(result);
-                        //         alert('Payment Success');
-                        //     },
-                        //     pendingEvent: function(result) {
-                        //         $.ajax({
-                        //             url: '<?= site_url('user/update_status_transaksi') ?>',
-                        //             method: 'POST',
-                        //             data: {
-                        //                 id_transaksi: res.id_transaksi,
-                        //                 status: 'pending'
-                        //             },
-                        //             success: function(res) {
-                        //                 console.log(res);
-                        //                 alert('Transaksi Updated')
-                        //             },
-                        //             error: function(err) {
-                        //                 console.log(err)
-                        //             }
-                        //         })
-                        //         // tambahkan fungsi sesuai kebutuhan anda
-                        //         console.log('pending');
-                        //         console.log(result);
-                        //         // alert('Payment Pending');
-                        //     },
-                        //     errorEvent: function(result) {
-                        //         // tambahkan fungsi sesuai kebutuhan anda
-                        //         console.log('error');
-                        //         console.log(result);
-                        //         // alert('Payment Error');
-                        //     },
-                        //     closeEvent: function(result) {
-                        //         // tambahkan fungsi sesuai kebutuhan anda
-                        //         console.log('customer closed the popup without finishing the payment');
-                        //         console.log(result);
-                        //         // alert('customer closed the popup without finishing the payment');
-                        //     }
-                        // });
+                        window.location.href = res.duitku.paymentUrl;
                     }
+                    
                 },
                 error: function(err) {
                     console.log(err)

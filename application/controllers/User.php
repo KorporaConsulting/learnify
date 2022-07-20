@@ -903,15 +903,27 @@ class User extends CI_Controller
 
             $id_transaksi = [];
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
-            for ($i=0; $i < $this->input->post('loop'); $i++) {
+            for ($i = 0; $i < $this->input->post('loop'); $i++) {
                 $num = $count + 1 + $i;
                 $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
-                $this->db->insert('transaksi', [
-                    'id_user' => $this->session->userdata('id_user'),
-                    'kode_transaksi' =>  $kode,
-                    'nama_transaksi' => $this->input->post('nama_product'),
-                    'harga' => $price,
-                ]);   
+
+                if ($i == 0) {
+                    $this->db->insert('transaksi', [
+                        'id_user' => $this->session->userdata('id_user'),
+                        'kode_transaksi' =>  $kode,
+                        'nama_transaksi' => $this->input->post('nama_product'),
+                        'harga' => $price,
+                        'angsuran' => 1,
+                        'referenceId' => $data['data']['reference']
+                    ]);
+                } else {
+                    $this->db->insert('transaksi', [
+                        'id_user' => $this->session->userdata('id_user'),
+                        'kode_transaksi' =>  $kode,
+                        'nama_transaksi' => $this->input->post('nama_product'),
+                        'harga' => $price,
+                    ]);
+                }
                 array_push($id_transaksi, $this->db->insert_id());
             }
 
@@ -928,7 +940,7 @@ class User extends CI_Controller
         ]);
     }
 
-   
+
 
     public function pay_without_installment()
     {
@@ -963,7 +975,7 @@ class User extends CI_Controller
                 'duitku' => $data['data'],
                 'success' => true,
                 'id_transaksi' => [$this->db->insert_id()]
-            ]); 
+            ]);
 
             die;
         }
@@ -978,8 +990,8 @@ class User extends CI_Controller
     {
         header('Content-type: application/json');
 
-        if(count($this->input->post('id_transaksi')) > 1){
-            
+        if (count($this->input->post('id_transaksi')) > 1) {
+
             $data = [
                 'status' => 'pending'
             ];
@@ -999,7 +1011,7 @@ class User extends CI_Controller
         ]);
     }
 
-    
+
 
     public function jadwal()
     {
