@@ -54,10 +54,11 @@ class Welcome extends CI_Controller
                 $this->db->where('id_user', $user->id_user)->update('user', $data);
 
                 $enroll = $this->db->where('id_user', $user->id_user)->get('enroll')->row();
+
                 $this->db->where('id_user', $user->id_user)->update('enroll', [
                     'expired_at' => date('Y-m-d',  strtotime($enroll->expired_at . ' + 1 month'))
                 ]);
-                echo date('Y-m-d',  strtotime($enroll->expired_at . ' + 1 month'));
+                echo json_encode($enroll);
             }
         } else {
             $status = 'failed';
