@@ -6,7 +6,14 @@ class Duitku
     public function pay($settingPayment, $product, $buyer)
     {
         try {
-            //code...
+            $duitkuConfig = new \Duitku\Config($settingPayment->merchant_key, $settingPayment->merchant_code);
+            // false for production mode
+            // true for sandbox mode
+            $duitkuConfig->setSandboxMode(true);
+            // set sanitizer (default : true)
+            $duitkuConfig->setSanitizedMode(true);
+            // set log parameter (default : true)
+            $duitkuConfig->setDuitkuLogs(true);
             $merchantCode = $settingPayment->merchant_code; // dari duitku
             $merchantKey = $settingPayment->merchant_key; // dari duitku
 
