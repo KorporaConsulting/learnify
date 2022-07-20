@@ -7,7 +7,9 @@ class Welcome extends CI_Controller
     public function payment_callback()
     {
 
-        $user = $this->db->where('referenceId', $this->input->post('reference'))
+        $user = $this->db
+            ->select('*, user.angsuran')
+            ->where('referenceId', $this->input->post('reference'))
             ->join('transaksi', 'transaksi.id_user = user.id_user')
             ->get('user')
             ->row();
@@ -19,7 +21,7 @@ class Welcome extends CI_Controller
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
-                    
+
                     $this->db->insert_batch('enroll', [
                         [
                             'id_semester' => 1,
@@ -45,6 +47,10 @@ class Welcome extends CI_Controller
         }
 
         $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => $status]);
+
+        echo json_encode([
+            'data' => $user
+        ]);
     }
 
     public function __construct()

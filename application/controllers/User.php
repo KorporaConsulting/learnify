@@ -915,10 +915,6 @@ class User extends CI_Controller
             ]);
             array_push($id_transaksi, $this->db->insert_id());
 
-            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', [
-                'angsuran' => $this->input->post('loop') 
-            ]);
-
 
             echo json_encode([
                 'duitku' => $data['data'],
