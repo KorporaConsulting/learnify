@@ -69,7 +69,7 @@
                 success: function(res) {
                     console.log(res);
                     if (res.success) {
-                        window.location.href = res.duitku.paymentUrl;
+                        // window.location.href = res.duitku.paymentUrl;
                     }
                     
                 },
