@@ -885,7 +885,7 @@ class User extends CI_Controller
     public function pay_with_installment()
     {
         header('Content-type: application/json');
-        $this->load->library('paymentlib');
+        $this->load->library('duitku');
         $price = 3000000 / $this->input->post('loop');
 
         $product = [
@@ -897,7 +897,7 @@ class User extends CI_Controller
 
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
-        $data = $this->paymentlib->pay($payment_setting, $product, $this->session->userdata());
+        $data = $this->duitku->pay($payment_setting, $product, $this->session->userdata());
 
         if ($data['success']) {
 
@@ -946,6 +946,7 @@ class User extends CI_Controller
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
         $data = $this->duitku->pay($payment_setting, $product, $this->session->userdata());
+
         if ($data['success']) {
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
             $num = $count + 1;

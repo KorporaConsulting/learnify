@@ -6,9 +6,9 @@ class Welcome extends CI_Controller
 
     public function payment_callback()
     {
-        $this->db->update('transaksi', ['status' => 'success']);
+        $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => 'success']);
     }
-    
+
     public function __construct()
     {
         parent::__construct();

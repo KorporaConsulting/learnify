@@ -6,14 +6,6 @@ class Duitku
     public function pay($settingPayment, $product, $buyer)
     {
         try {
-            $duitkuConfig = new \Duitku\Config($settingPayment->merchant_key, $settingPayment->merchant_code);
-            // false for production mode
-            // true for sandbox mode
-            $duitkuConfig->setSandboxMode(true);
-            // set sanitizer (default : true)
-            $duitkuConfig->setSanitizedMode(true);
-            // set log parameter (default : true)
-            $duitkuConfig->setDuitkuLogs(true);
             $merchantCode = $settingPayment->merchant_code; // dari duitku
             $merchantKey = $settingPayment->merchant_key; // dari duitku
 
@@ -27,7 +19,7 @@ class Duitku
             $customerVaName = $buyer['nama']; // menampilkan nama pelanggan pada tampilan konfirmasi bank
             $callbackUrl = 'https://demo.salesuniversity.id/welcome/payment_callback'; // url untuk callback
             $returnUrl = 'https://demo.salesuniversity.id/user/pembayaran'; //'http://example.com/return'; // url untuk redirect
-            $expiryPeriod = 10; // untuk menentukan waktu kedaluarsa dalam menit
+            $expiryPeriod = 1; // untuk menentukan waktu kedaluarsa dalam menit
             $signature = hash('sha256', $merchantCode . $timestamp . $merchantKey);
             //$paymentMethod = 'VC'; //digunakan untuk direksional pembayaran
 
