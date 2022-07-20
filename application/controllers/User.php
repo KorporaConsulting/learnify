@@ -873,6 +873,7 @@ class User extends CI_Controller
         $data['total_absen'] = $this->m_siswa->get_total_absen();
         $data['absen'] = $this->m_siswa->get_absen();
         $this->pdf->setFileName('Traskrip_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->setKertas('portrait');
         $this->pdf->load_view('user/print_transkrip', $data);
     }
 
@@ -903,7 +904,7 @@ class User extends CI_Controller
 
             $id_transaksi = [];
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
-            for ($i=0; $i < $this->input->post('loop'); $i++) {
+            for ($i = 0; $i < $this->input->post('loop'); $i++) {
                 $num = $count + 1 + $i;
                 $kode = 'INV-' . str_pad($num, 6, '0', STR_PAD_LEFT);
                 $this->db->insert('transaksi', [
@@ -911,7 +912,7 @@ class User extends CI_Controller
                     'kode_transaksi' =>  $kode,
                     'nama_transaksi' => $this->input->post('nama_product'),
                     'harga' => $price,
-                ]);   
+                ]);
                 array_push($id_transaksi, $this->db->insert_id());
             }
 
@@ -974,8 +975,8 @@ class User extends CI_Controller
     {
         header('Content-type: application/json');
 
-        if(count($this->input->post('id_transaksi')) > 1){
-            
+        if (count($this->input->post('id_transaksi')) > 1) {
+
             $data = [
                 'status' => 'pending'
             ];
@@ -1009,6 +1010,16 @@ class User extends CI_Controller
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
         $this->pdf->setFileName('Jadwal_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->setKertas('portrait');
         $this->pdf->load_view('user/print_jadwal', $data);
+    }
+    public function print_sertifikat()
+    {
+        $this->load->library('pdf');
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        // $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+        $this->pdf->setFileName('Sertifikat_' . $data['user']->nama . '.pdf');
+        $this->pdf->setKertas('landscape');
+        $this->pdf->load_view('user/print_sertifikat', $data);
     }
 }

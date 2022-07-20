@@ -110,6 +110,7 @@ class Welcome extends CI_Controller
                     'email' => $user['email'],
                     'nama' => $user['username'],
                     'image' => $user['image'],
+                    'login_admin' => 'is_login'
 
                 ];
                 $this->session->set_userdata($data);

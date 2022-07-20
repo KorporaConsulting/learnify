@@ -14,9 +14,9 @@ class Admin extends CI_Controller
         $this->load->library('upload');
         $this->load->helper('download');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        // if (!$this->session->userdata('email')) {
-        //     redirect('welcome/admin');
-        // }
+        if (!$this->session->userdata('login_admin')) {
+            redirect('welcome/admin');
+        }
     }
 
     public function index()
