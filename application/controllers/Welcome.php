@@ -19,6 +19,7 @@ class Welcome extends CI_Controller
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
+                    
                     $this->db->insert_batch('enroll', [
                         [
                             'id_semester' => 1,
@@ -32,7 +33,8 @@ class Welcome extends CI_Controller
                         ]
                     ]);
                 }else{
-                    
+                    $data['angsuran'] = $user->angsuran + 1;
+                    $this->db->where('id_user', $user->id_user)->update('user', $data);
                 }
 
             }else{
