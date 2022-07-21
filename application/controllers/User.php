@@ -925,10 +925,10 @@ class User extends CI_Controller
             $user = $this->db->where('id_user', $this->session->userdata('id_user'))->get('user')->row();
             $angsuran = 0;
 
-            if($user->angsuran != NULL && $user->ansguran > 0){
+            if($user->angsuran != NULL && $user->angsuran > 0){
                 $angsuran = $user->angsuran;
             }
-            
+
             $this->db->where('id_user', $this->session->userdata('id_user'))->update('user',[
                 'angsuran' => $angsuran,
                 'tipe_angsuran' => $this->input->post('loop')
