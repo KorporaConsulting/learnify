@@ -22,20 +22,20 @@ class Welcome extends CI_Controller
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
 
-                    if($data['angsuran'] == $user->tipe_angsuran){
+                    $this->db->where('id_user', $user->id_user)->update('user', $data);
+
+                    if ($data['angsuran'] == $user->tipe_angsuran) {
                         $expired_at = NULL;
-                    }else{
+                    } else {
                         $expired_at = date('Y-m-d',  strtotime($Date . ' + 1 month'));
                     }
-                    
-                    $this->db->where('id_user', $user->id_user)->update('user', $data);
 
                     $this->db->insert_batch('enroll', [
                         [
                             'id_semester' => 1,
                             'id_user' => $user->id_user,
                             'expired_at' => $expired_at
-                            
+
                         ],
                         [
                             'id_semester' => 2,
@@ -74,7 +74,7 @@ class Welcome extends CI_Controller
 
         $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', [
             'status' => $status,
-            
+
         ]);
 
         // echo json_encode([
