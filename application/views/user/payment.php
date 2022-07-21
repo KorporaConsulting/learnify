@@ -21,7 +21,7 @@
         <?php if($user->angsuran == null) : ?>
             Pembayaran anda sudah lunas
         <?php else: ?>
-            Bayar Angsuran anda sebelum <?= $user->expire_at ?>
+            Bayar Angsuran anda sebelum <?= $user->expired_at ?>
         <?php endif; ?>
     <?php else: ?>
         <div class="row">
