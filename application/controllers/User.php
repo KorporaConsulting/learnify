@@ -922,7 +922,7 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
             array_push($id_transaksi, $this->db->insert_id());
-            $this->db->where('id-user', $this->session->userdata('id_user'))->update('user',[
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user',[
                 'angsuran' => 0
             ]);
 
@@ -970,7 +970,7 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
 
-            $this->db->where('id-user', $this->session->userdata('id_user'))->update('user', [
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', [
                 'angsuran' => NULL
             ]);
 
