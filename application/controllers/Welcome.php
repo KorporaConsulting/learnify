@@ -82,6 +82,10 @@ class Welcome extends CI_Controller
         // ]);
     }
 
+    public function cron_job(){
+        $this->db->where('expired_at <', date("Y-m-d"))->delete();
+    }
+
     public function __construct()
     {
         parent::__construct();
