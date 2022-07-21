@@ -25,8 +25,9 @@ class Welcome extends CI_Controller
                     if($data['angsuran'] == $user->tipe_angsuran){
                         $expired_at = NULL;
                     }else{
-                        $expired_at = date('Y-m-d',  strtotime($Date . ' + 1 month'))
+                        $expired_at = date('Y-m-d',  strtotime($Date . ' + 1 month'));
                     }
+                    
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
 
                     $this->db->insert_batch('enroll', [
