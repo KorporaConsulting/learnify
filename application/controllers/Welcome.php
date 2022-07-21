@@ -83,7 +83,7 @@ class Welcome extends CI_Controller
     }
 
     public function cron_job(){
-        $this->db->where('expired_at <', date("Y-m-d"))->delete();
+        $this->db->where('expired_at <', date("Y-m-d"))->delete('enroll');
     }
 
     public function __construct()
