@@ -17,41 +17,49 @@
 
 
 <div class="container pt-3">
-    <div class="row">
-        <div class="col-lg-6 mb-3">
-            <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                <div class="card-header">
-                    Bayar dengan Cicilan
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        <img src="<?= base_url('assets/img/cicil.svg') ?>" alt="" class="w-50">
+    <?php if($user->last_status > 0): ?>
+        <?php if($user->angsuran == null) : ?>
+            Pembayaran anda sudah lunas
+        <?php else: ?>
+            Bayar Angsuran anda sebelum <?= $user->expire_at ?>
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="row">
+            <div class="col-lg-6 mb-3">
+                <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                    <div class="card-header">
+                        Bayar dengan Cicilan
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="<?= base_url('assets/img/cicil.svg') ?>" alt="" class="w-50">
+                        </div>
+                    </div>
+                    <div>
+                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="3" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Rp. 1.000.000 (3x)</button>
+                    </div>
+                    <div>
+                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 6x" data-loop="6" class="btn btn-block btn-primary pay" data-price="1000000" data-angsuran="1">Rp. 500.000 (6x)</button>
                     </div>
                 </div>
-                <div>
-                    <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="3" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Rp. 1.000.000 (3x)</button>
-                </div>
-                <div>
-                    <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 6x" data-loop="6" class="btn btn-block btn-primary pay" data-price="1000000" data-angsuran="1">Rp. 500.000 (6x)</button>
+            </div>
+            <div class="col-lg-6 mb-3">
+                <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                    <div class="card-header">
+                        Bayar tanpa cicilan
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="<?= base_url('assets/img/non_cicilan.svg') ?>" alt="" class="w-50">
+                        </div>
+                    </div>
+                    <div>
+                        <button data-url="<?= site_url('user/pay_without_installment') ?>" data-name="Kelas Pembayaran Total" data-loop="1" class="btn btn-block btn-primary pay" data-price="3000000" data-angsuran="0">Rp. 3.000.000 (1x)</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
-            <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                <div class="card-header">
-                    Bayar tanpa cicilan
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        <img src="<?= base_url('assets/img/non_cicilan.svg') ?>" alt="" class="w-50">
-                    </div>
-                </div>
-                <div>
-                    <button data-url="<?= site_url('user/pay_without_installment') ?>" data-name="Kelas Pembayaran Total" data-loop="1" class="btn btn-block btn-primary pay" data-price="3000000" data-angsuran="0">Rp. 3.000.000 (1x)</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php endif; ?>
 </div>
 
 

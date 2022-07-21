@@ -879,7 +879,12 @@ class User extends CI_Controller
     public function pembayaran()
     {
         // $this->load->view('user/template_user/header');
-        $this->load->view('user/payment');
+        $data['user'] = $this->db
+            ->where('id_user', $this->session->userdata('user'))
+            ->join('enroll', 'user.id_user = enroll.id_user', 'left')
+            ->get('user')
+            ->row();
+        $this->load->view('user/payment', $data);
     }
 
     public function pay_with_installment()
@@ -914,7 +919,7 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
             array_push($id_transaksi, $this->db->insert_id());
-            $this->db->where('id-user', $this->session->userdata('id_user'))->update([
+            $this->db->where('id-user', $this->session->userdata('id_user'))->update('user',[
                 'angsuran' => 0
             ]);
 
@@ -962,7 +967,7 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
 
-            $this->db->where('id-user', $this->session->userdata('id_user'))->update([
+            $this->db->where('id-user', $this->session->userdata('id_user'))->update('user', [
                 'angsuran' => NULL
             ]);
 
