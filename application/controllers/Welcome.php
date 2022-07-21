@@ -64,7 +64,10 @@ class Welcome extends CI_Controller
             $status = 'failed';
         }
 
-        $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', ['status' => $status]);
+        $this->db->where('referenceId', $this->input->post('reference'))->update('transaksi', [
+            'status' => $status,
+            
+        ]);
 
         // echo json_encode([
         //     'data' => $user

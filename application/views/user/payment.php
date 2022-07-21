@@ -17,13 +17,16 @@
 
 
 <div class="container pt-3">
-    <?php if($user->last_status > 0): ?>
-        <?php if($user->angsuran == null) : ?>
+    <?php if ($user->last_status > 0) : ?>
+        <?php if ($user->angsuran == null || $user->angsuran >= $user->tipe_angsuran) : ?>
             Pembayaran anda sudah lunas
-        <?php else: ?>
+        <?php else : ?>
             Bayar Angsuran anda sebelum <?= $user->expired_at ?>
+            <div>
+                <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="<?= $user->tipe_angsuran ?>" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Bayar Cicilan ke <?= $user->angsuran+1 ?></button>
+            </div>
         <?php endif; ?>
-    <?php else: ?>
+    <?php else : ?>
         <div class="row">
             <div class="col-lg-6 mb-3">
                 <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
@@ -79,7 +82,7 @@
                     if (res.success) {
                         window.location.href = res.duitku.paymentUrl;
                     }
-                    
+
                 },
                 error: function(err) {
                     console.log(err)
