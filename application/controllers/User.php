@@ -922,8 +922,15 @@ class User extends CI_Controller
                 'referenceId' => $data['data']['reference']
             ]);
             array_push($id_transaksi, $this->db->insert_id());
+            $user = $this->db->where('id_user', $this->session->userdata('id_user'))->get('user')->row();
+            $angsuran = 0;
+
+            if($user->angsuran != NULL && $user->ansguran > 0){
+                $angsuran = $user->angsuran;
+            }
+            
             $this->db->where('id_user', $this->session->userdata('id_user'))->update('user',[
-                'angsuran' => 0,
+                'angsuran' => $angsuran,
                 'tipe_angsuran' => $this->input->post('loop')
             ]);
 
