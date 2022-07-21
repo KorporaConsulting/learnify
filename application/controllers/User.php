@@ -880,7 +880,7 @@ class User extends CI_Controller
     {
         // $this->load->view('user/template_user/header');
         $data['user'] = $this->db
-            ->where('id_user', $this->session->userdata('user'))
+            ->where('user.id_user', $this->session->userdata('user'))
             ->join('enroll', 'user.id_user = enroll.id_user', 'left')
             ->get('user')
             ->row();
