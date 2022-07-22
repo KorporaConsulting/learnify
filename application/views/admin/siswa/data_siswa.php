@@ -26,7 +26,7 @@ $this->load->view('admin/template_admin/sidebar');
                                     <th scope="col">Email</th>
                                     <th scope="col">Gambar</th>
                                     <!-- <th scope="col">Akun Aktif *</th> -->
-                                    <th scope="col">Detail</th>
+                                    <th scope="col" class="text-center">Detail</th>
                                     <th scope="col">Option</th>
                                 </tr>
                             </thead>
@@ -55,13 +55,16 @@ $this->load->view('admin/template_admin/sidebar');
                                         </td>
                                         <td class="text-center">
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <a href="<?php echo site_url('admin/detail_siswa/' . $u->id_user); ?>" class="btn btn-success">Detail User ⭢</a>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <a href="<?php echo site_url('admin/progres_course_siswa/' . $u->id_user); ?>" class="btn btn-primary">Progress User ⭢</a>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                    <a href="<?php echo site_url('admin/absensi_siswa/' . $u->id_user); ?>" class="btn btn-info">Absensi User ⭢</a>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <a href="<?php echo site_url('admin/transkrip/' . $u->id_user); ?>" class="btn btn-warning">Transkrip User ⭢</a>
                                                 </div>
                                             </div>

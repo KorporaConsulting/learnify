@@ -64,7 +64,7 @@ class M_materi extends CI_Model
         return $this->db->get('semester')->num_rows();
     }
 
-    
+
 
     public function tampil_sort_mapel($id)
     {
@@ -585,5 +585,30 @@ class M_materi extends CI_Model
         $this->db->where('urutan', $urutan);
         $this->db->where('is_zoom', 0);
         return $this->db->get();
+    }
+    public function get_absensi_siswa($id)
+    {
+        $this->db->select('*, absensi.created_at as waktu_masuk');
+        $this->db->from('absensi');
+        $this->db->join('mapel', 'absensi.id_mapel = mapel.id_mapel');
+        $this->db->where('id_user',  $id);
+        return  $this->db->get();
+    }
+    public function total_absensi_siswa($id)
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'user.id_user = absensi.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_mapel = absensi.id_mapel', 'left');
+        $this->db->where('absensi.id_user',  $id);
+        $query =  $this->db->get();
+        return $query->num_rows();
+    }
+    public function get_akurasi_absen($id)
+    {
+        $this->db->select('*, sum(ketepatan_absensi) as akurasi');
+        $this->db->from('absensi');
+        $this->db->where('id_user',  $id);
+        return  $this->db->get();
     }
 }

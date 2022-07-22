@@ -15,7 +15,7 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                     <div class="table-responsive">
-                        <table id="example" class="table align-items-center table-flush">
+                        <table id="quiz" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
                                     <th scope="col">No</th>
@@ -132,7 +132,26 @@ $this->load->view('admin/template_admin/sidebar');
         })
     }
 </script>
-
+<script>
+    $(document).ready(function() {
+        $('#quiz').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excelHtml5',
+                    title: 'Test Attemp',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Test Attemp'
+                },
+                // 'colvis'
+            ]
+        });
+    });
+</script>
 <?php
 $this->load->view('admin/template_admin/footer');
 ?>

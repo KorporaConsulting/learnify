@@ -529,8 +529,8 @@ class M_siswa extends CI_Model
         $this->db->where('enroll.id_user', $this->session->userdata('id_user'));
         $this->db->where('mapel.is_zoom', 1);
         // $this->db->where('mapel.tgl_mulai', date('Y-m-d 00:00:00'));
-        $this->db->where('mapel.tgl_mulai >=', '2022-07-18 00:00:00');
-        $this->db->where('mapel.tgl_mulai <=', '2022-07-18 23:59:59');
+        $this->db->where('mapel.tgl_mulai >=', $tgl_start);
+        $this->db->where('mapel.tgl_mulai <=', $tgl_end);
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }

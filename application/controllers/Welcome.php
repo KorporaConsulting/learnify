@@ -47,6 +47,13 @@ class Welcome extends CI_Controller
         redirect(base_url('welcome'));
     }
 
+    public function logout_mentor()
+    {
+        $this->session->sess_destroy();
+        $this->session->set_flashdata('success-logout', 'Berhasil!');
+        redirect('welcome/mentor');
+    }
+
     private function login()
     {
         $email = $this->input->post('email');
@@ -183,7 +190,7 @@ class Welcome extends CI_Controller
     }
 
     // Guru
-    public function guru()
+    public function mentor()
     {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', [
             'required' => 'Harap isi bidang email!',
@@ -212,21 +219,23 @@ class Welcome extends CI_Controller
             if (password_verify($password, $user['password'])) {
                 $data = [
 
+                    'id_guru' => $user['id_guru'],
                     'email' => $user['email'],
                     'nama_guru' => $user['nama_guru'],
+                    'is_guru' => "is_guru",
 
                 ];
                 $this->session->set_userdata($data);
-                redirect(base_url('guru'));
+                redirect(base_url('mentor'));
             } else {
 
                 $this->session->set_flashdata('fail-pass', 'Gagal!');
-                redirect(base_url('welcome/guru'));
+                redirect(base_url('welcome/mentor'));
             }
         } else {
 
             $this->session->set_flashdata('fail-login', 'Gagal!');
-            redirect(base_url('welcome/guru'));
+            redirect(base_url('welcome/mentor'));
         }
     }
 

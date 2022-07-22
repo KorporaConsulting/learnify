@@ -29,10 +29,10 @@ $this->load->view('admin/template_admin/sidebar');
 
             <div class="card-body">
                 <form method="POST" action="<?= base_url('admin/add_guru') ?>">
-                    <div id="" class="form-group">
-                        <label for="nip">Nomor Induk Mentor</label>
-                        <input id="nip" type="text" class="form-control" value="<?= $nip; ?>" name="nip">
-                        <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input id="nama" type="text" class="form-control" value="<?= $nama; ?>" name="nama">
+                        <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
                     </div>
@@ -46,9 +46,9 @@ $this->load->view('admin/template_admin/sidebar');
                     </div>
 
                     <div class="form-group">
-                        <label for="nama">Nama Lengkap</label>
-                        <input id="nama" type="text" class="form-control" value="<?= $nama; ?>" name="nama">
-                        <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
+                        <label>Tanggal Lahir</label>
+                        <input type="date" name="ttl" value="<?php echo $ttl ?>" class="form-control">
+                        <?= form_error('ttl', '<small class="text-danger">', '</small>'); ?>
                         <div class="invalid-feedback">
                         </div>
                     </div>
@@ -93,16 +93,6 @@ $this->load->view('admin/template_admin/sidebar');
                             <label for="password2" class="d-block">Konfirmasi Password</label>
                             <input id="password2" type="password" class="form-control" name="password2">
                             <?= form_error('password2', '<small class="text-danger">', '</small>'); ?>
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" name="agree" class="custom-control-input" id="agree">
-                            <label class="custom-control-label" for="agree">Saya Mengerti dan ingin
-                                melajutkan.</label>
                         </div>
                     </div>
 
