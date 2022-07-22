@@ -16,6 +16,11 @@
 
 <div class="container mt-5 mb-5">
     <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 ">
+                <div class="border" id="calendar"></div>
+            </div>
+        </div>
         <div class="d-flex">
             <!-- <a class="btn btn-sm btn-info justify-content-between mb-3" href="<?= base_url('user/detail_transkrip') ?>">Detail</a> -->
             <a class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_jadwal') ?>"><i class="fa fa-print"></i> Cetak</a>
@@ -83,7 +88,44 @@
 </div>
 </div>
 
+<script type="text/javascript">
+    var events = <?php echo json_encode($data) ?>;
 
+    var date = new Date()
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear()
+
+    $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        buttonText: {
+            today: 'today',
+            month: 'month',
+            week: 'week',
+            day: 'day'
+        },
+
+        events: events,
+        eventClick: function(calEvent, jsEvent, view) {
+
+            Swal.fire({
+                title: '<strong>' + calEvent.title + '</strong>',
+                icon: 'info',
+                html: 'Mentor: ' + calEvent.nama_guru + '<br>' + '<br>' + 'Jam: ' + calEvent.start.format('H:mm:ss') + ' WIB' + '<br>' + '<br>',
+                showConfirmButton: false,
+                // timer: 1500
+            })
+
+            $(this).css('border-color', 'red');
+        },
+        // textColor: white
+        // themeSystem: 'bootstrap'
+    })
+</script>
 
 <!-- End Class Card -->
 <?php $this->load->view('user/template_user/footer'); ?>

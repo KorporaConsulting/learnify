@@ -1000,6 +1000,16 @@ class User extends CI_Controller
     public function jadwal()
     {
         $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+
+        foreach ($data['jadwal'] as $key => $value) {
+            $data['data'][$key]['title'] = $value->nama_mapel;
+            $data['data'][$key]['nama_guru'] = $value->nama_guru;
+            $data['data'][$key]['start'] = $value->tgl_mulai;
+            $data['data'][$key]['end'] = $value->tgl_selesai;
+            $data['data'][$key]['link'] = $value->link;
+            $data['data'][$key]['textColor'] = "#fff";
+        }
+
         $this->load->view('user/jadwal', $data);
         $this->load->view('template/footer');
     }
