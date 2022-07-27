@@ -875,13 +875,21 @@ class User extends CI_Controller
     public function pembayaran()
     {
         // $this->load->view('user/template_user/header');
-        $this->load->view('user/payment');
+        $data['user'] = $this->db
+            ->where('user.id_user', $this->session->userdata('id_user'))
+            ->join('enroll', 'user.id_user = enroll.id_user', 'left')
+            ->get('user')
+            ->row();
+        // header('Content-type: application/json');
+        // echo json_encode($data);
+        // die;
+        $this->load->view('user/payment', $data);
     }
 
     public function pay_with_installment()
     {
         header('Content-type: application/json');
-        $this->load->library('paymentlib');
+        $this->load->library('duitku');
         $price = 3000000 / $this->input->post('loop');
 
         $product = [
@@ -893,7 +901,7 @@ class User extends CI_Controller
 
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
-        $data = $this->paymentlib->pay($payment_setting, $product, $this->session->userdata());
+        $data = $this->duitku->pay($payment_setting, $product, $this->session->userdata());
 
         if ($data['success']) {
 
@@ -911,6 +919,11 @@ class User extends CI_Controller
                 array_push($id_transaksi, $this->db->insert_id());
             }
 
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user',[
+                'angsuran' => $angsuran,
+                'tipe_angsuran' => $this->input->post('loop')
+            ]);
+
             echo json_encode([
                 'duitku' => $data['data'],
                 'success' => true,
@@ -924,10 +937,12 @@ class User extends CI_Controller
         ]);
     }
 
+
+
     public function pay_without_installment()
     {
         header('Content-type: application/json');
-        $this->load->library('paymentlib');
+        $this->load->library('duitku');
         $price = 3000000 / $this->input->post('loop');
 
         $product = [
@@ -939,7 +954,8 @@ class User extends CI_Controller
 
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
-        $data = $this->paymentlib->pay($payment_setting, $product, $this->session->userdata());
+        $data = $this->duitku->pay($payment_setting, $product, $this->session->userdata());
+
         if ($data['success']) {
             $count = $this->db->select('id_transaksi')->get('transaksi')->num_rows();
             $num = $count + 1;
@@ -949,6 +965,11 @@ class User extends CI_Controller
                 'kode_transaksi' =>  $kode,
                 'nama_transaksi' => $this->input->post('nama_product'),
                 'harga' => $price,
+                'referenceId' => $data['data']['reference']
+            ]);
+
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', [
+                'angsuran' => NULL
             ]);
 
             echo json_encode([
@@ -962,7 +983,7 @@ class User extends CI_Controller
 
         echo json_encode([
             'success' => false,
-            'err' => $data['data']
+            'err' => $data
         ]);
     }
 
@@ -990,6 +1011,7 @@ class User extends CI_Controller
             'data' => $this->input->post('id_transaksi')
         ]);
     }
+
 
 
     public function jadwal()
