@@ -888,12 +888,12 @@ class User extends CI_Controller
         $this->load->view('user/payment', $data);
     }
 
-    public function detail_pembayaran ()
+    public function detail_pembayaran()
     {
-        if($this->input->get('type')){
+        if ($this->input->get('type')) {
             $data['is_cicilan'] = true;
             $data['cicilan'] = 3;
-        }else{
+        } else {
             $data['is_cicilan'] = false;
         }
 
@@ -932,8 +932,14 @@ class User extends CI_Controller
                 ]);
                 array_push($id_transaksi, $this->db->insert_id());
             }
+            $user = $this->db->where('id_user', $this->session->userdata('id_user'))->get('user')->row();
+            $angsuran = 0;
 
-            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user',[
+            if ($user->angsuran != NULL && $user->angsuran > 0) {
+                $angsuran = $user->angsuran;
+            }
+
+            $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', [
                 'angsuran' => $angsuran,
                 'tipe_angsuran' => $this->input->post('loop')
             ]);
@@ -1062,7 +1068,6 @@ class User extends CI_Controller
         $this->pdf->setFileName('Sertifikat_' . $data['user']->nama . '.pdf');
         $this->pdf->setKertas('landscape');
         $this->pdf->load_view('user/print_sertifikat', $data);
-
     }
     public function check_voucher()
     {
@@ -1071,7 +1076,7 @@ class User extends CI_Controller
         $check = $this->db->where('kode', $this->input->post('kode_voucher'))->get('voucher')->row();
 
         if ($check != null) {
-            if($check->kode === $this->input->post('kode_voucher')){
+            if ($check->kode === $this->input->post('kode_voucher')) {
                 if ($check->expired_at > date("Y-m-d")) {
                     $data = [
                         'success' => true,
@@ -1083,7 +1088,7 @@ class User extends CI_Controller
                         'message' => 'Voucher expired'
                     ];
                 }
-            }else{
+            } else {
                 $data = [
                     'success' => false,
                     'message' => 'Kode Voucher tidak tersedia',
