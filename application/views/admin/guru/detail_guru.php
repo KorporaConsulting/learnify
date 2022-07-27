@@ -45,29 +45,41 @@ $this->load->view('admin/template_admin/sidebar');
                         <td><?= $detail->jk ?></td>
                     </tr>
                     <tr style="border-bottom: 0.5px solid #6c757d;">
+                        <td><span class="font-weight-bold">Tanggal Lahir : </span></td>
+                        <td><?= $detail->ttl ?></td>
+                    </tr>
+                    <tr style="border-bottom: 0.5px solid #6c757d;">
                         <td><span class="font-weight-bold">Alamat : </span></td>
                         <td><?= $detail->alamat ?></td>
                     </tr>
-
-                    <tr style="border-bottom: 0.5px solid #6c757d;">
-                        <td><span class="font-weight-bold">Course :</span></td>
-                        <td>
-                            <?php
-                            $no = 1;
-                            foreach ($course as $c) { ?>
-                                <?= $no++ . "." . " " . $c->nama ?> <br>
-                            <?php } ?>
-                        </td>
-
-                    </tr>
                 </tbody>
             </table>
+
+            <div class="container">
+                <h4 class="mt-5">List Course</h4>
+                <div class="row ">
+                    <?php foreach ($course as $c) : ?>
+                        <div class="col-md-4">
+                            <div class="shadow card text-center" style="width: 18rem;">
+                                <img src="<?= base_url('assets/img/courses/' . $c->image) ?>" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= $c->nama_mapel ?></h5>
+                                    <p class="card-text"><?= substr($c->desk, 0, 50)  ?>...</p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+            </div>
             <p style="font-weight:500px!important;font-size:18px;text-align:justify;" class="text-justify">
             </p>
-            <a href="<?= base_url('admin/data_guru') ?>" class="btn btn-success btn-block">Kembali</a>
+            <a href="<?= base_url('admin/data_guru') ?>" class="btn btn-success">Kembali</a>
         </div>
+
     </section>
 </div>
+
+
 </div>
 </div>
 <!-- End Main Content -->

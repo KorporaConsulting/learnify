@@ -108,13 +108,14 @@ class User extends CI_Controller
         //     'data' => $data['mapel']
         // ]), 0, '/');
 
-        $this->db->insert('activity', [
-            'id_user' => $this->session->userdata('id_user'),
-            'nama_activity' => $data['mapel']->nama_mapel,
-            'url' => current_url(),
-            'type' => 'course'
-        ]);
-
+        if ($data['mapel']->is_zoom == 0) {
+            $this->db->insert('activity', [
+                'id_user' => $this->session->userdata('id_user'),
+                'nama_activity' => $data['mapel']->nama_mapel,
+                'url' => current_url(),
+                'type' => 'course'
+            ]);
+        }
 
 
         // var_dump($data['semester']);
@@ -529,12 +530,6 @@ class User extends CI_Controller
     }
 
 
-    public function registration()
-    {
-        $this->load->view('user/registration');
-        $this->load->view('template/footer');
-    }
-
     public function upload_tugas()
     {
         $id_materi = $this->m_siswa->get_materi($this->input->post('slug_materi'))->row();
@@ -849,9 +844,9 @@ class User extends CI_Controller
         $data['ujian'] = $this->m_siswa->ujian()->result();
         $data['tugas'] = $this->m_siswa->tugas()->result();
         $data['absensi'] = $this->m_siswa->get_all_absensi()->result();
-        $data['total_absen'] = $this->m_siswa->get_total_absen();
+        $data['total_absen'] = $this->m_siswa->total_absen_penilaian();
         $data['akurasi'] = $this->m_siswa->get_akurasi_absen()->row();
-        // var_dump($data['absensi']);
+        // var_dump($data['total_absen']);
         // die;
         $this->load->view('user/transkrip', $data);
     }
@@ -873,6 +868,7 @@ class User extends CI_Controller
         $data['total_absen'] = $this->m_siswa->get_total_absen();
         $data['absen'] = $this->m_siswa->get_absen();
         $this->pdf->setFileName('Traskrip_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->setKertas('portrait');
         $this->pdf->load_view('user/print_transkrip', $data);
     }
 
@@ -1027,6 +1023,16 @@ class User extends CI_Controller
     public function jadwal()
     {
         $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+
+        foreach ($data['jadwal'] as $key => $value) {
+            $data['data'][$key]['title'] = $value->nama_mapel;
+            $data['data'][$key]['nama_guru'] = $value->nama_guru;
+            $data['data'][$key]['start'] = $value->tgl_mulai;
+            $data['data'][$key]['end'] = $value->tgl_selesai;
+            $data['data'][$key]['link'] = $value->link;
+            $data['data'][$key]['textColor'] = "#fff";
+        }
+
         $this->load->view('user/jadwal', $data);
         $this->load->view('template/footer');
     }
@@ -1037,6 +1043,16 @@ class User extends CI_Controller
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
         $this->pdf->setFileName('Jadwal_SU_' . $this->session->userdata('nama') . '.pdf');
+        $this->pdf->setKertas('portrait');
         $this->pdf->load_view('user/print_jadwal', $data);
+    }
+    public function print_sertifikat()
+    {
+        $this->load->library('pdf');
+        $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
+        // $data['jadwal'] = $this->m_siswa->jadwal_zoom()->result();
+        $this->pdf->setFileName('Sertifikat_' . $data['user']->nama . '.pdf');
+        $this->pdf->setKertas('landscape');
+        $this->pdf->load_view('user/print_sertifikat', $data);
     }
 }

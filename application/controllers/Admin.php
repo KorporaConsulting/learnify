@@ -13,10 +13,11 @@ class Admin extends CI_Controller
         $this->load->helper('url');
         $this->load->library('upload');
         $this->load->helper('download');
+        date_default_timezone_set('Asia/Jakarta');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        // if (!$this->session->userdata('email')) {
-        //     redirect('welcome/admin');
-        // }
+        if (!$this->session->userdata('login_admin')) {
+            redirect('welcome/admin');
+        }
     }
 
     public function index()
@@ -72,7 +73,10 @@ class Admin extends CI_Controller
             } else {
                 $image = 'nill.svg';
             }
-            $nis = 'SUS-' . strtotime($this->input->post('ttl', true)) . rand(111, 999);
+            $last_id = $this->db->select_max('id_user')->get('user')->row();
+            if ($last_id == "") $last_id = 0;
+
+            $nis = 'SUS-' . date("Y") . strtotime($this->input->post('ttl', true)) .  ($last_id->id_user + 1);
 
             $data = [
                 'nis' => $nis,
@@ -118,10 +122,19 @@ class Admin extends CI_Controller
     public function data_siswa()
     {
         $this->load->model('m_siswa');
-
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/siswa/data_siswa', $data);
     }
+
+    public function progres_data_siswa()
+    {
+        $this->load->model('m_siswa');
+
+        $data['user'] = $this->m_siswa->progress_data_siswa()->result();
+        $this->load->view('admin/siswa/progres_data_siswa', $data);
+    }
+
+
 
     public function detail_siswa($id)
     {
@@ -230,9 +243,8 @@ class Admin extends CI_Controller
 
     public function detail_guru($id)
     {
-        $detail = $this->m_guru->detail_guru($id)->row();
+        $data['detail'] = $this->m_guru->get_guru($id)->row();
         $data['course'] = $this->m_guru->detail_guru($id)->result();
-        $data['detail'] = $detail;
         $this->load->view('admin/guru/detail_guru', $data);
     }
 
@@ -253,6 +265,7 @@ class Admin extends CI_Controller
             'nip' => htmlspecialchars($this->input->post('nip', true)),
             'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
             'email' => htmlspecialchars($this->input->post('email', true)),
+            'ttl' => htmlspecialchars($this->input->post('ttl', true)),
             'jk' => htmlspecialchars($this->input->post('jk', true)),
             'alamat' => htmlspecialchars($this->input->post('alamat', true)),
         );
@@ -280,11 +293,6 @@ class Admin extends CI_Controller
 
     public function add_guru()
     {
-        $this->form_validation->set_rules('nip', 'Nip', 'required|trim|min_length[4]', [
-            'required' => 'Harap isi kolom NIP.',
-            'min_length' => 'NIP terlalu pendek.',
-        ]);
-
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[guru.email]', [
             'is_unique' => 'Email ini telah digunakan!',
             'required' => 'Harap isi kolom email.',
@@ -292,7 +300,7 @@ class Admin extends CI_Controller
         ]);
 
         $this->form_validation->set_rules('nama', 'Nama', 'required|trim', [
-            'required' => 'Harap isi kolom nAMA.',
+            'required' => 'Harap isi kolom Nama.',
         ]);
 
         $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
@@ -305,9 +313,9 @@ class Admin extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $data['nip'] = $this->input->post('nip', true);
             $data['nama'] = $this->input->post('nama', true);
             $data['email'] = $this->input->post('email', true);
+            $data['ttl'] = $this->input->post('ttl', true);
             $data['jk'] = $this->input->post('jk', true);
             $data['alamat'] = $this->input->post('alamat', true);
             $this->load->view('admin/guru/add_guru', $data);
@@ -318,12 +326,14 @@ class Admin extends CI_Controller
             } else {
                 $image = 'nill.svg';
             }
+            $nip = 'SUM-' . strtotime($this->input->post('ttl', true)) . rand(111, 999);
             $data = [
-                'nip' => htmlspecialchars($this->input->post('nip', true)),
+                'nip' => $nip,
                 'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'image_guru' => $image,
+                'ttl' => htmlspecialchars($this->input->post('ttl', true)),
                 'jk' => htmlspecialchars($this->input->post('jk', true)),
                 'alamat' => htmlspecialchars($this->input->post('alamat', true)),
             ];
@@ -891,7 +901,7 @@ class Admin extends CI_Controller
 
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
+                'slug_materi' => $this->create_slug($this->input->post('nama_materi')),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
@@ -955,7 +965,7 @@ class Admin extends CI_Controller
 
             $data = [
                 'nama_materi' => htmlspecialchars($this->input->post('nama_materi', true)),
-                'slug_materi' => url_title($this->input->post('nama_materi'), 'dash', TRUE),
+                'slug_materi' => $this->create_slug($this->input->post('nama_materi')),
                 'desk_materi' => htmlspecialchars($this->input->post('desk', true)),
                 'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
                 'urutan' => $urutan,
@@ -1902,8 +1912,21 @@ class Admin extends CI_Controller
         $this->db->where($where);
         $this->db->update('status_mapel', $data);
     }
-
-    public function riwayat_transaksi ()
+    public function create_slug($name)
+    {
+        $count = 0;
+        $name = url_title($name);
+        $slug_name = $name;             // Create temp name
+        while (true) {
+            $this->db->select('id_materi');
+            $this->db->where('slug_materi', $slug_name);   // Test temp name
+            $query = $this->db->get('materi');
+            if ($query->num_rows() == 0) break;
+            $slug_name = $name . '-' . (++$count);  // Recreate new temp name
+        }
+        return $slug_name;
+    }
+    public function riwayat_transaksi()
     {
         $data['transaksi'] = $this->db
             ->join('user', 'user.id_user=transaksi.id_user')
@@ -1911,5 +1934,16 @@ class Admin extends CI_Controller
             ->result();
 
         $this->load->view('admin/transaksi/riwayat', $data);
+    }
+
+    public function absensi_siswa($id)
+    {
+        $data['nama_siswa'] = $this->m_siswa->get_profile($id)->row();
+        $data['absensi'] = $this->m_materi->get_absensi_siswa($id)->result();
+        $data['total_absen'] = $this->m_materi->total_absensi_siswa($id);
+        $data['akurasi'] = $this->m_materi->get_akurasi_absen($id)->row();
+        // var_dump($data['progres']);
+        // die;
+        $this->load->view('admin/siswa/absensi', $data);
     }
 }

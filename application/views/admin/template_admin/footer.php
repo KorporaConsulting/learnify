@@ -11,11 +11,11 @@
  <!-- End Main Content -->
 
  <!-- General JS Scripts -->
-    <?php if($this->session->flashdata('success')): ?>
-        <script>
-            Swal.fire('Berhasil', '<?= $this->session->flashdata('success') ?>', 'success');
-        </script>
-    <?php endif; ?>
+ <?php if ($this->session->flashdata('success')) : ?>
+     <script>
+         Swal.fire('Berhasil', '<?= $this->session->flashdata('success') ?>', 'success');
+     </script>
+ <?php endif; ?>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
  </script>
  <script>
@@ -33,6 +33,10 @@
  <!-- JS Libraies -->
  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
  <script>
      $(document).ready(function() {
          $('#example').DataTable();

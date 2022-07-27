@@ -5,8 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="Learnify dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
-    <meta content="Learnify, E-learning, Open Source, Syauqi Zaidan Khairan Khalaf, github, programmer indonesia" name="keywords" />
+    <!-- <meta content="Learnify dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" /> -->
+    <!-- <meta content="Learnify, E-learning, Open Source, Syauqi Zaidan Khairan Khalaf, github, programmer indonesia" name="keywords" /> -->
     <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/') ?>img/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/') ?>img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/') ?>img/favicon/favicon-16x16.png">
@@ -42,6 +42,9 @@
     <script src="<?= base_url('assets/') ?>js/popper.js"></script>
     <script src="<?= base_url('assets/') ?>js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
     <!-- or -->
     <script type="text/javascript">
         $(document).ready(() => {
@@ -50,14 +53,6 @@
         })
     </script>
 
-
-    <!-- <style>
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: red;
-            border-radius: 10px;
-        }
-    </style> -->
 </head>
 
 <body>
@@ -97,7 +92,7 @@
                                     <!-- <a class="dropdown-item" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a> -->
                                     <a class="dropdown-item" href="<?= base_url('user/profile') ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                                     <a class="dropdown-item" href="<?= base_url('user/jadwal') ?>"><i class="fa fa-list-alt" aria-hidden="true"></i> Jadwal Live Kelas</a>
-                                    <a class=" dropdown-item text-danger" href="<?= base_url('welcome/logout') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                                    <a class=" dropdown-item text-danger" href="<?= base_url('auth/logout') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
                                 </div>
                             </li>
                             <!-- <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>

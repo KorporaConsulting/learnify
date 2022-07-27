@@ -1,4 +1,4 @@
-<?php $this->load->view('user/template_user/header'); ?>
+<?php $this->load->view('guru/template_guru/header'); ?>
 <style>
     .noBorder {
         border: none !important;
@@ -16,14 +16,15 @@
 
 <div class="container mt-5 mb-5">
     <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+
         <div class="row justify-content-center mb-5">
             <div class="col-md-8 ">
                 <div class="border" id="calendar"></div>
             </div>
         </div>
-        <div class="d-flex">
+        <div class="d-flex mt-3">
             <!-- <a class="btn btn-sm btn-info justify-content-between mb-3" href="<?= base_url('user/detail_transkrip') ?>">Detail</a> -->
-            <a class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('user/print_jadwal') ?>"><i class="fa fa-print"></i> Cetak</a>
+            <a class="btn btn-sm btn-primary justify-content-between mb-3" href="<?= base_url('mentor/print_jadwal') ?>"><i class="fa fa-print"></i> Cetak</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -115,7 +116,7 @@
             Swal.fire({
                 title: '<strong>' + calEvent.title + '</strong>',
                 icon: 'info',
-                html: 'Mentor: ' + calEvent.nama_guru + '<br>' + '<br>' + 'Jam: ' + calEvent.start.format('H:mm:ss') + ' WIB' + '<br>' + '<br>',
+                html: 'Mentor: ' + calEvent.nama_guru + '<br>' + '<br>' + 'Jam: ' + calEvent.start.format('H:mm:ss') + ' WIB' + '<br>' + '<br>' + '<a class="btn btn-info" href="' + calEvent.link + '">Gabung</a> ',
                 showConfirmButton: false,
                 // timer: 1500
             })
@@ -128,4 +129,4 @@
 </script>
 
 <!-- End Class Card -->
-<?php $this->load->view('user/template_user/footer'); ?>
+<?php $this->load->view('guru/template_guru/footer'); ?>

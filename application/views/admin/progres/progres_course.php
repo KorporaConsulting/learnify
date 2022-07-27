@@ -18,7 +18,7 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                     <div class="table-responsive">
-                        <table id="example" class="table align-items-center table-flush">
+                        <table id="progress" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
                                     <th scope="col">No</th>
@@ -45,7 +45,7 @@ $this->load->view('admin/template_admin/sidebar');
                                         <td>
                                             <?php
                                             $pro = ((int)$u->done * 100) / (int)$u->jumlah;
-                                            // echo 
+
                                             ?>
                                             <div class="progress">
                                                 <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $pro ?>%;" aria-valuenow="<?= $pro ?>%" aria-valuemin="0" aria-valuemax="100"> <?= $pro ?>%</div>
@@ -127,6 +127,26 @@ $this->load->view('admin/template_admin/sidebar');
             }
         })
     }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#progress').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excelHtml5',
+                    title: 'Progress <?= $nama_siswa->nama ?>',
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Progress <?= $nama_siswa->nama ?>'
+                },
+                // 'colvis'
+            ]
+        });
+    });
 </script>
 
 <?php

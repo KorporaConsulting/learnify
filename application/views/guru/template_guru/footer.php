@@ -1,44 +1,113 @@
- <!-- Start Footer -->
- <footer class="main-footer">
-     <div class="text-center">
-         Copyright &copy; 2022 <div class="bullet"></div><a href="https://korporaconsulting.com/">Korpora Consulting</a>
-     </div>
- </footer>
- <!-- End Footer -->
+<br>
+<script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
+<!-- <script src="<?= base_url('assets/') ?>plyr/js/plyr.js"></script> -->
+<script>
+    const player = new Plyr('#player', {
+        title: 'Example Title',
+        clickToPlay: false,
+        controls: [
+            'play-large', // The large play button in the center
+            // 'restart', // Restart playback
+            // 'rewind', // Rewind by the seek time (default 10 seconds)
+            'play', // Play/pause playback
+            // 'fast-forward', // Fast forward by the seek time (default 10 seconds)
+            'progress', // The progress bar and scrubber for playback and buffering
+            // 'current-time', // The current time of playback
+            'duration', // The full duration of the media
+            'mute', // Toggle mute
+            'volume', // Volume control
+            // 'captions', // Toggle captions
+            // 'settings', // Settings menu
+            // 'pip', // Picture-in-picture (currently Safari only)
+            // 'airplay', // Airplay (currently Safari only)
+            // 'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+            // 'fullscreen',
+        ]
+    });
+    player.on('ended', event => {
+        $.ajax({
+            url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',
+            method: 'POST',
+            success: function(res) {
+                location.reload();
+                swal("Berhasil!", "Materi telah selesai!", "success");
+            },
+            error: function() {
 
- </div>
- </div>
- <!-- End Main Content -->
+            }
+        })
+    });
+</script>
+<script type="text/javascript">
 
- <!-- General JS Scripts -->
+</script>
+<!-- Start Animate On Scroll -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="<?= base_url('assets/') ?>js/stellar.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/nice-select/js/jquery.nice-select.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/isotope/isotope.pkgd.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/popup/jquery.magnific-popup.min.js"></script>
+<script src="<?= base_url('assets/') ?>js/jquery.ajaxchimp.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="<?= base_url('assets/') ?>vendors/counter-up/jquery.counterup.js"></script>
+<script src="<?= base_url('assets/') ?>js/mail-script.js"></script>
+<script src="<?= base_url('assets/') ?>js/theme.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
+</script>
+<script>
+    var animateButton = function(e) {
+        e.preventDefault;
+        e.target.classList.remove('animate');
+        e.target.classList.add('animate');
+        setTimeout(function() {
+            e.target.classList.remove('animate');
+        }, 700);
+    };
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
- </script>
- <script>
-     $('.custom-file-input').on('change', function() {
-         let fileName = $(this).val().split('\\').pop();
-         $(this).next('.custom-file-label').addClass("selected").html(fileName);
-     });
- </script>
- <!-- <script src="<?= base_url('assets/') ?>/modules/bootstrap-daterangepicker/daterangepicker.js"></script> -->
- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
- </script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
- <script src="<?= base_url('assets/') ?>stisla-assets/js/stisla.js"></script>
- <!-- JS Libraies -->
- <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
- <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
- <script>
-     $(document).ready(function() {
-         $('#example').DataTable();
-     });
- </script>
- <!-- Template JS File -->
- <script src="<?= base_url('assets/') ?>stisla-assets/js/scripts.js"></script>
- <script src="<?= base_url('assets/') ?>stisla-assets/js/custom.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
- </body>
+    var bubblyButtons = document.getElementsByClassName("bubbly-button");
 
- </html>
+    for (var i = 0; i < bubblyButtons.length; i++) {
+        bubblyButtons[i].addEventListener('click', animateButton, false);
+    }
+</script>
+<script>
+    AOS.init();
+</script>
+<script>
+    <?php if ($this->session->flashdata('success-mark')) : ?>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $this->session->flashdata('success-mark'); ?>',
+            text: 'Materi telah selesai',
+            showConfirmButton: false,
+            timer: 2500
+        })
+    <?php endif; ?>
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/62cfd1a17b967b1179997997/1g7tslomh';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
+<!--End of Tawk.to Script-->
+
+<!-- End Animate On Scroll -->

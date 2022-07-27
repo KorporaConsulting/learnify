@@ -56,7 +56,13 @@ $this->load->view('admin/template_admin/sidebar');
                             <div class="invalid-feedback">
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label>Tanggal Lahir</label>
+                            <input type="date" name="ttl" value="<?= $u->ttl ?>" required class="form-control">
+                            <?= form_error('ttl', '<small class="text-danger">', '</small>'); ?>
+                            <div class="invalid-feedback">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="form-label">Jenis Kelamin</label>
                             <div class="section-title">Terpilih</div>

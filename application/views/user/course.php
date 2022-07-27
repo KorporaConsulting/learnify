@@ -2,10 +2,10 @@
 
 <!-- Start Greetings Card -->
 <div class="container">
-    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-        <div class="row" style="color: black; font-family: 'poppins';">
+    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px; background-image: linear-gradient(to right, #2c3e50, #4ca1af)">
+        <div class="row" style="color: white; font-family: 'poppins';">
             <div class="col-md-12 mt-1">
-                <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Course Semester <?= $this->uri->segment(3); ?>
+                <h1 class="display-4" style="color: white; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Semester <?= $this->uri->segment(3); ?>
                 </h1>
                 <p>Hello Students! , Ini merupakan halaman course Sales University! Silahkan pilih course yang dapat kamu
                     akses
@@ -24,7 +24,7 @@
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button id="course" class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <h4>Course <i id="icon-course" class="fa fa-arrow-down"></i></h4>
+                        <h4>Course <i id="icon-course-down" class="fa fa-arrow-down"></i><i id="icon-course-up" style="display: none;" class="fa fa-arrow-up"></i></h4>
                     </button>
                 </h2>
             </div>
@@ -40,7 +40,7 @@
                                     <?php } else { ?>
                                         <a class="disabled" href="#">
                                         <?php } ?>
-                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                                        <div class="card shadow bg-white mx-auto p-4 buat-text text-center mb-3" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                             <h2><?php if ($c->status == 0 && $c->kunci == 0) { ?>
                                                     <i class="fa fa-lock float-right" title="Terkunci" style="color:red"></i>
                                                     <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
@@ -118,9 +118,11 @@
 <script>
     $(document).ready(function() {
         $('#course').on('click', function() {
-            $("#icon-course").hide();
+            $("#icon-course-down").hide();
+            $("#icon-course-up").show();
         });
     });
+
     $(document).ready(function() {
         $('#live-class').on('click', function() {
             $("#icon-live-class").hide();

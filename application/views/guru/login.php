@@ -5,16 +5,13 @@
 
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Learnify - Teacher Login</title>
-
-    <!-- General CSS Files -->
+    <title>Sales University - Admin Login</title>
     <link rel="icon" href="<?= base_url('assets/') ?>img/favicon.png" type="image/png">
+    <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/node_modules/bootstrap-social/bootstrap-social.css">
-
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/components.css">
@@ -23,17 +20,19 @@
 </head>
 
 <body>
+
+    <!-- Main Content -->
     <div id="app">
         <section class="section">
             <div class="d-flex flex-wrap align-items-stretch">
                 <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
                     <div class="p-4 m-3">
                         <a href="<?= base_url('welcome') ?>"> <img src="<?= base_url('assets/') ?>/img/logo.png" alt="logo" width="150" class=" mb-5 mt-2"></a>
-                        <h4 class="text-dark font-weight-normal">Selamat datang di <span class="font-weight-bold">Learnify</span>
+                        <h4 class="text-dark font-weight-normal">Selamat datang di <br> <span class="font-weight-bold">Sales University</span>
                         </h4>
-                        <p class="text-muted">Sebelum masuk ke halaman guru, anda harus login terlebih dahulu sebagai
-                            guru. silahkan isi data dibawah untuk melanjutkan.</p>
-                        <form method="post" action="<?= base_url('welcome/guru') ?>" class="needs-validation" novalidate="">
+                        <p class="text-muted">Sebelum masuk ke halaman Mentor, anda harus login terlebih dahulu sebagai
+                            Mentor. silahkan isi data dibawah untuk melanjutkan.</p>
+                        <form method="post" action="<?= base_url('auth/mentor') ?>" class="needs-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
@@ -59,24 +58,24 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url('assets/') ?>stisla-assets/img/unsplash/login-bg.jpg">
+                <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url('assets/') ?>stisla-assets/img/unsplash/login-mentor.jpg">
                     <div class="absolute-bottom-left index-2">
                         <div class="text-light p-5 pb-2">
                             <div class="mb-5 pb-3">
-                                <h1 class="mb-2 display-4 font-weight-bold text-white">Selamat datang, Guru!</h1>
+                                <h1 class="mb-2 display-4 font-weight-bold text-white">Selamat datang!</h1>
                                 <h5 class="font-weight-normal text-muted-transparent text-white">Silahkan login untuk
-                                    masuk ke
-                                    halaman guru.</h5>
+                                    masuk ke halaman Mentor.</h5>
                             </div>
-                            Made with <span class="text-danger"> &#10084;</span> by <a class="text-light bb" target="_blank" href="https://syauqizaidan.github.io/">Syaauqi Zaaidan</a> - Image by <a class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a>
+                            <!-- Made with <span class="text-danger"> &#10084;</span> by <a class="text-light bb" target="_blank" href="https://syauqizaidan.github.io/">Syaauqi Zaaidan</a> - Image by <a class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a> -->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    <!-- End Main Content -->
 
-    <!-- Start Sweetalert Flashdata -->
+    <!-- Sweetalert Flashdata -->
 
     <?php if ($this->session->flashdata('success-reg')) : ?>
         <script>
@@ -90,7 +89,6 @@
         </script>
     <?php endif; ?>
 
-
     <?php if ($this->session->flashdata('login-success')) : ?>
         <script>
             Swal.fire({
@@ -102,7 +100,6 @@
             })
         </script>
     <?php endif; ?>
-
 
     <?php if ($this->session->flashdata('success-verify')) : ?>
         <script>
@@ -116,7 +113,6 @@
         </script>
     <?php endif; ?>
 
-
     <?php if ($this->session->flashdata('success-logout')) : ?>
         <script>
             Swal.fire({
@@ -128,7 +124,6 @@
             })
         </script>
     <?php endif; ?>
-
 
     <?php if ($this->session->flashdata('fail-login')) : ?>
         <script>
@@ -142,7 +137,6 @@
         </script>
     <?php endif; ?>
 
-
     <?php if ($this->session->flashdata('fail-email')) : ?>
         <script>
             Swal.fire({
@@ -154,7 +148,6 @@
             })
         </script>
     <?php endif; ?>
-
 
     <?php if ($this->session->flashdata('fail-pass')) : ?>
         <script>
@@ -168,7 +161,6 @@
         </script>
     <?php endif; ?>
 
-
     <?php if ($this->session->flashdata('not-login')) : ?>
         <script>
             Swal.fire({
@@ -180,8 +172,7 @@
             });
         </script>
     <?php endif; ?>
-
-    <!-- End Sweetalert -->
+    <!-- end sweetalert -->
 
     <!-- General JS Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>

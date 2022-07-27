@@ -125,6 +125,9 @@
                                     <label for="">Ulangi Password Baru</label>
                                     <input type="text" class="form-control" name="conf_password" placeholder="">
                                 </div>
+                                <div class="text-center">
+                                    <button type="button" id="tutup-password" class="btn btn-outline-primary" aria-describedby="helpId"><i class="fa fa-arrow-up"></i> Tutup Kolom Password</button>
+                                </div>
                             </div>
                             <div class="text-center">
                                 <button type="button" id="button-password" class="btn btn-outline-primary" aria-describedby="helpId"><i class="fa fa-arrow-down"></i> Ubah Password</button>
@@ -144,6 +147,10 @@
     $("#button-password").click(function() {
         $("#password").show();
         $("#button-password").hide("slow");
+    });
+    $("#tutup-password").click(function() {
+        $("#password").hide();
+        $("#button-password").show("slow");
     });
 </script>
 <?php if ($this->session->flashdata('success-password')) : ?>

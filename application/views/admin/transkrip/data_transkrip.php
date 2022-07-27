@@ -18,7 +18,7 @@ $this->load->view('admin/template_admin/sidebar');
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                     <div class="table-responsive">
-                        <table id="example" class="table align-items-center table-flush">
+                        <table id="transkrip" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
                                     <th>Semester</th>
@@ -50,7 +50,6 @@ $this->load->view('admin/template_admin/sidebar');
                                 <?php  } ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -117,6 +116,22 @@ $this->load->view('admin/template_admin/sidebar');
             }
         })
     }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#transkrip').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excelHtml5',
+                    title: 'Transkrip <?= $nama_siswa->nama ?>'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Transkrip <?= $nama_siswa->nama ?>'
+                }
+            ]
+        });
+    });
 </script>
 
 <?php

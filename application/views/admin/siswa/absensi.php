@@ -7,62 +7,56 @@ $this->load->view('admin/template_admin/sidebar');
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title" style="color: black;">Test Attemp</h2>
+                <h2 class="card-title" style="color: black;">Absensi <?= $nama_siswa->nama ?></h2>
                 <hr>
+                <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
+                <!-- <a href="<?= base_url('admin/add_siswa') ?>" class="btn btn-success">Tambah
+                    Data Siswa ⭢ </a> -->
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                     <div class="table-responsive">
-                        <table id="quiz" class="table align-items-center table-flush">
+                        <table id="absensi" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama Siswa</th>
-                                    <th scope="col">Nama Course</th>
-                                    <th scope="col">Nama Test</th>
-                                    <th scope="col">Nilai</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Detail</th>
+                                    <th>No</th>
+                                    <th>Nama Course</th>
+                                    <th>Waktu Absensi</th>
+                                    <th>Waktu Kelas Live</th>
+                                    <th>Persentase ketepatan waktu</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <?php
                                 $no = 1;
-                                foreach ($quiz as $u) {
+                                foreach ($absensi as $t) {
                                 ?>
-                                    <tr class="text-center">
-                                        <th scope="row">
-                                            <?php echo $no++ ?>
-                                        </th>
-                                        <td>
-                                            <?php echo $u->nama ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $u->nama_mapel ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $u->nama_materi ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $u->nilai ?>
-                                        </td>
-                                        <?php
-                                        if ($u->nilai < 70) { ?>
-                                            <td><span class="badge badge-danger badge-lg">Tidak Lulus</span></td>
-                                        <?php } else { ?>
-                                            <td><span class="badge badge-success badge-lg">Lulus</span></td>
-                                        <?php }
-                                        ?>
-                                        <td class="text-center">
-                                            <a href="<?php echo site_url('admin/histori_quiz/' . $u->id_materi . '/' . $u->id_user . '/' . $u->id_mapel); ?>" class="btn btn-success">Detail History ⭢</a>
-                                        </td>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $t->nama_mapel ?></td>
+                                        <td><?= $t->waktu_masuk ?></td>
+                                        <td><?= $t->tgl_mulai ?></td>
+                                        <td><?= $t->ketepatan_absensi ?>%</td>
                                     </tr>
-                                <?php
-                                }
-                                ?>
+                                <?php } ?>
+
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total persentase ketepatan waktu</td>
+                                    <?php
+                                    if ($total_absen <= 0) $total_absen = 1;
+                                    $total = $akurasi->akurasi / $total_absen;
+                                    ?>
+                                    <td><b style="color:black"><?= $total ?>%</b></td>
+                                </tr>
+                            </tfoot>
                         </table>
 
                     </div>
@@ -134,24 +128,24 @@ $this->load->view('admin/template_admin/sidebar');
 </script>
 <script>
     $(document).ready(function() {
-        $('#quiz').DataTable({
+        $('#absensi').DataTable({
             dom: 'Bfrtip',
             buttons: [{
                     extend: 'excelHtml5',
-                    title: 'Test Attemp',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
-                    }
+                    title: 'Absensi <?= $nama_siswa->nama ?>',
+                    footer: true
                 },
                 {
                     extend: 'pdfHtml5',
-                    title: 'Test Attemp'
+                    title: 'Absensi <?= $nama_siswa->nama ?>',
+                    footer: true
                 },
                 // 'colvis'
             ]
         });
     });
 </script>
+
 <?php
 $this->load->view('admin/template_admin/footer');
 ?>

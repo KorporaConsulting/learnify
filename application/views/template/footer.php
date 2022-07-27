@@ -8,12 +8,8 @@
                 </script> Sales University Powered by <a style="color: white;" href="https://pastiprestasi.com/">Pasti Prestasi</a>
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
-                <a href="https://www.facebook.com/syaaauqi"><i class="fa fa-facebook"></i></a>
-                <a href="https://twitter.com/syaaauqi"><i class="fa fa-twitter"></i></a>
-                <a href="https://dribbble.com/syaufy"><i class="fa fa-dribbble"></i></a>
-                <a href="https://www.behance.net/syaufy"><i class="fa fa-behance"></i></a>
-                <a href="https://www.github.com/syauqi"><i class="fa fa-github"></i></a>
-                <a href="https://www.instagram.com/syaufy"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UCRTaGfH5CiCYa9dmKVHxX6w"><i class="fa fa-youtube-play"></i></a>
+                <a href="https://www.instagram.com/sahabatsales/"><i class="fa fa-instagram"></i></a>
             </div>
         </div>
     </div>

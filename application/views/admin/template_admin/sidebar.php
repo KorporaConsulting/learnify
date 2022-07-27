@@ -17,7 +17,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-title">Admin - Sales University</div>
-                            <a href="<?= base_url('welcome/logout') ?>" class="dropdown-item has-icon text-danger">
+                            <a href="<?= base_url('auth/logout') ?>" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </div>
@@ -96,7 +96,7 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-money-bill"></i>
-                            <span>Transaksi</span>
+                                <span>Transaksi</span>
                             </a>
                             <!-- <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/opt_course') ?>">Course</a>

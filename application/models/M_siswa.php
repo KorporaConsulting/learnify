@@ -8,6 +8,16 @@ class M_siswa extends CI_Model
         return $query;
     }
 
+    public function progress_data_siswa()
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->group_by('enroll.id_user');
+        $query = $this->db->get();
+        return $query;
+    }
+
     public function tampil_data_semester($semester, $id_user)
     {
         $this->db->select('*');
@@ -360,6 +370,18 @@ class M_siswa extends CI_Model
         $query =  $this->db->get();
         return $query->num_rows();
     }
+
+    public function total_absen_penilaian()
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'user.id_user = absensi.id_user', 'left');
+        $this->db->join('mapel', 'mapel.id_mapel = absensi.id_mapel', 'left');
+        $this->db->where('absensi.id_user',  $this->session->userdata('id_user'));
+        $query =  $this->db->get();
+        return $query->num_rows();
+    }
+
     public function get_absen()
     {
         $this->db->select('*');
@@ -517,8 +539,8 @@ class M_siswa extends CI_Model
         $this->db->where('enroll.id_user', $this->session->userdata('id_user'));
         $this->db->where('mapel.is_zoom', 1);
         // $this->db->where('mapel.tgl_mulai', date('Y-m-d 00:00:00'));
-        $this->db->where('mapel.tgl_mulai >=', '2022-07-18 00:00:00');
-        $this->db->where('mapel.tgl_mulai <=', '2022-07-18 23:59:59');
+        $this->db->where('mapel.tgl_mulai >=', $tgl_start);
+        $this->db->where('mapel.tgl_mulai <=', $tgl_end);
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }
