@@ -17,15 +17,31 @@ class User extends CI_Controller
         $this->load->library('image_lib');
         $this->load->helper('download');
         date_default_timezone_set('Asia/Jakarta');
+
         if (!$this->session->userdata('id_user')) {
             $this->session->set_flashdata('not-login', 'Gagal!');
             redirect('welcome');
         }
     }
 
+    public function check_profile()
+    {
+        $cek_profile = $this->db->query('SELECT jk,ttl,alamat FROM user WHERE id_user = ' . $this->session->userdata("id_user"));
+        $cek = $cek_profile->row();
+
+        // var_dump($cek);
+        // return $cek;
+        if ($cek->jk == null || $cek->ttl == null || $cek->alamat == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function index()
     {
 
+        $data['cek'] = $this->check_profile();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
 
         $data['aktifitas_belajar'] = $this->db

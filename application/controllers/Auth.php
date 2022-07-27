@@ -17,7 +17,8 @@ class Auth extends CI_Controller
 
     public function register()
     {
-        $this->load->view('user/registration');
+        $this->load->view('template/nav');
+        $this->load->view('registration');
         $this->load->view('template/footer');
     }
 
@@ -188,6 +189,53 @@ class Auth extends CI_Controller
 
             $this->session->set_flashdata('fail-login', 'Gagal!');
             redirect(base_url('auth/mentor'));
+        }
+    }
+    public function regis_act()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'required|trim', [
+            'required' => 'Harap isi kolom Nama.',
+        ]);
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
+            'is_unique' => 'Email ini telah digunakan!',
+            'required' => 'Harap isi kolom email.',
+            'valid_email' => 'Masukan email yang valid.',
+        ]);
+        $this->form_validation->set_rules('no_telp', 'No Telp', 'required|trim', [
+            'required' => 'Harap isi kolom Nomer Telepon.',
+        ]);
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[retype_password]', [
+            'required' => 'Harap isi kolom Password.',
+            'matches' => 'Password tidak sama!',
+            'min_length' => 'Password terlalu pendek',
+        ]);
+        $this->form_validation->set_rules('retype_password', 'Password', 'required|trim|matches[password]', [
+            'matches' => 'Password tidak sama!',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $this->register();
+        } else {
+            $last_id = $this->db->select_max('id_user')->get('user')->row();
+            if ($last_id == "") $last_id = 0;
+
+            $nis = 'SUS-' . date("Y") . strtotime(date("Y-m-d")) .  ($last_id->id_user + 1);
+
+            $data = [
+                'nis' => $nis,
+                'nama' => htmlspecialchars($this->input->post('nama', true)),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'no_telp' => htmlspecialchars($this->input->post('no_telp', true)),
+                'image_user' => 'null.svg',
+                'role' => 3,
+            ];
+
+            $this->load->library('qrcode');
+            $data['qr_code'] = $this->qrcode->generate($this->input->post('email', true));
+            $this->db->insert('user', $data);
+            $this->session->set_flashdata('sukses-regis', 'Berhasil!');
+            redirect(base_url('auth/login'));
         }
     }
 }

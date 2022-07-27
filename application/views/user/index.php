@@ -24,6 +24,21 @@
         <p>Akses Course disini</p>
         <a class="btn btn-primary btn-lg" href="<?= base_url('user/all_semester') ?>" role="button">Course</a>
     </div>
+    <?php
+    if ($cek == false) { ?>
+        <div class="shadow alert alert-warning rounded" role="alert">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="bodymovin" style="width: 200px;" data-icon="<?= base_url('assets/') ?>json/registration-animation.json"></div>
+                </div>
+                <div class="col-md-8">
+                    <strong>Profile Anda belum lengkap</strong>
+                    <p>Mohon lengkapi terlebih dahulu profile Anda</p>
+                </div>
+            </div>
+
+        </div>
+    <?php } ?>
     <div class="masonry">
         <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;">
             <div class="card-header" style="border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af);
