@@ -8,6 +8,16 @@ class M_siswa extends CI_Model
         return $query;
     }
 
+    public function progress_data_siswa()
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->group_by('enroll.id_user');
+        $query = $this->db->get();
+        return $query;
+    }
+
     public function tampil_data_semester($semester, $id_user)
     {
         $this->db->select('*');

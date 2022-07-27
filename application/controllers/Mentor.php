@@ -8,6 +8,7 @@ class Mentor extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->load->model('m_guru');
+        $this->load->library('image_lib');
         date_default_timezone_set('Asia/Jakarta');
         if (!$this->session->userdata('is_guru')) {
             $this->session->set_flashdata('not-login', 'Gagal!');
@@ -92,7 +93,6 @@ class Mentor extends CI_Controller
     public function jadwal()
     {
         $data['jadwal'] = $this->m_guru->jadwal_zoom_all()->result();
-
         foreach ($data['jadwal'] as $key => $value) {
             $data['data'][$key]['title'] = $value->nama_mapel;
             $data['data'][$key]['nama_guru'] = $value->nama_guru;
@@ -101,7 +101,6 @@ class Mentor extends CI_Controller
             $data['data'][$key]['link'] = $value->link;
             $data['data'][$key]['textColor'] = "#fff";
         }
-
         $this->load->view('guru/jadwal', $data);
         $this->load->view('template/footer');
     }
@@ -114,10 +113,104 @@ class Mentor extends CI_Controller
         $this->pdf->setKertas('portrait');
         $this->pdf->load_view('guru/print_jadwal', $data);
     }
-    public function logout()
+
+    public function profile()
     {
-        $this->session->sess_destroy();
-        $this->session->set_flashdata('success-logout', 'Berhasil!');
-        redirect('welcome/mentor');
+        $id_user = $this->session->userdata('id_guru');
+        $data['profile'] = $this->m_guru->get_profile($id_user)->row();
+
+        $this->load->view('guru/profile', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function image_profile()
+    {
+        $config['upload_path']          = './assets/profile_picture/';
+        $config['allowed_types']        = 'jpeg|jpg|png';
+        $config['max_size']             = 1000;
+        // $config['max_width']            = 1024;
+        // $config['max_height']           = 768;
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('image_guru')) {
+            $this->session->set_flashdata('error-profile', $this->upload->display_errors());
+            redirect('mentor/profile');
+        } else {
+            $image_data =   $this->upload->data();
+            $configer =  array(
+                'image_library'   => 'gd2',
+                'source_image'    =>  $image_data,
+                'maintain_ratio'  =>  TRUE,
+                'width'           =>  250,
+                'height'          =>  250,
+            );
+            $this->image_lib->clear();
+            $this->image_lib->initialize($configer);
+            $this->image_lib->resize();
+            $gambar = $image_data['file_name'];
+
+            $where = [
+                'id_guru' => $this->session->userdata('id_guru')
+            ];
+            $data = [
+                'image_guru' => $gambar
+            ];
+
+            $this->db->where($where);
+            $this->db->update('guru', $data);
+            $this->session->set_flashdata('success-profile', 'berhasil mengubah image profile');
+            redirect('mentor/profile');
+        }
+    }
+
+    public function update_profile()
+    {
+
+        if (empty($this->input->post('password_baru'))) {
+            $this->form_validation->set_rules(
+                'password_baru',
+                'Password'
+            );
+            $this->form_validation->set_rules('conf_password', 'Password', 'required|trim|matches[password_baru]', [
+                'matches' => 'Password tidak sama!',
+            ]);
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error-password', 'Gagal');
+                $this->profile();
+            } else {
+                $where = [
+                    'id_guru' => $this->session->userdata('id_guru')
+                ];
+                $data = [
+                    'nama_guru' => $this->input->post('nama_guru'),
+                    'email' => $this->input->post('email'),
+                    'password' => password_hash($this->input->post('password_baru'), PASSWORD_DEFAULT),
+                    // 'no_telp' => $this->input->post('no_telp'),
+                    'jk' => $this->input->post('jk'),
+                    'ttl' => $this->input->post('ttl'),
+                    'alamat' => $this->input->post('alamat'),
+                ];
+                $this->db->where($where);
+                $this->db->update('guru', $data);
+                $this->session->set_flashdata('success-password', 'berhasil');
+                redirect('mentor/profile');
+            }
+        } else {
+            $where = [
+                'id_guru' => $this->session->userdata('id_guru')
+            ];
+            $data = [
+                'nama_guru' => $this->input->post('nama_guru'),
+                'email' => $this->input->post('email'),
+                // 'no_telp' => $this->input->post('no_telp'),
+                'jk' => $this->input->post('jk'),
+                'ttl' => $this->input->post('ttl'),
+                'alamat' => $this->input->post('alamat'),
+            ];
+            $this->db->where($where);
+            $this->db->update('guru', $data);
+            $this->session->set_flashdata('success-password', 'berhasil');
+            redirect('mentor/profile');
+        }
     }
 }

@@ -49,7 +49,6 @@
     <script type="text/javascript">
         $(document).ready(() => {
             $("#nav<?= $this->uri->segment(2); ?>").addClass('active')
-
         })
     </script>
 
@@ -92,7 +91,7 @@
                                     <!-- <a class="dropdown-item" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a> -->
                                     <a class="dropdown-item" href="<?= base_url('mentor/profile') ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                                     <!-- <a class="dropdown-item" href="<?= base_url('user/jadwal') ?>"><i class="fa fa-list-alt" aria-hidden="true"></i> Jadwal Live Kelas</a> -->
-                                    <a class=" dropdown-item text-danger" href="<?= base_url('welcome/logout_mentor') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                                    <a class=" dropdown-item text-danger" href="<?= base_url('auth/logout_mentor') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
                                 </div>
                             </li>
                             <!-- <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>

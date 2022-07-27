@@ -80,4 +80,11 @@ class M_guru extends CI_Model
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }
+    public function get_profile($id)
+    {
+        $this->db->select('*');
+        $this->db->from('guru');
+        $this->db->where('id_guru', $id);
+        return  $this->db->get();
+    }
 }

@@ -1,10 +1,10 @@
 <?php $this->load->view('user/template_user/header'); ?>
 <!-- Start Greetings Card -->
 <!-- <div class="container">
-    <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+    <div class="card shadow bg-white mx-auto p-4 buat-text"  style="width: 100%; border-radius:20px;">
         <div class="row" style="color: black; font-family: 'poppins';">
             <div class="col-md-12 mt-1">
-                <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400">Selamat Datang
+                <h1 class="display-4" style="color: black; font-family:'poppins';" >Selamat Datang
                     di Sales University <span style="font-size: 40px;">
                     </span> </h1>
                 <p>Hello Students! , Ini merupakan halaman utama Sales University ! Selamat belajar ya students!</p>
@@ -17,7 +17,7 @@
 
 
 <div class="container pt-3" style="min-height: 100vh;">
-    <div class="card mb-3 shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+    <div class="card mb-3 shadow bg-white mx-auto p-4 buat-text" style="width: 100%; border-radius:20px;">
         <h2>Selamat Datang <?= $this->session->userdata('nama') ?> 👋🏻</h2>
         <p class="lead">Semoga aktivitas belajarmu disini menyenangkan.</p>
         <hr class="my-4">
@@ -25,7 +25,7 @@
         <a class="btn btn-primary btn-lg" href="<?= base_url('user/all_semester') ?>" role="button">Course</a>
     </div>
     <div class="masonry">
-        <div class="card shadow bg-white mx-auto p-4 buat-text item" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+        <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;">
             <div class="card-header" style="border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af);
 ">
                 <h5 style="color: white;">Absensi</h5>
@@ -34,7 +34,7 @@
                 <div class="row mb-3 justify-content-center" style="color: black; font-family: 'poppins';">
                     <div class="col-md-6 mt-1 text-center">
                         <img class="rounded-circle" width="100px" alt="100x100" src="<?= base_url('assets/profile_picture/') . $user->image_user ?>" data-holder-rendered="true">
-                        <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="400"> </h1>
+                        <h1 class="display-4" style="color: black; font-family:'poppins';"> </h1>
                         <h5><?= $user->nama ?></h5>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <div class="card shadow bg-white mx-auto p-4 buat-text item" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af)">
+        <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af)">
             <div class="card-header">
                 <h6 style="color: white;">Aktivitas Belajar</h6>
             </div>
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="card shadow bg-white mx-auto p-4 buat-text item" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px; ">
+        <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px; ">
             <div class="card-header" style="border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af);
 ">
                 <h6 style="color: white;">Jadwal Live Kelas Hari Ini</h6>
@@ -121,7 +121,7 @@
             </div>
         </div>
 
-        <div class="card shadow bg-white mx-auto p-4 buat-text item" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+        <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;">
             <div class="card-header" style="border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af);
 ">
                 <h6 style="color: white;">Recent Video</h6>
@@ -143,8 +143,6 @@
     </div>
 </div>
 
-<<<<<<< HEAD
-=======
 <!-- Modal Absen -->
 <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -165,6 +163,17 @@
         </div>
     </div>
 </div>
+<?php if ($this->session->flashdata('sukses-login')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Selamat Datang',
+            text: 'Anda berhasil Login',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    </script>
+<?php endif; ?>
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
@@ -223,6 +232,5 @@
         });
     }
 </script>
->>>>>>> 3101ac8658998f9f20f34d6c0d7ad9260ce068d9
 <!-- End Class Card -->
 <?php $this->load->view('user/template_user/footer'); ?>

@@ -32,7 +32,7 @@
                         </h4>
                         <p class="text-muted">Sebelum masuk ke halaman Mentor, anda harus login terlebih dahulu sebagai
                             Mentor. silahkan isi data dibawah untuk melanjutkan.</p>
-                        <form method="post" action="<?= base_url('welcome/mentor') ?>" class="needs-validation" novalidate="">
+                        <form method="post" action="<?= base_url('auth/mentor') ?>" class="needs-validation" novalidate="">
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
@@ -64,8 +64,7 @@
                             <div class="mb-5 pb-3">
                                 <h1 class="mb-2 display-4 font-weight-bold text-white">Selamat datang!</h1>
                                 <h5 class="font-weight-normal text-muted-transparent text-white">Silahkan login untuk
-                                    masuk ke
-                                    halaman Mentor.</h5>
+                                    masuk ke halaman Mentor.</h5>
                             </div>
                             <!-- Made with <span class="text-danger"> &#10084;</span> by <a class="text-light bb" target="_blank" href="https://syauqizaidan.github.io/">Syaauqi Zaaidan</a> - Image by <a class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a> -->
                         </div>

@@ -108,13 +108,14 @@ class User extends CI_Controller
         //     'data' => $data['mapel']
         // ]), 0, '/');
 
-        $this->db->insert('activity', [
-            'id_user' => $this->session->userdata('id_user'),
-            'nama_activity' => $data['mapel']->nama_mapel,
-            'url' => current_url(),
-            'type' => 'course'
-        ]);
-
+        if ($data['mapel']->is_zoom == 0) {
+            $this->db->insert('activity', [
+                'id_user' => $this->session->userdata('id_user'),
+                'nama_activity' => $data['mapel']->nama_mapel,
+                'url' => current_url(),
+                'type' => 'course'
+            ]);
+        }
 
 
         // var_dump($data['semester']);
@@ -528,12 +529,6 @@ class User extends CI_Controller
         $this->db->update('status_mapel', $data);
     }
 
-
-    public function registration()
-    {
-        $this->load->view('user/registration');
-        $this->load->view('template/footer');
-    }
 
     public function upload_tugas()
     {

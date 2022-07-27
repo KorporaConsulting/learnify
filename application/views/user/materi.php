@@ -3,8 +3,8 @@
 
 <!-- Start Greetings Card -->
 <div class="container">
-    <div class="card shadow bg-white mx-auto p-4 buat-text " data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
-        <div class="row" style="color: black; font-family: 'poppins';">
+    <div class="card shadow bg-white mx-auto p-4 buat-text " data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;background-image: linear-gradient(to right, #2c3e50, #4ca1af)">
+        <div class="row" style="color: white; font-family: 'poppins';">
 
             <?php if ($mapel->is_zoom == 1) {
                 $date_mulai = date_create($mapel->tgl_mulai);
@@ -12,7 +12,7 @@
 
             ?>
                 <div class="col-md-8 mt-1">
-                    <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400"><?= $mapel->nama_mapel ?>
+                    <h1 class="display-4" style="color: white; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400"><?= $mapel->nama_mapel ?>
                     </h1>
                     <h4>Hello Students!, Ini merupakan halaman Live Kelas</h4>
                     <h3><a href="<?= base_url('user/semester/' . $semester->semester) ?>" class="badge badge-info"><i class="fa fa-arrow-left"></i> Kembali ke List Course</a></h3>
@@ -34,7 +34,7 @@
                 <?php } ?>
             <?php } else { ?>
                 <div class="col-md-8 mt-1">
-                    <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Materi Course <?= $mapel->nama_mapel ?>
+                    <h1 class="display-4" style="color: white; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400"><?= $mapel->nama_mapel ?>
                     </h1>
                     <p>Hello Students!, Ini merupakan halaman Materi Silahkan pilih materi yang dapat kamu
                         akses </p>
@@ -137,6 +137,7 @@
         </div>
     </div>
 <?php } ?>
+
 </div>
 <!-- Modal Absen -->
 <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">

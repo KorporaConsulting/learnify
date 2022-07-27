@@ -13,6 +13,7 @@ class Admin extends CI_Controller
         $this->load->helper('url');
         $this->load->library('upload');
         $this->load->helper('download');
+        date_default_timezone_set('Asia/Jakarta');
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('login_admin')) {
             redirect('welcome/admin');
@@ -72,7 +73,10 @@ class Admin extends CI_Controller
             } else {
                 $image = 'nill.svg';
             }
-            $nis = 'SUS-' . strtotime($this->input->post('ttl', true)) . rand(111, 999);
+            $last_id = $this->db->select_max('id_user')->get('user')->row();
+            if ($last_id == "") $last_id = 0;
+
+            $nis = 'SUS-' . date("Y") . strtotime($this->input->post('ttl', true)) .  ($last_id->id_user + 1);
 
             $data = [
                 'nis' => $nis,
@@ -118,10 +122,19 @@ class Admin extends CI_Controller
     public function data_siswa()
     {
         $this->load->model('m_siswa');
-
         $data['user'] = $this->m_siswa->tampil_data()->result();
         $this->load->view('admin/siswa/data_siswa', $data);
     }
+
+    public function progress_data_siswa()
+    {
+        $this->load->model('m_siswa');
+
+        $data['user'] = $this->m_siswa->progress_data_siswa()->result();
+        $this->load->view('admin/siswa/data_siswa', $data);
+    }
+
+
 
     public function detail_siswa($id)
     {

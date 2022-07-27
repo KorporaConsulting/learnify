@@ -44,7 +44,17 @@
     </div>
     <!-- </div> -->
 </div>
-
+<?php if ($this->session->flashdata('sukses-login')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Selamat Datang',
+            text: 'Anda berhasil Login',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    </script>
+<?php endif; ?>
 
 <!-- End Class Card -->
 <?php $this->load->view('guru/template_guru/footer'); ?>

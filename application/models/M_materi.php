@@ -30,6 +30,14 @@ class M_materi extends CI_Model
         $this->db->where('id_mapel', $id);
         return  $this->db->get();
     }
+    public function get_all_mapel()
+    {
+        $this->db->select('*');
+        $this->db->from('mapel');
+        $this->db->where('is_zoom', 0);
+        $this->db->limit(10);
+        return  $this->db->get();
+    }
 
     public function get_materi($slug)
     {

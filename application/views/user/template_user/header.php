@@ -5,8 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="Learnify dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
-    <meta content="Learnify, E-learning, Open Source, Syauqi Zaidan Khairan Khalaf, github, programmer indonesia" name="keywords" />
+    <!-- <meta content="Learnify dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" /> -->
+    <!-- <meta content="Learnify, E-learning, Open Source, Syauqi Zaidan Khairan Khalaf, github, programmer indonesia" name="keywords" /> -->
     <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/') ?>img/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/') ?>img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/') ?>img/favicon/favicon-16x16.png">
@@ -53,14 +53,6 @@
         })
     </script>
 
-
-    <!-- <style>
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: red;
-            border-radius: 10px;
-        }
-    </style> -->
 </head>
 
 <body>
@@ -100,7 +92,7 @@
                                     <!-- <a class="dropdown-item" href="javascript:void(0)">Hai, <?php echo $this->session->userdata('nama'); ?></a> -->
                                     <a class="dropdown-item" href="<?= base_url('user/profile') ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                                     <a class="dropdown-item" href="<?= base_url('user/jadwal') ?>"><i class="fa fa-list-alt" aria-hidden="true"></i> Jadwal Live Kelas</a>
-                                    <a class=" dropdown-item text-danger" href="<?= base_url('welcome/logout') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                                    <a class=" dropdown-item text-danger" href="<?= base_url('auth/logout') ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
                                 </div>
                             </li>
                             <!-- <li class="nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>

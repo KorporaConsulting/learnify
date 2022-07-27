@@ -19,21 +19,21 @@
 <section class="finance_area">
     <div class="container">
         <div class="finance_inner row">
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="finance_item">
-                    <div data-aos="fade-right" data-aos-duration="1600" class="media">
+                    <div class="media">
                         <div class="d-flex">
                             <i class="lnr lnr-users"></i>
                         </div>
                         <div class="media-body">
-                            <h5>Admin, User & Guru Data Management</h5>
+                            <h5>Mentor Berkualitas</h5>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="finance_item">
-                    <div data-aos="fade-right" data-aos-duration="1800" class="media">
+                    <div class="media">
                         <div class="d-flex">
                             <i class="lnr lnr-file-empty"></i>
                         </div>
@@ -43,26 +43,14 @@
                     </div>
                 </div>
             </div>
-            <div data-aos="fade-right" data-aos-duration="2000" class="col-lg-3 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
                 <div class="finance_item">
                     <div class="media">
                         <div class="d-flex">
                             <i class="lnr lnr-camera-video"></i>
                         </div>
                         <div class="media-body">
-                            <h5>E-Learning Berbasis Video dan Disqus</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div data-aos="fade-right" data-aos-duration="2200" class="col-lg-3 col-sm-6">
-                <div class="finance_item">
-                    <div class="media">
-                        <div class="d-flex">
-                            <i class="lnr lnr-tag"></i>
-                        </div>
-                        <div class="media-body">
-                            <h5>Gratis dengan Lisensi MIT Open-Source</h5>
+                            <h5>E-Learning Berbasis Video dan Live Class</h5>
                         </div>
                     </div>
                 </div>
@@ -100,93 +88,18 @@
             <h2 data-aos="fade-up" data-aos-duration="1600">Pelajaran Yang Tersedia di Sales University</h2>
             <p data-aos="fade-up" data-aos-duration="1800">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
         </div>
-        <div class="row courses_inner">
-            <div class="col-lg-9">
-                <div class="grid_inner">
-                    <div class="grid_item wd55">
-                        <div class="courses_item" data-aos="fade-right" data-aos-duration="1800">
-                            <img src="<?= base_url('assets/') ?>img/courses/course-1.jpg" alt="">
-                            <div class="hover_text">
-                                <a class="cat" href="#">Gratis</a>
-                                <a href="javaScript:void(0);">
-                                    <h4>Kelas Selling</h4>
-                                </a>
-                                <ul class="list">
-                                    <li><a href="#"><i class="lnr lnr-users"></i>54</a></li>
-                                    <li><a href="#"><i class="lnr lnr-bubble"></i> 0</a></li>
-                                    <!-- <li><a href="#"><i class="lnr lnr-user"></i>Guru Matematika SMKN 1 Ciamis</a> -->
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid_item wd44">
-                        <div class="courses_item" data-aos="fade-down" data-aos-duration="1800">
-                            <img src="<?= base_url('assets/') ?>img/courses/course-2.jpg" alt="">
-                            <div class="hover_text">
-                                <a class="cat" href="#">Gratis</a>
-                                <a href="javaScript:void(0);">
-                                    <h4>Kelas Selling</h4>
-                                </a>
-                                <ul class="list">
-                                    <li><a href="#"><i class="lnr lnr-users"></i> 34</a></li>
-                                    <li><a href="#"><i class="lnr lnr-bubble"></i> 0</a></li>
-                                    <!-- <li><a href="#"><i class="lnr lnr-user"></i> Guru IPA SMKN 1 Ciamis</a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid_item wd44">
-                        <div class="courses_item" data-aos="fade-right" data-aos-duration="1800">
-                            <img src="<?= base_url('assets/') ?>img/courses/course-4.jpg" alt="">
-                            <div class="hover_text">
-                                <a class="cat" href="#">Gratis</a>
-                                <a href="javaScript:void(0);">
-                                    <h4>Kelas Selling</h4>
-                                </a>
-                                <ul class="list">
-                                    <li><a href="#"><i class="lnr lnr-users"></i> 63</a></li>
-                                    <li><a href="#"><i class="lnr lnr-bubble"></i> 0</a></li>
-                                    <!-- <li><a href="#"><i class="lnr lnr-user"></i> Guru English SMKN 1 Ciamis</a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid_item wd55">
-                        <div class="courses_item" data-aos="fade-up" data-aos-duration="1800">
-                            <img src="<?= base_url('assets/') ?>img/courses/course-5.jpg" alt="">
-                            <div class="hover_text">
-                                <a class="cat" href="#">Gratis</a>
-                                <a href="javaScript:void(0);">
-                                    <h4>Kelas Selling</h4>
-                                </a>
-                                <ul class="list">
-                                    <li><a href="#"><i class="lnr lnr-users"></i> 24</a></li>
-                                    <li><a href="#"><i class="lnr lnr-bubble"></i> 0</a></li>
-                                    <!-- <li><a href="#"><i class="lnr lnr-user"></i> Guru Indonesia SMKN 1 Ciamis</a> -->
-                                    </li>
-                                </ul>
-                            </div>
+        <div class="row mt-4 mb-5 justify-content-center">
+            <?php foreach ($course as $c) { ?>
+                <div class="col-md-4 ">
+                    <div class="card shadow bg-white mx-auto p-4 buat-text text-center mb-3" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
+                        <img class="card-img-top" src="<?= base_url('assets/img/courses/' . $c->image) ?>" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: black;"><?= $c->nama_mapel ?></h5>
+                            <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="course_item" data-aos="fade-left" data-aos-duration="1800">
-                    <img src="<?= base_url('assets/') ?>img/courses/course-3.jpg" alt="">
-                    <div class="hover_text">
-                        <a class="cat" href="#">Gratis</a>
-                        <a href="javaScript:void(0);">
-                            <h4>Kelas Selling</h4>
-                        </a>
-                        <ul class="list">
-                            <li><a href="#"><i class="lnr lnr-users"></i> 35</a></li>
-                            <li><a href="#"><i class="lnr lnr-bubble"></i> 0</a></li>
-                            <!-- <li><a href="#"><i class="lnr lnr-user"></i> Guru Agama SMKN 1 Ciamis</a></li> -->
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <?php  } ?>
         </div>
     </div>
 </section>
