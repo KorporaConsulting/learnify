@@ -126,12 +126,12 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/data_siswa', $data);
     }
 
-    public function progress_data_siswa()
+    public function progres_data_siswa()
     {
         $this->load->model('m_siswa');
 
         $data['user'] = $this->m_siswa->progress_data_siswa()->result();
-        $this->load->view('admin/siswa/data_siswa', $data);
+        $this->load->view('admin/siswa/progres_data_siswa', $data);
     }
 
 
