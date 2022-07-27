@@ -880,10 +880,24 @@ class User extends CI_Controller
             ->join('enroll', 'user.id_user = enroll.id_user', 'left')
             ->get('user')
             ->row();
+
+        $data['harga_enroll'] = $this->db->get('harga_enroll')->row();
         // header('Content-type: application/json');
         // echo json_encode($data);
         // die;
         $this->load->view('user/payment', $data);
+    }
+
+    public function detail_pembayaran ()
+    {
+        if($this->input->get('type')){
+            $data['is_cicilan'] = true;
+            $data['cicilan'] = 3;
+        }else{
+            $data['is_cicilan'] = false;
+        }
+
+        $this->load->view('user/detail_payment', $data);
     }
 
     public function pay_with_installment()
@@ -1048,5 +1062,41 @@ class User extends CI_Controller
         $this->pdf->setFileName('Sertifikat_' . $data['user']->nama . '.pdf');
         $this->pdf->setKertas('landscape');
         $this->pdf->load_view('user/print_sertifikat', $data);
+
+    }
+    public function check_voucher()
+    {
+        header('Content-type: application/json');
+
+        $check = $this->db->where('kode', $this->input->post('kode_voucher'))->get('voucher')->row();
+
+        if ($check != null) {
+            if($check->kode === $this->input->post('kode_voucher')){
+                if ($check->expired_at > date("Y-m-d")) {
+                    $data = [
+                        'success' => true,
+                        'message' => 'Voucher dapat digunakan'
+                    ];
+                } else {
+                    $data = [
+                        'success' => false,
+                        'message' => 'Voucher expired'
+                    ];
+                }
+            }else{
+                $data = [
+                    'success' => false,
+                    'message' => 'Kode Voucher tidak tersedia',
+                ];
+            }
+        } else {
+            $data = [
+                'success' => false,
+                'message' => 'Kode Voucher tidak tersedia',
+            ];
+        }
+
+
+        echo json_encode($data);
     }
 }

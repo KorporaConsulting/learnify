@@ -1946,4 +1946,16 @@ class Admin extends CI_Controller
         // die;
         $this->load->view('admin/siswa/absensi', $data);
     }
+    public function diskon()
+    {
+        $this->load->helper('voucher');
+        $voucher = $this->voucher->generate();
+        $check = $this->db->where('kode', $voucher)->get('voucher')->num_rows();
+        
+        if($check > 0){
+            $voucher = $this->voucher->generate();
+        }
+
+        
+    }
 }

@@ -23,12 +23,12 @@
         <?php else : ?>
             Bayar Angsuran anda sebelum <?= $user->expired_at ?>
             <div>
-                <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="<?= $user->tipe_angsuran ?>" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Bayar Cicilan ke <?= $user->angsuran+1 ?></button>
+                <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="<?= $user->tipe_angsuran ?>" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Bayar Cicilan ke <?= $user->angsuran + 1 ?></button>
             </div>
         <?php endif; ?>
     <?php else : ?>
         <div class="row">
-            <div class="col-lg-6 mb-3">
+            <!-- <div class="col-lg-6 mb-3">
                 <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos="fade-down" data-aos-duration="400" style="width: 100%; border-radius:20px;">
                     <div class="card-header">
                         Bayar dengan Cicilan
@@ -39,10 +39,10 @@
                         </div>
                     </div>
                     <div>
-                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="3" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Rp. 1.000.000 (3x)</button>
+                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="3" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Rp. <?= number_format($harga_enroll->harga / 3, 2, ",", ".") ?> (3x)</button>
                     </div>
                     <div>
-                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 6x" data-loop="6" class="btn btn-block btn-primary pay" data-price="1000000" data-angsuran="1">Rp. 500.000 (6x)</button>
+                        <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 6x" data-loop="6" class="btn btn-block btn-primary pay" data-price="1000000" data-angsuran="1">Rp. <?= number_format($harga_enroll->harga / 6, 2, ",", ".") ?> (6x)</button>
                     </div>
                 </div>
             </div>
@@ -57,10 +57,11 @@
                         </div>
                     </div>
                     <div>
-                        <button data-url="<?= site_url('user/pay_without_installment') ?>" data-name="Kelas Pembayaran Total" data-loop="1" class="btn btn-block btn-primary pay" data-price="3000000" data-angsuran="0">Rp. 3.000.000 (1x)</button>
+                        <button data-url="<?= site_url('user/pay_without_installment') ?>" data-name="Kelas Pembayaran Total" data-loop="1" class="btn btn-block btn-primary pay" data-price="3000000" data-angsuran="0">Rp. <?= number_format($harga_enroll->harga, 2, ",", ".") ?> (1x)</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
+            <a href="<?= site_url('user/detail_pembayaran?type=3') ?>" class="btn btn-primary">Rp. <?= number_format($harga_enroll->harga / 3, 2, ",", ".") ?> (3x)</a>
         </div>
     <?php endif; ?>
 </div>
@@ -82,7 +83,6 @@
                     if (res.success) {
                         window.location.href = res.duitku.paymentUrl;
                     }
-
                 },
                 error: function(err) {
                     console.log(err)

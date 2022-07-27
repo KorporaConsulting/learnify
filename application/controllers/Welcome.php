@@ -3,7 +3,59 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Welcome extends CI_Controller
 {
+    public function check_voucher()
+    {
+        header('Content-type: application/json');
 
+        $check = $this->db->where('kode', $this->input->post('kode_voucher'))->get('voucher')->row();
+        
+        if ($check != null) {
+            if ($check->expired_at > date("Y-m-d")) {
+                $data = [
+                    'success' => true,
+                    'Message' => 'Voucher dapat digunakan'
+                ];
+
+            } else {
+                $data = [
+                    'success' => false,
+                    'message' => 'Voucher expired'
+                ];
+                
+            }
+        } else {
+            $data = [
+                'success' => false,
+                'message' => 'Kode Voucher tidak tersedia',
+            ];
+        }
+
+
+        echo json_encode($data);
+    }
+
+    public function check($voucher){
+        $this->load->helper('voucher');
+        $check = $this->db->where('kode', $voucher)->get('voucher')->num_rows();
+        if ($check > 0) {
+            $voucher = generateRandomString();
+            $this->check($voucher);
+        }else{
+            return $voucher;
+        }
+    }
+
+    public function voucher()
+    {
+        $this->load->helper('voucher');
+        $voucher = generateRandomString();
+        $resultVoucher = $this->check($voucher);
+        echo $resultVoucher;
+        $data['kode'] = $resultVoucher;
+        $this->db->insert('voucher', $data);
+
+    }
+    
     public function payment_callback()
     {
         $Date = date("Y-m-d");
