@@ -84,8 +84,13 @@
                             </li>
                             <li class="nav-item" id="navkontak"><a class="nav-link" href="<?= base_url('kontak') ?>">Kontak</a>
                             </li>
-                            <li class="nav-item" id="navkontak"><a class="nav-link" href="<?= base_url('auth/login') ?>">Masuk</a>
-                            </li>
+                            <?php if (!$this->session->userdata('id_user')) { ?>
+                                <li class="nav-item" id="navkontak"><a class="nav-link" href="<?= base_url('auth/login') ?>">Masuk</a>
+                                </li>
+                            <?php } else { ?>
+                                <li class="nav-item" id="navkontak"><a class="nav-link" href="<?= base_url('user') ?>">Masuk</a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>
