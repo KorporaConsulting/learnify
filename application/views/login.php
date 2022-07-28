@@ -19,7 +19,7 @@
                         <label class="label-font" for="
                                         exampleFormControlInput1">
                             Email</label>
-                        <input required type="text" value="<?= set_value('email'); ?>" class="form-control" name="email" autocomplete="off" id="email" placeholder="Masukan email mu disini ..">
+                        <input required type="email" value="<?= set_value('email'); ?>" class="form-control" name="email" autocomplete="off" id="email" placeholder="Masukan email mu disini ..">
                         <small class="text-danger"></small>
                     </div>
                     <div class="form-group">
