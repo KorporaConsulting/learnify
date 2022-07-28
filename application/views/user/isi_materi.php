@@ -82,27 +82,27 @@
                          </div>
                      <?php } else {
                         ?>
-                        
+
                          <style>
                              .ytp-title-channel {
                                  display: none !important;
                              }
                          </style>
-                         <div class=" card-body p-5">
-                             <div class="card shadow bg-white mx-auto p-2 buat-text" data-aos-duration="400" style="width: 100%; border-radius:15px;">
-                                 <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
-                                 <hr style="background-color: white;">
-                                 <div class="plyr__video-embed" id="player">
-                                     <!-- <div id="vid"></div> -->
-                                     <iframe id="existing-iframe-example" allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
-                                     <!-- <iframe id="existing-iframe-example" width="640" height="360" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
-                                 </div>
-                                 <div class="text-center mt-2">
-                                     <h5><?= $video->nama_video ?></h5>
-                                     <p><?= $video->desk_video ?></p>
-                                 </div>
-                             </div>
+                         <!-- <div class=" card-body p-5">
+                             <div class="card shadow bg-white mx-auto p-2 buat-text " data-aos-duration="400" style="width: 100%; border-radius:15px;"> -->
+                         <h3 class="card-title display-5"><?= $video->nama_video ?></h3>
+                         <hr style="background-color: white;">
+                         <div class="plyr__video-embed" id="player">
+                             <!-- <div id="vid"></div> -->
+                             <iframe id="existing-iframe-example" allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+                             <!-- <iframe id="existing-iframe-example" width="640" height="360" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
                          </div>
+                         <div class="text-center mt-2">
+                             <h5><?= $video->nama_video ?></h5>
+                             <p><?= $video->desk_video ?></p>
+                         </div>
+                         <!-- </div>
+                         </div> -->
                      <?php } ?>
                      <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
                          <div class="row">
@@ -436,8 +436,6 @@
      }
  </script>
  <script>
-
-
      $('#mark').click(function() {
          $.ajax({
              url: '<?= base_url('user/mark/' . $materi->id_mapel . '/' . $this->uri->segment(4)) ?>',
