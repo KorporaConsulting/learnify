@@ -17,6 +17,12 @@ class Price extends CI_Controller
 
     public function index()
     {
+        $data['user'] = $this->db
+            ->where('user.id_user', $this->session->userdata('id_user'))
+            ->join('enroll', 'user.id_user = enroll.id_user', 'left')
+            ->get('user')
+            ->row();
+
         $data['harga'] = $this->db->get('harga_enroll')->row();
         $this->load->view('user/price', $data);
         $this->load->view('template/footer');
@@ -129,10 +135,15 @@ class Price extends CI_Controller
     }
     public function pay_with_installment()
     {
+
         header('Content-type: application/json');
         $this->load->library('duitku');
         $price = 3000000 / $this->input->post('loop');
-
+        // echo json_encode([
+        //     'success' => false,
+        //     'err' => $this->input->post('name')
+        // ]);
+        // die;
         $product = [
             'nama' => $this->input->post('name'),
             'cicilan' => true,
@@ -154,7 +165,7 @@ class Price extends CI_Controller
                 $this->db->insert('transaksi', [
                     'id_user' => $this->session->userdata('id_user'),
                     'kode_transaksi' =>  $kode,
-                    'nama_transaksi' => $this->input->post('nama_product'),
+                    'nama_transaksi' => $this->input->post('name'),
                     'harga' => $price,
                 ]);
                 array_push($id_transaksi, $this->db->insert_id());

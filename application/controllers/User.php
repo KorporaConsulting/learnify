@@ -108,7 +108,7 @@ class User extends CI_Controller
         $data['course'] = $this->m_siswa->tampil_data_semester($semester, $id_user)->result();
         $data['zoom'] = $this->m_siswa->tampil_data_semester_zoom($semester, $id_user)->result();
 
-        // var_dump($data['course']);
+        // var_dump($data['zoom']);
         // die;
 
         $this->load->view('user/course', $data);

@@ -32,6 +32,7 @@
                 </div>
                 <?php if ($is_cicilan) : ?>
                     <form action="<?= site_url('price/pay_with_installment') ?>" method="POST">
+                        <input type="hidden" name="name" value="<?= $cicilan ?>x Angsuran">
                         <input type="hidden" name="loop" value="<?= $cicilan ?>">
                         <button class="btn btn-primary">Bayar</button>
                     </form>
@@ -53,7 +54,7 @@
     $(function() {
         $('#use-voucher').click(function() {
             $.ajax({
-                url: '<?= site_url("user/check_voucher") ?>',
+                url: '<?= site_url("price/check_voucher") ?>',
                 method: 'POST',
                 data: {
                     kode_voucher: $('#input-voucher').val(),
