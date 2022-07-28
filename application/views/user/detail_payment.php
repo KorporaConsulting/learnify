@@ -31,12 +31,12 @@
                     </div>
                 </div>
                 <?php if ($is_cicilan) : ?>
-                    <form action="<?= site_url('user/pay_with_installment') ?>" method="POST">
+                    <form action="<?= site_url('price/pay_with_installment') ?>" method="POST">
                         <input type="hidden" name="loop" value="<?= $cicilan ?>">
                         <button class="btn btn-primary">Bayar</button>
                     </form>
                 <?php else : ?>
-                    <form action="<?= site_url('user/pay_without_installment') ?>" method="POST">
+                    <form action="<?= site_url('price/pay_without_installment') ?>" method="POST">
                         <button class="btn btn-primary">Bayar</button>
                     </form>
                 <?php endif; ?>

@@ -18,7 +18,10 @@
 
 <div class="container pt-3" style="min-height: 100vh;">
     <div class="card mb-3 shadow bg-white mx-auto p-4 buat-text" style="width: 100%; border-radius:20px;">
-        <h2>Selamat Datang <?= $this->session->userdata('nama') ?> 👋🏻</h2>
+        <div class="row ">
+            <h2>Selamat Datang <?= $this->session->userdata('nama') ?></h2>
+            <div class="bodymovin" style="width: 50px;" data-icon="<?= base_url('assets/') ?>json/hand.json"></div>
+        </div>
         <p class="lead">Semoga aktivitas belajarmu disini menyenangkan.</p>
         <hr class="my-4">
         <p>Akses Course disini</p>
@@ -28,12 +31,13 @@
     if ($cek == false) { ?>
         <div class="shadow alert alert-warning rounded" role="alert">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="bodymovin" style="width: 200px;" data-icon="<?= base_url('assets/') ?>json/registration-animation.json"></div>
+                <div class="col-md-2">
+                    <div class="bodymovin" style="width: 100px;" data-icon="<?= base_url('assets/') ?>json/warning.json"></div>
                 </div>
                 <div class="col-md-8">
                     <strong>Profile Anda belum lengkap</strong>
                     <p>Mohon lengkapi terlebih dahulu profile Anda</p>
+                    <a class="btn btn-sm btn-primary" href="<?= base_url('user/profile') ?>" role="button">Lengkapi Profile</a>
                 </div>
             </div>
 

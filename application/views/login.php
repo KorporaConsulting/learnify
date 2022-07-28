@@ -35,14 +35,11 @@
                             Ingat saya.
                         </label>
                     </div>
-                    <p class="terms">Dengan login anda
-                        menyetujui
-                        <i>privasi dan persyaratan ketentuan
-                            hukum kami </i> .
-                        belum punya akun? daftar <a href=" <?= base_url('auth/register') ?>">
+                    <h6 class="terms mt-2"></a>
+                        Belum punya akun? daftar <a href=" <?= base_url('auth/register') ?>">
                             disini.</a>
-                    </p>
-                    <button class="btn btn-block font-weight-bold" style="background-color: #193c7f;color:white;font-size:18px;">Login
+                    </h6>
+                    <button class="btn btn-block font-weight-bold mt-3" style="background-color: #193c7f;color:white;font-size:18px;">Login
                         Sekarang!</button>
                 </form>
             </div>
@@ -82,6 +79,17 @@
             icon: 'error',
             title: 'Harap Login Terlebih Dahulu !',
             text: 'Silahkan Login Dahulu !',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    </script>
+<?php endif; ?>
+<?php if ($this->session->flashdata('sukses-regis')) : ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Silahkan Login untuk melanjuakan sesi Anda',
             showConfirmButton: false,
             timer: 2500
         });

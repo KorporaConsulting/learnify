@@ -22,6 +22,9 @@ class User extends CI_Controller
             $this->session->set_flashdata('not-login', 'Gagal!');
             redirect('welcome');
         }
+        if ($this->check_transaksi() == false) {
+            redirect('price');
+        }
     }
 
     public function check_profile()
@@ -38,9 +41,20 @@ class User extends CI_Controller
         }
     }
 
+    public function check_transaksi()
+    {
+        $cek_transaksi = $this->db->query('SELECT last_status FROM user WHERE id_user = ' . $this->session->userdata("id_user"));
+        $cek = $cek_transaksi->row();
+
+        if ($cek->last_status == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function index()
     {
-
         $data['cek'] = $this->check_profile();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
 
@@ -78,6 +92,9 @@ class User extends CI_Controller
         $this->load->view('user/index', $data);
         $this->load->view('template/footer');
     }
+
+
+
 
     public function test()
     {

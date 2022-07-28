@@ -636,7 +636,7 @@ button:focus {
 }
 
 .banner_area .banner_inner .overlay {
-	background: url(../img/banner/banner.jpg) no-repeat scroll center center;
+	/* background: url(../img/banner/banner.jpg) no-repeat scroll center center; */
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -648,7 +648,7 @@ button:focus {
 }
 
 .banner_area .banner_inner .pelajaran {
-	background: url(../img/banner/banner-pelajaran.jpg) no-repeat scroll center center;
+	/* background: url(../img/banner/banner-pelajaran.jpg) no-repeat scroll center center; */
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -660,7 +660,7 @@ button:focus {
 }
 
 .banner_area .banner_inner .kontak {
-	background: url(../img/banner/banner-kontak.jpg) no-repeat scroll center center;
+	/* background: url(../img/banner/banner-kontak.jpg) no-repeat scroll center center; */
 	position: absolute;
 	left: 0;
 	right: 0;
