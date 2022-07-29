@@ -8,7 +8,7 @@
                 <h3 data-aos="fade-up" style="opacity: 1.0;" data-aos-duration="1600">Belajar Dimana Saja & Kapan Saja <br /> Mudah Dengan Sales University</h3>
                 <p data-aos="fade-up" data-aos-duration="1900">Dengan Sales University kemudahan kegiatan belajar mengajar dapat terpenuhi. Para guru dan siswa dapat
                     belajar meski banyak halangan atau rintangan. Nikmati Pembelajaran terstruktur dan efektif menggunakan Sales University serta kemudahan belajar dengan menggunakan aplikasi kami. </p>
-                <a data-aos="fade-up" data-aos-duration="2000" class="main_btn" href="<?= base_url('user/registration') ?>#registration">Bergabung Sekarang <span class="lnr lnr-arrow-right"></span></a>
+                <a data-aos="fade-up" data-aos-duration="2000" class="main_btn" href="<?= base_url('auth/register') ?>">Bergabung Sekarang <span class="lnr lnr-arrow-right"></span></a>
             </div>
         </div>
     </div>
