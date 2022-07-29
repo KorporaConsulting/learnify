@@ -733,6 +733,27 @@ class Admin extends CI_Controller
         $data['semester'] = $this->m_materi->tampil_data_semester()->result();
         $this->load->view('admin/mapel/update_mapel', $data);
     }
+    public function rekaman($id)
+    {
+        $this->load->model('m_materi');
+        $data['mentor'] = $this->m_guru->tampil_data()->result();
+        $data['user'] = $this->m_materi->update_mapel($id)->row();
+        $data['semester'] = $this->m_materi->tampil_data_semester()->result();
+        $this->load->view('admin/mapel/rekaman_live', $data);
+    }
+    public function insert_video()
+    {
+        $id_mapel = $this->input->post('id_mapel', true);
+        $data = [
+            'video' => htmlspecialchars($this->input->post('video', true)),
+        ];
+        $where = array(
+            'id_mapel' => $id_mapel,
+        );
+        $this->m_guru->update_data($where, $data, 'mapel');
+        $this->session->set_flashdata('success-edit', 'Berhasil!');
+        redirect(base_url('admin/data_mapel'));
+    }
     public function mapel_edit()
     {
         $this->form_validation->set_rules('nama_mapel', 'Nama', 'required|trim|min_length[1]', [
@@ -1951,11 +1972,9 @@ class Admin extends CI_Controller
         $this->load->helper('voucher');
         $voucher = $this->voucher->generate();
         $check = $this->db->where('kode', $voucher)->get('voucher')->num_rows();
-        
-        if($check > 0){
+
+        if ($check > 0) {
             $voucher = $this->voucher->generate();
         }
-
-        
     }
 }

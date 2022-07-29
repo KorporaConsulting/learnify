@@ -23,13 +23,13 @@
                                  <div class="row" style="color: black; font-family: 'poppins';">
                                      <div class="col-md-12 mt-1">
                                          <h2><?php if ($m->status == 0 && $m->kunci == 0) { ?>
-                                                 <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                 <i class="fa fa-lock float-right" title="Terkunci" style="color:red"></i>
                                                  <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
                                              <?php } elseif ($m->status == 1 && $m->kunci == 1) { ?>
                                                  <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
                                                  <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
                                              <?php } elseif ($m->status == 0 && $m->kunci == 1) { ?>
-                                                 <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                 <i class="fa fa-circle-o float-right" title="Sedang dipelajari" style="color:green"></i>
                                              <?php } ?>
                                          </h2>
                                          <h5 class="display-5" style="color: black; font-family:'poppins';" data-aos-duration="1400"><?= $m->nama_materi ?>
@@ -94,8 +94,10 @@
                          <hr style="background-color: white;">
                          <div class="plyr__video-embed" id="player">
                              <!-- <div id="vid"></div> -->
-                             <iframe id="existing-iframe-example" allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
+
+                             <iframe id="existing-iframe-example" allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" <?php if ($video->video == null) { ?> src="https://www.youtube-nocookie.com/embed/<?= $video->link ?>" <?php } else { ?>src="<?= base_url('assets/materi_video/' . $video->video) ?>" <?php } ?>></iframe>
                              <!-- <iframe id="existing-iframe-example" width="640" height="360" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
+
                          </div>
                          <div class="text-center mt-2">
                              <h5><?= $video->nama_video ?></h5>

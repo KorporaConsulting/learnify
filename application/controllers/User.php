@@ -124,12 +124,11 @@ class User extends CI_Controller
     public function course($slug)
     {
         $data['materi'] = $this->m_siswa->tampil_data_materi($slug)->result();
-        $data['live'] = $this->m_siswa->tampil_data_live($slug)->result();
+        $data['live'] = $this->m_siswa->tampil_data_live($slug)->row();
         $data['mapel'] = $this->m_siswa->tampil_data_course($slug)->row();
         $data['semester'] = $this->m_siswa->get_semester_mapel($slug)->row();
         $data['user'] = $this->m_siswa->tampil_data_user($this->session->userdata('id_user'))->row();
         $data['check_absensi'] = $this->m_siswa->check_absensi($data['mapel']->id_mapel, $this->session->userdata('id_user'));
-
         $data['total_materi'] = $this->m_siswa->total_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
         $data['done_materi'] = $this->m_siswa->done_status($this->session->userdata('id_user'), $data['mapel']->id_mapel);
 

@@ -117,16 +117,21 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('#course').on('click', function() {
-            $("#icon-course-down").hide();
-            $("#icon-course-up").show();
-        });
-    });
-
-    $(document).ready(function() {
-        $('#live-class').on('click', function() {
-            $("#icon-live-class").hide();
-        });
+        $('.collapse')
+            .on('shown.bs.collapse', function() {
+                $(this)
+                    .parent()
+                    .find(".fa-arrow-down")
+                    .removeClass("fa-arrow-down")
+                    .addClass("fa-arrow-up");
+            })
+            .on('hidden.bs.collapse', function() {
+                $(this)
+                    .parent()
+                    .find(".fa-arrow-up")
+                    .removeClass("fa-arrow-up")
+                    .addClass("fa-arrow-down");
+            });
     });
 </script>
 <!-- End Class Card -->

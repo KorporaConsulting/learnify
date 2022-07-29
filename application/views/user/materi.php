@@ -52,20 +52,47 @@
             <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" style="width: 100%; border-radius:10px;">
                 <div class="row" style="color: black; font-family: 'poppins';">
                     <div class="col-md-12 mt-1">
-                        <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
-                            <div class="row" style="color: black; font-family: 'poppins';">
-                                <!-- <div class="list-group"> -->
-                                <div class="col-2 text-center">
-                                    <img src="<?= base_url('assets/img/icon/ban.png') ?>" class="img-fluid" alt="">
+                        <?php
+                        $date_mulai = date_create($live->tgl_mulai);
+                        $date_selesai = date_create($live->tgl_selesai);
+                        if (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
+                            <div class="card shadow bg-white mx-auto p-4 buat-text" data-aos-duration="1400" border-radius:10px;">
+                                <div class="row" style="color: black; font-family: 'poppins';">
+                                    <!-- <div class="list-group"> -->
+                                    <div class="col-2 text-center">
+                                        <img src="<?= base_url('assets/img/icon/ban.png') ?>" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="col-10 text-center mt-5">
+                                        <h2>
+                                            Silahkan absen terlebih dahulu untuk bergabung Live Kelas
+                                        </h2>
+                                    </div>
+                                    <!-- </div> -->
                                 </div>
-                                <div class="col-10 text-center mt-5">
-                                    <h2>
-                                        Silahkan absen terlebih dahulu untuk bergabung Live Kelas
-                                    </h2>
-                                </div>
-                                <!-- </div> -->
                             </div>
-                        </div>
+                        <?php } else { ?>
+                            <h3 class="card-title display-5">Rekaman <?= $live->nama_mapel ?></h3>
+                            <hr style="background-color: white;">
+                            <?php if ($live->video == null) { ?>
+                                <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
+                                    <div class="card-body">
+                                        <h4>Rekaman Belum Tersedia</h4>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <!-- <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
+                                <div class="card-body"> -->
+                                <div class="plyr__video-embed" id="rekaman" style="width: 100%;">
+                                    <!-- <div id="vid"></div> -->
+                                    <div class="embed-responsive embed-responsive-9by16">
+                                        <iframe allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/<?= $live->video ?>"></iframe>
+                                        <!-- <iframe id="existing-iframe-example" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
+                                    </div>
+                                    <!-- </div>
+                                </div> -->
+                                </div>
+                            <?php  } ?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -76,21 +103,44 @@
             <div class="bg-white mx-auto p-4 buat-text mt-5 mb-5" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                 <div class="row" style="color: black; font-family: 'poppins';">
                     <?php
-                    $no = 1;
-                    foreach ($live as $m) {
-                        $id_mapel = $m->id_mapel;
-                    ?>
+                    $date_mulai = date_create($live->tgl_mulai);
+                    $date_selesai = date_create($live->tgl_selesai);
+                    if (strtotime(date('Y-m-d H:i:s')) >= strtotime(date_format($date_mulai, 'Y-m-d H:i:s')) && strtotime(date('Y-m-d H:i:s')) <= strtotime(date_format($date_selesai, 'Y-m-d H:i:s'))) { ?>
                         <div class="col-md-12 mt-3">
                             <div class="list-group">
                                 <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
                                     <div class="card-body">
-                                        <h2 class="card-title" style="color: black;"><?= $m->nama_mapel ?></h2>
-                                        <a class="btn btn-primary" href="<?= $m->link ?>"><b style="color: white;">Link Zoom</b></a>
+                                        <h2 class="card-title" style="color: black;"><?= $live->nama_mapel ?></h2>
+                                        <a class="btn btn-primary" href="<?= $live->link ?>"><b style="color: white;">Link Zoom</b></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php  } else { ?>
+                        <h3 class="card-title display-5">Rekaman <?= $live->nama_mapel ?></h3>
+                        <hr style="background-color: white;">
+                        <?php if ($live->video == null) { ?>
+                            <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
+                                <div class="card-body">
+                                    <h4>Rekaman Belum Tersedia</h4>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <!-- <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px; height: 100%;">
+                                <div class="card-body"> -->
+                            <div class="plyr__video-embed" id="rekaman" style="width: 100%;">
+                                <!-- <div id="vid"></div> -->
+                                <div class="embed-responsive embed-responsive-9by16">
+                                    <iframe allowfullscreen allowtransparency allow="autoplay" class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/<?= $live->video ?>"></iframe>
+                                    <!-- <iframe id="existing-iframe-example" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0"></iframe> -->
+                                </div>
+                                <!-- </div>
+                                </div> -->
+                            </div>
+                        <?php  } ?>
+                    <?php  } ?>
+
+
                 </div>
             </div>
         </div>
@@ -115,13 +165,13 @@
                                     <div class="card shadow bg-white mx-auto p-4 buat-text text-center" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                         <h3>
                                             <?php if ($m->status == 0 && $m->kunci == 0) { ?>
-                                                <i class="fa fa-lock float-right" title="Selesai" style="color:red"></i>
+                                                <i class="fa fa-lock float-right" title="Terkunci" style="color:red"></i>
                                                 <!-- <span class="badge badge-warning badge-pill float-right">Belum selesai</span> -->
                                             <?php } elseif ($m->status == 1 && $m->kunci == 1) { ?>
                                                 <i class="fa fa-check-circle float-right" title="Selesai" style="color:#33b5e5"></i>
                                                 <!-- <span class="badge badge-primary badge-pill float-right">Selesai</span> -->
                                             <?php } elseif ($m->status == 0 && $m->kunci == 1) { ?>
-                                                <i class="fa fa-circle-o float-right" title="Selesai" style="color:green"></i>
+                                                <i class="fa fa-circle-o float-right" title="Sedang Dipelajari" style="color:green"></i>
                                             <?php } ?>
                                         </h3>
                                         <div class="card-body">
@@ -241,5 +291,7 @@
         });
     }
 </script>
+
+
 <!-- End Class Card -->
 <?php $this->load->view('user/template_user/footer'); ?>

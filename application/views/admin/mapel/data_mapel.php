@@ -116,8 +116,8 @@ $this->load->view('admin/template_admin/sidebar');
                                             <?php echo $u->semester ?>
                                         </td>
                                         <td class="text-center">
+                                            <a href="<?php echo site_url('admin/rekaman/' . $u->id_mapel); ?>" class="btn btn-warning">Input Rekaman ⭢</a>
                                             <a href="<?php echo site_url('admin/update_mapel/' . $u->id_mapel); ?>" class="btn btn-info">Edit ⭢</a>
-
                                             <a onclick="yourConfirm(<?= $u->id_mapel ?>,<?= $u->id_semester ?>);" href="javascript:void(0);" class="btn btn-danger">Delete ✖</a>
                                         </td>
 
