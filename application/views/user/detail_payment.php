@@ -29,15 +29,22 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="use-voucher">Gunakan</button>
                     </div>
+
+                </div>
+                <div id="harga_dibayarkan" class="mb-4">
+                    Rp. <span class="" id="harga" data-harga="<?= $harga_enroll->harga ?>"><?= number_format($harga_enroll->harga / $this->input->get('type')) ?></span>
                 </div>
                 <?php if ($is_cicilan) : ?>
                     <form action="<?= site_url('user/pay_with_installment') ?>" method="POST">
                         <input type="hidden" name="loop" value="<?= $cicilan ?>">
+                        <input type="hidden" name="harga" value="<?= $harga_enroll->harga / $cicilan ?>" id="hargaSubmit">
+                        <input type="hidden" name="nama_product" value="Cicilan <?= $cicilan ?>X">
+                        <input type="hidden" name="kode_voucher" value="Cicilan <?= $cicilan ?>X" id="kode_voucher">
                         <button class="btn btn-primary">Bayar</button>
                     </form>
                 <?php else : ?>
                     <form action="<?= site_url('user/pay_without_installment') ?>" method="POST">
-                        <button class="btn btn-primary">Bayar</button>
+                        <button type="button" class="btn btn-primary">Bayar</button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -49,8 +56,10 @@
 
 
 <script src="https://app-sandbox.duitku.com/lib/js/duitku.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
     $(function() {
+
         $('#use-voucher').click(function() {
             $.ajax({
                 url: '<?= site_url("user/check_voucher") ?>',
@@ -61,9 +70,23 @@
                 success: function(res) {
                     if (res.success) {
                         const html = `<div class="alert alert-success">${res.message}</div>`;
+                        const harga = $('#harga').data('harga')
+                        let newHarga;
+                        if (res.data.is_percentage > 0) {
+                            newHarga = (harga - (harga / 100) * res.data.potongan) / '<?= $this->input->get('type') ?>'
+                            $('#hargaSubmit').val(newHarga);
+                            $('#kode_voucher').val($('#input-voucher').val());
+                            $('#harga').html(numeral(newHarga).format('0,0'))
+                        } else {
+                            $('#harga').html(newHarga)
+
+                        }
                         $('#wrap-alert').html(html)
                     } else {
                         const html = `<div class="alert alert-danger">${res.message}</div>`;
+
+
+
                         $('#wrap-alert').html(html)
                     }
                     console.log(res);

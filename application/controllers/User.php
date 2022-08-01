@@ -901,14 +901,15 @@ class User extends CI_Controller
             $data['is_cicilan'] = false;
         }
 
+        $data['harga_enroll'] = $this->db->get('harga_enroll')->row();
+
         $this->load->view('user/detail_payment', $data);
     }
 
     public function pay_with_installment()
     {
-        header('Content-type: application/json');
         $this->load->library('duitku');
-        $price = 3000000 / $this->input->post('loop');
+        $price = (int) $this->input->post('harga');
 
         $product = [
             'nama' => $this->input->post('name'),
@@ -916,6 +917,8 @@ class User extends CI_Controller
             'Detail Product' => 'Cicilan Pertama',
             'price' => $price
         ];
+
+        $this->db->where('id_user', $this->session->userdata('id_user'))->update('user', ['voucher' => $this->input->post('kode_voucher')]);
 
         $payment_setting = $this->db->where('is_active', 1)->get('payment_setting')->row();
 
@@ -935,6 +938,7 @@ class User extends CI_Controller
                 'harga' => $price,
                 'referenceId' => $data['data']['reference']
             ]);
+
             array_push($id_transaksi, $this->db->insert_id());
             $user = $this->db->where('id_user', $this->session->userdata('id_user'))->get('user')->row();
             $angsuran = 0;
@@ -947,18 +951,10 @@ class User extends CI_Controller
                 'angsuran' => $angsuran,
                 'tipe_angsuran' => $this->input->post('loop')
             ]);
-
-            echo json_encode([
-                'duitku' => $data['data'],
-                'success' => true,
-                'id_transaksi' => $id_transaksi
-            ]);
-            die;
+            redirect($data['data']['paymentUrl']);
         }
-        echo json_encode([
-            'success' => false,
-            'err' => $data['data']
-        ]);
+        
+        echo json_encode($data['data']);
     }
 
 
@@ -1064,6 +1060,7 @@ class User extends CI_Controller
             if($check->kode === $this->input->post('kode_voucher')){
                 if ($check->expired_at > date("Y-m-d")) {
                     $data = [
+                        'data' => $check,
                         'success' => true,
                         'message' => 'Voucher dapat digunakan'
                     ];
