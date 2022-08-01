@@ -1,0 +1,21 @@
+Date:2022-07-13 11:32:59
+METHOD:POST
+FUNCTION:Duitku\Pop->createInvoice
+URL:https://api-sandbox.duitku.com/api/merchant/createInvoice
+REQUEST:{"paymentAmount":10000,"merchantOrderId":1657686779,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60}
+RESPONSE:{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"One or more validation errors occurred.","status":400,"traceId":"|ba48291b-46db1beda8eaac32.","errors":{"$.merchantOrderId":["The JSON value could not be converted to System.String. Path: $.merchantOrderId | LineNumber: 0 | BytePositionInLine: 51."]}}
+
+Date:2022-07-13 11:33:35
+METHOD:POST
+FUNCTION:Duitku\Pop->createInvoice
+URL:https://api-sandbox.duitku.com/api/merchant/createInvoice
+REQUEST:{"paymentAmount":10000,"merchantOrderId":1657686815,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60}
+RESPONSE:{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"One or more validation errors occurred.","status":400,"traceId":"|ba48291d-46db1beda8eaac32.","errors":{"$.merchantOrderId":["The JSON value could not be converted to System.String. Path: $.merchantOrderId | LineNumber: 0 | BytePositionInLine: 51."]}}
+
+Date:2022-07-13 11:34:40
+METHOD:POST
+FUNCTION:Duitku\Pop->createInvoice
+URL:https://api-sandbox.duitku.com/api/merchant/createInvoice
+REQUEST:{"paymentAmount":10000,"merchantOrderId":1657686880,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60}
+RESPONSE:{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"One or more validation errors occurred.","status":400,"traceId":"|ba482920-46db1beda8eaac32.","errors":{"$.merchantOrderId":["The JSON value could not be converted to System.String. Path: $.merchantOrderId | LineNumber: 0 | BytePositionInLine: 51."]}}
+

@@ -1,0 +1,35 @@
+Date:2022-07-19 09:24:25
+METHOD:POST
+FUNCTION:Duitku\Api->createInvoice
+URL:https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry
+REQUEST:{"paymentAmount":10000,"paymentMethod":"BT","merchantOrderId":1658197464,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://YOUR_SERVER/callback","returnUrl":"http://YOUR_SERVER/return","expiryPeriod":60,"merchantCode":"DS12776","signature":"53239f44288c424c5f9622cbdd503b3f"}
+RESPONSE:{"merchantCode":"DS12776","reference":"DS12776J58E8MTTG4XQMPS","paymentUrl":"https://sandbox.duitku.com/topup/topupdirectv2.aspx?ref=BTFLRWLA0HKA68LYF","vaNumber":"8680011280595528","amount":"10000","statusCode":"00","statusMessage":"SUCCESS"}
+
+Date:2022-07-19 09:28:14
+METHOD:POST
+FUNCTION:Duitku\Api->createInvoice
+URL:https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry
+REQUEST:{"paymentAmount":10000,"paymentMethod":"BT","merchantOrderId":1658197693,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://YOUR_SERVER/callback","returnUrl":"http://YOUR_SERVER/return","expiryPeriod":60,"merchantCode":"DS12776","signature":"508d072caf255a87a78fda92d6a31be2"}
+RESPONSE:{"merchantCode":"DS12776","reference":"DS12776TYL0ASUC2X585C6","paymentUrl":"https://sandbox.duitku.com/topup/topupdirectv2.aspx?ref=BT8CETPHMWHWSYXEB","vaNumber":"8680016946615230","amount":"10000","statusCode":"00","statusMessage":"SUCCESS"}
+
+Date:2022-07-19 09:29:33
+METHOD:POST
+FUNCTION:Duitku\Api->createInvoice
+URL:https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry
+REQUEST:{"paymentAmount":10000,"paymentMethod":"BT","merchantOrderId":1658197772,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60,"merchantCode":"DS12776","signature":"7f6d88be755f0df519f8cbee8b21f470"}
+RESPONSE:{"merchantCode":"DS12776","reference":"DS12776E4SPZKQZRQY1EDQ","paymentUrl":"https://sandbox.duitku.com/topup/topupdirectv2.aspx?ref=BT4IWZCKY27YX8EJH","vaNumber":"8680011803542501","amount":"10000","statusCode":"00","statusMessage":"SUCCESS"}
+
+Date:2022-07-19 09:30:48
+METHOD:POST
+FUNCTION:Duitku\Api->createInvoice
+URL:https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry
+REQUEST:{"paymentAmount":10000,"paymentMethod":"BT","merchantOrderId":1658197848,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60,"merchantCode":"DS12776","signature":"308a20e76d8cbb286ff3c89a73faf3f3"}
+RESPONSE:{"merchantCode":"DS12776","reference":"DS12776TBVS7B1PMC8LCPG","paymentUrl":"https://sandbox.duitku.com/topup/topupdirectv2.aspx?ref=BTWDNE7A5CA4LN6EX","vaNumber":"8680019889049595","amount":"10000","statusCode":"00","statusMessage":"SUCCESS"}
+
+Date:2022-07-19 09:38:09
+METHOD:POST
+FUNCTION:Duitku\Api->createInvoice
+URL:https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry
+REQUEST:{"paymentAmount":10000,"paymentMethod":"BT","merchantOrderId":1658198288,"productDetails":"Test Payment","additionalParam":"","merchantUserInfo":"","customerVaName":"John Doe","email":"customer@gmail.com","phoneNumber":"081234567890","itemDetails":[{"name":"Test Payment","price":10000,"quantity":1}],"customerDetail":{"firstName":"John","lastName":"Doe","email":"customer@gmail.com","phoneNumber":"081234567890","billingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"},"shippingAddress":{"firstName":"John","lastName":"Doe","address":"Jl. Kembangan Raya","city":"Jakarta","postalCode":"11530","phone":"081234567890","countryCode":"ID"}},"callbackUrl":"http://localhost/learnify/callback","returnUrl":"http://localhost/learnify/return","expiryPeriod":60,"merchantCode":"DS12776","signature":"fad77dc5f485f2745f0a9b61765c4313"}
+RESPONSE:{"merchantCode":"DS12776","reference":"DS12776X1BE7XDQ0TVN8N1","paymentUrl":"https://sandbox.duitku.com/topup/topupdirectv2.aspx?ref=BTYBU2HRQQCUI3MX6","vaNumber":"8680017374791531","amount":"10000","statusCode":"00","statusMessage":"SUCCESS"}
+
