@@ -29,7 +29,7 @@
                     <input type="hidden" name="nama_product" value="Cicilan <?= $user->tipe_angsuran ?>X">
                     <input type="hidden" name="kode_voucher" value="" id="kode_voucher">
                     <button class="btn btn-primary">Bayar <?= $user->angsuran + 1 ?></button>
-                </form>Z
+                </form>
             </div>
         <?php endif; ?>
     <?php else : ?>
