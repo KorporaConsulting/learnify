@@ -73,6 +73,12 @@ class Welcome extends CI_Controller
                 if ($user->angsuran != null) {
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
+                    
+                    if(!empty($data['voucher'])){
+                        $data['voucher_status'] = 1;
+                    }else{
+                        $data['voucher_status'] = 0;
+                    }
 
                     $this->db->where('id_user', $user->id_user)->update('user', $data);
 
