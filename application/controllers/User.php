@@ -917,7 +917,7 @@ class User extends CI_Controller
             'Detail Product' => 'Cicilan Pertama',
             'price' => $price
         ];
-        // echo  $this->input->post('kode_voucher');
+
         $this->db
             ->where('id_user', $this->session->userdata('id_user'))
             ->update('user', ['voucher' => $this->input->post('kode_voucher')]);
@@ -953,7 +953,7 @@ class User extends CI_Controller
                 'angsuran' => $angsuran,
                 'tipe_angsuran' => $this->input->post('loop')
             ]);
-            // redirect($data['data']['paymentUrl']);
+            redirect($data['data']['paymentUrl']);
         }
         
     }
