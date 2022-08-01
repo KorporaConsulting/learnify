@@ -39,7 +39,7 @@
                         <input type="hidden" name="loop" value="<?= $cicilan ?>">
                         <input type="hidden" name="harga" value="<?= $harga_enroll->harga / $cicilan ?>" id="hargaSubmit">
                         <input type="hidden" name="nama_product" value="Cicilan <?= $cicilan ?>X">
-                        <input type="hidden" name="kode_voucher" value="Cicilan <?= $cicilan ?>X" id="kode_voucher">
+                        <input type="hidden" name="kode_voucher" value="" id="kode_voucher">
                         <button class="btn btn-primary">Bayar</button>
                     </form>
                 <?php else : ?>

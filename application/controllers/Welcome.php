@@ -76,6 +76,7 @@ class Welcome extends CI_Controller
                     
                     if(!empty($data['voucher'])){
                         $data['voucher_status'] = 1;
+                        // $this->input-
                     }else{
                         $data['voucher_status'] = 0;
                     }
