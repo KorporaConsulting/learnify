@@ -76,9 +76,6 @@ class Welcome extends CI_Controller
                     
                     if(!empty($user->voucher)){
                         $data['voucher_status'] = 1;
-                        // $this->input-
-                    }else{
-                        $data['voucher_status'] = 0;
                     }
 
                     $this->db->where('id_user', $user->id_user)->update('user', $data);

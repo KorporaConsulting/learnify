@@ -23,7 +23,13 @@
         <?php else : ?>
             Bayar Angsuran anda sebelum <?= $user->expired_at ?>
             <div>
-                <button data-url="<?= site_url('user/pay_with_installment') ?>" data-name="Kelas Cicilan 3x" data-loop="<?= $user->tipe_angsuran ?>" class="btn btn-block btn-primary pay mb-3 " data-price="1000000" data-angsuran="1">Bayar Cicilan ke <?= $user->angsuran + 1 ?></button>
+                <form action="<?= site_url('user/pay_with_installment') ?>" method="POST">
+                    <input type="hidden" name="loop" value="<?= $user->tipe_angsuran ?>">
+                    <input type="hidden" name="harga" value="<?= $harga_enroll->harga / $user->tipe_angsuran ?>" id="hargaSubmit">
+                    <input type="hidden" name="nama_product" value="Cicilan <?= $user->tipe_angsuran ?>X">
+                    <input type="hidden" name="kode_voucher" value="" id="kode_voucher">
+                    <button class="btn btn-primary">Bayar <?= $user->angsuran + 1 ?></button>
+                </form>Z
             </div>
         <?php endif; ?>
     <?php else : ?>
