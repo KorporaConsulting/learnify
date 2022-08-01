@@ -74,7 +74,7 @@ class Welcome extends CI_Controller
                     $data['last_status'] = 1;
                     $data['angsuran'] = $user->angsuran + 1;
                     
-                    if(!empty($data['voucher'])){
+                    if(!empty($user->voucher)){
                         $data['voucher_status'] = 1;
                         // $this->input-
                     }else{
