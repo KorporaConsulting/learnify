@@ -52,6 +52,8 @@
                     <p class="terms">Dengan mendaftar anda menyetujui <i>privasi dan persyaratan ketentuan
                             hukum kami </i>
                         baca selengkapnya <a href="#"> disini</a></p>
+
+                    <p><a href="<?= base_url('login') ?>"> Login</a></p>
                     <button type="submit" name="submit" id="btnsubmit" disabled class="btn btn-block btn-modal btn-submit">Daftar
                         Sekarang!</button>
                 </form>

@@ -36,7 +36,7 @@
                         </label>
                     </div>
                     <h6 class="terms mt-2"></a>
-                        Belum punya akun? daftar <a href=" <?= base_url('auth/register') ?>">
+                        Belum punya akun? daftar <a href=" <?= base_url('register') ?>">
                             disini.</a>
                     </h6>
                     <button class="btn btn-block font-weight-bold mt-3" style="background-color: #193c7f;color:white;font-size:18px;">Login

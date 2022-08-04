@@ -51,13 +51,13 @@ class Auth extends CI_Controller
     {
         $this->session->sess_destroy();
         $this->session->set_flashdata('success-logout', 'Berhasil!');
-        redirect(base_url());
+        redirect(base_url('login'));
     }
 
     private function login_proses()
     {
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
+        $email = $this->input->post('email', true);
+        $password = $this->input->post('password', true);
 
         $user = $this->db->get_where('user', ['email' => $email])->row_array();
 
@@ -78,11 +78,11 @@ class Auth extends CI_Controller
                 redirect(base_url('user'));
             } else {
                 $this->session->set_flashdata('fail-pass', 'Gagal!');
-                redirect(base_url('auth/login'));
+                redirect(base_url('login'));
             }
         } else {
             $this->session->set_flashdata('fail-login', 'Gagal!');
-            redirect(base_url('auth/login'));
+            redirect(base_url('login'));
         }
     }
 
@@ -225,7 +225,7 @@ class Auth extends CI_Controller
                 'nis' => $nis,
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'password' => password_hash($this->input->post('password', true), PASSWORD_DEFAULT),
                 'no_telp' => htmlspecialchars($this->input->post('no_telp', true)),
                 'image_user' => 'null.svg',
                 'role' => 3,
@@ -235,7 +235,7 @@ class Auth extends CI_Controller
             $data['qr_code'] = $this->qrcode->generate($this->input->post('email', true));
             $this->db->insert('user', $data);
             $this->session->set_flashdata('sukses-regis', 'Berhasil!');
-            redirect(base_url('auth/login'));
+            redirect(base_url('login'));
         }
     }
 }
