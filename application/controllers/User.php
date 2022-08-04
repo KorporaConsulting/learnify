@@ -313,7 +313,6 @@ class User extends CI_Controller
             // }
         }
 
-
         $data['materi'] = $this->db->get_where('materi', ['id_materi' => $id])->row();
         $id_mapel =  $data['materi']->id_mapel;
         $data['mapel'] = $this->db->get_where('mapel', ['id_mapel' => $id_mapel])->row();
