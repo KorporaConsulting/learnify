@@ -17,16 +17,16 @@ class Auth extends CI_Controller
 
     public function register()
     {
-        $this->load->view('template/nav');
+        // $this->load->view('template/nav');
         $this->load->view('registration');
-        $this->load->view('template/footer');
+        // $this->load->view('template/footer');
     }
 
     public function login()
     {
-        $this->load->view('template/nav');
+        // $this->load->view('template/nav');
         $this->load->view('login');
-        $this->load->view('template/footer');
+        // $this->load->view('template/footer');
     }
 
     public function validateLogin()
