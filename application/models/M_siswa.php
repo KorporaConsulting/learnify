@@ -7,6 +7,11 @@ class M_siswa extends CI_Model
         $query = $this->db->get_where('user', array('role' => 3));
         return $query;
     }
+    public function tampil_id_transkrip($id_user, $id_mapel)
+    {
+        $query = $this->db->get_where('transkrip', array('id_user' => $id_user, 'id_mapel' => $id_mapel));
+        return $query;
+    }
 
     public function progress_data_siswa()
     {

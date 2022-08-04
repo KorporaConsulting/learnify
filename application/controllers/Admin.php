@@ -611,8 +611,15 @@ class Admin extends CI_Controller
                             "status" => 0,
                             "kunci" => $kunci,
                         );
+                        $transkrip[] = array(
+                            "id_user" => $user->id_user,
+                            "id_mapel" => $insert_id
+                        );
                     }
                     $this->db->insert_batch('status_mapel', $insert);
+                    if ($check_materi->is_zoom == 0) {
+                        $this->db->insert_batch('transkrip', $transkrip);
+                    }
                 }
                 $this->session->set_flashdata('success-reg', 'Berhasil!');
                 redirect(base_url('admin/data_mapel'));
@@ -1340,8 +1347,23 @@ class Admin extends CI_Controller
                 'id_semester' => htmlspecialchars($this->input->post('semester', true)),
                 'id_user' => htmlspecialchars($this->input->post('user', true)),
             ];
-
             $this->db->insert('enroll', $data);
+
+
+            $check_enroll = $this->m_materi->check_transkrip($this->input->post('user', true));
+            if ($check_enroll == 0) {
+                $get_mapel = $this->m_materi->tampil_data_mapel()->result();
+                foreach ($get_mapel as $mapel) {
+                    $transkrip[] = array(
+                        "id_user" => $this->input->post('user', true),
+                        "id_mapel" => $mapel->id_mapel
+                    );
+                }
+                $this->db->insert_batch('transkrip', $transkrip);
+            }
+
+
+
             $get_enroll = $this->m_materi->get_list_materi($this->input->post('semester', true))->result();
             $get_enroll_mapel = $this->m_materi->get_kunci_mapel($this->input->post('semester', true))->result();
 
@@ -1360,8 +1382,14 @@ class Admin extends CI_Controller
                         "status" => 0,
                         "kunci" => $kunci_mapel,
                     );
+                    $transkrip[] = array(
+                        "id_user" => $this->input->post('user', true),
+                        "id_mapel" => $mapel->id_mapel
+                    );
                 }
                 $this->db->insert_batch('status_mapel', $insert_status_mapel);
+                $this->db->insert_batch('transkrip', $transkrip);
+
 
                 if ($get_enroll != "") {
                     foreach ($get_enroll as $id_materi) {
@@ -1378,7 +1406,6 @@ class Admin extends CI_Controller
                             "semester_status_materi" => $this->input->post('semester', true),
                         );
                     }
-
                     $this->db->insert_batch('status_materi', $insert);
                 } else {
                     $data['semester'] = $this->m_materi->tampil_data_semester()->result();

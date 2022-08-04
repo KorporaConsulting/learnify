@@ -859,13 +859,12 @@ class User extends CI_Controller
         //     $nilai_tugas = 0;
         // }
         // $total = $nilai_quiz + $nilai_final  + $nilai_absensi + $nilai_tugas;
+        $id_transkrip = $this->m_siswa->tampil_id_transkrip($id_user, $id_mapel)->row();
 
         $data = [
-            'id_user' => $id_user,
-            'id_mapel' => $id_mapel,
             'nilai' => $nilai_final,
         ];
-        $this->db->insert('transkrip', $data);
+        $this->db->where('id_transkrip', $id_transkrip->id_transkrip)->update('transkrip', $data);
     }
 
     public function penilaian()

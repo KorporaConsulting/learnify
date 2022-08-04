@@ -10,6 +10,7 @@ class M_materi extends CI_Model
         $this->db->join('semester', 'semester.id_semester= mapel.id_semester');
         $this->db->where('mapel.is_zoom', 0);
         $this->db->order_by('mapel.id_semester');
+        $this->db->order_by('mapel.urutan');
         return  $this->db->get();
     }
     public function tampil_data_mapel_live()
@@ -284,6 +285,14 @@ class M_materi extends CI_Model
     {
         $this->db->where($where);
         $this->db->update($table, $data);
+    }
+    public function check_transkrip($id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('transkrip');
+        $this->db->where('id_user', $id_user);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
     public function check_enroll($id_semester, $id_user)
     {
