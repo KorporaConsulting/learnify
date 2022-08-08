@@ -23,6 +23,31 @@ class M_siswa extends CI_Model
         return $query;
     }
 
+    public function akses_course($id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('status_mapel');
+        $this->db->join('user', 'user.id_user = status_mapel.id_user');
+        $this->db->join('mapel', 'mapel.id_mapel = status_mapel.id_mapel');
+        $this->db->where('status_mapel.id_user', $id_user);
+        $this->db->where('mapel.is_zoom', 0);
+        $this->db->order_by('mapel.urutan');
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function akses_materi($id_user, $id_mapel)
+    {
+        $this->db->select('*');
+        $this->db->from('status_materi');
+        $this->db->join('user', 'user.id_user = status_materi.id_user');
+        $this->db->join('materi', 'materi.id_materi = status_materi.id_materi');
+        $this->db->where('status_materi.id_user', $id_user);
+        $this->db->where('materi.id_mapel', $id_mapel);
+        $query = $this->db->get();
+        return $query;
+    }
+
     public function tampil_data_semester($semester, $id_user)
     {
         $this->db->select('*');

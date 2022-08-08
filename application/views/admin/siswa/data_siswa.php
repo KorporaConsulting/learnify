@@ -120,6 +120,27 @@ $this->load->view('admin/template_admin/sidebar');
 <?php endif; ?>
 
 <!-- End Sweetalert -->
+<script>
+    $('.confirmation').click(function(e) {
+        e.preventDefault(); // Prevent the href from redirecting directly
+        var linkURL = $(this).attr("href");
+        warnBeforeRedirect(linkURL);
+    });
+
+    function warnBeforeRedirect(linkURL) {
+        swal({
+            title: "Ingin mengubah akses?",
+            text: "Jika klik 'OK', Akses akan berubah",
+            type: "warning",
+            showCancelButton: true
+        }, function() {
+            // Redirect the user
+            window.location.href = linkURL;
+        });
+    }
+</script>
+
+
 
 <script type="text/javascript">
     function yourConfirm(id) {

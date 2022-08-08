@@ -47,6 +47,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_siswa') ?>">Data User</a></li>
                                 <li><a class="nav-link" href="<?= base_url('admin/progres_data_siswa') ?>">Progres Data Siswa</a></li>
+                                <li><a class="nav-link" href="<?= base_url('admin/akses_siswa') ?>">Akses Siswa</a></li>
                             </ul>
                         </li>
                         <li class="menu-header">Management Mentor</li>

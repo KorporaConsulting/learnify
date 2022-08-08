@@ -126,6 +126,100 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/data_siswa', $data);
     }
 
+    public function akses_course_user($id)
+    {
+        $this->load->model('m_siswa');
+        $data['profile'] = $this->m_siswa->get_profile($id)->row();
+        $data['user'] = $this->m_siswa->akses_course($id)->result();
+        $this->load->view('admin/siswa/akses_course', $data);
+    }
+
+    public function akses_materi_user($id, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $data['profile'] = $this->m_siswa->get_profile($id)->row();
+        $data['user'] = $this->m_siswa->akses_materi($id, $id_mapel)->result();
+        $this->load->view('admin/siswa/akses_materi', $data);
+    }
+
+    public function tutup_akses($id, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_mapel' => $id_mapel);
+        $data = array(
+            'status' => 0,
+            'kunci' => 0,
+        );
+        $this->db->update('status_mapel', $data, $where);
+        $this->session->set_flashdata('success-tutup', 'berhasil');
+        redirect('admin/akses_course_user/' . $id);
+    }
+
+    public function buka_akses($id, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_mapel' => $id_mapel);
+        $data = array(
+            'status' => 0,
+            'kunci' => 1,
+        );
+        $this->db->update('status_mapel', $data, $where);
+        $this->session->set_flashdata('success-buka', 'berhasil');
+        redirect('admin/akses_course_user/' . $id);
+    }
+
+    public function selesai_akses($id, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_mapel' => $id_mapel);
+        $data = array(
+            'status' => 1,
+            'kunci' => 1,
+        );
+        $this->db->update('status_mapel', $data, $where);
+        $this->session->set_flashdata('success-selesai', 'berhasil');
+        redirect('admin/akses_course_user/' . $id);
+    }
+
+    public function tutup_materi_akses($id, $id_materi, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_materi' => $id_materi);
+        $data = array(
+            'status' => 0,
+            'kunci' => 0,
+        );
+        $this->db->update('status_materi', $data, $where);
+        $this->session->set_flashdata('success-tutup', 'berhasil');
+        redirect('admin/akses_materi_user/' . $id . '/' . $id_mapel);
+    }
+
+    public function buka_materi_akses($id, $id_materi, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_materi' => $id_materi);
+        $data = array(
+            'status' => 0,
+            'kunci' => 1,
+        );
+        $this->db->update('status_materi', $data, $where);
+        $this->session->set_flashdata('success-buka', 'berhasil');
+        redirect('admin/akses_materi_user/' . $id . '/' . $id_mapel);
+    }
+
+    public function selesai_materi_akses($id, $id_materi, $id_mapel)
+    {
+        $this->load->model('m_siswa');
+        $where = array('id_user' => $id, 'id_materi' => $id_materi);
+        $data = array(
+            'status' => 1,
+            'kunci' => 1,
+        );
+        $this->db->update('status_materi', $data, $where);
+        $this->session->set_flashdata('success-selesai', 'berhasil');
+        redirect('admin/akses_materi_user/' . $id . '/' . $id_mapel);
+    }
+
     public function progres_data_siswa()
     {
         $this->load->model('m_siswa');
@@ -134,7 +228,13 @@ class Admin extends CI_Controller
         $this->load->view('admin/siswa/progres_data_siswa', $data);
     }
 
+    public function akses_siswa()
+    {
+        $this->load->model('m_siswa');
 
+        $data['user'] = $this->m_siswa->progress_data_siswa()->result();
+        $this->load->view('admin/siswa/akses', $data);
+    }
 
     public function detail_siswa($id)
     {

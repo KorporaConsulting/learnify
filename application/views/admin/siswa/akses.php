@@ -7,50 +7,64 @@ $this->load->view('admin/template_admin/sidebar');
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title" style="color: black;">Transkrip <?= $nama_siswa->nama ?></h2>
+                <h2 class="card-title" style="color: black;">Management Akses Course Siswa Sales University</h2>
                 <hr>
                 <!-- <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p> -->
                 <!-- <a href="<?= base_url('admin/add_siswa') ?>" class="btn btn-success">Tambah
                     Data Siswa ⭢ </a> -->
-                <a href="<?= base_url('admin/progres_data_siswa') ?>" class="btn btn-info">Kembali </a>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
                     <div class="table-responsive">
-                        <table id="transkrip" class="table align-items-center table-flush">
+                        <table id="example" class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
-                                    <th>Semester</th>
-                                    <th>Kode Course</th>
-                                    <th>Course</th>
-                                    <th>Nilai</th>
-                                    <th>Grade</th>
+                                    <th scope="col">NIS</th>
+                                    <th scope="col">Nama Siswa</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Gambar</th>
+                                    <!-- <th scope="col">Akun Aktif *</th> -->
+                                    <!-- <th scope="col" class="text-center">Detail</th> -->
+                                    <th scope="col">Option</th>
                                 </tr>
                             </thead>
 
-                            <tbody class="text-center">
-                                <?php foreach ($transkrip as $t) { ?>
-                                    <tr>
-                                        <td scope="row"><?= $t->id_semester ?></td>
-                                        <td><?= $t->kode_mapel ?></td>
-                                        <td><?= $t->nama_mapel ?></td>
-                                        <td><?= $t->nilai_final ?></td>
-                                        <?php foreach ($mutu as $mu) { ?>
-                                            <?php
-                                            $pisah = explode("-", $mu->nilai);
-                                            ?>
-                                            <?php if ($t->nilai_final >= $pisah[0] && $t->nilai_final <= $pisah[1]) { ?>
-                                                <td><b style="color: black;"><?= $mu->mutu ?></b></td>
-                                            <?php
-                                                break;
-                                            } ?>
-                                        <?php } ?>
+                            <tbody>
+                                <?php
+
+                                foreach ($user as $u) {
+                                ?>
+                                    <tr class="text-center">
+
+                                        <th scope="row">
+                                            <?php echo $u->nis ?>
+                                        </th>
+
+                                        <td>
+                                            <?php echo $u->nama ?>
+                                        </td>
+
+                                        <td>
+                                            <?php echo $u->email ?>
+                                        </td>
+
+                                        <td>
+                                            <img height="20px" src="<?= base_url() . 'assets/profile_picture/' . $u->image_user; ?>">
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="<?php echo site_url('admin/akses_course_user/' . $u->id_user); ?>" class="btn btn-success">Akses Course User ⭢</a>
+
+                                        </td>
+
                                     </tr>
-                                <?php  } ?>
+                                <?php
+                                }
+                                ?>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -117,22 +131,6 @@ $this->load->view('admin/template_admin/sidebar');
             }
         })
     }
-</script>
-<script>
-    $(document).ready(function() {
-        $('#transkrip').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'excelHtml5',
-                    title: 'Transkrip <?= $nama_siswa->nama ?>'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Transkrip <?= $nama_siswa->nama ?>'
-                }
-            ]
-        });
-    });
 </script>
 
 <?php
