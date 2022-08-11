@@ -38,7 +38,7 @@
                                 <?php if ($c->kunci == 1) { ?>
                                     <a href="<?= base_url('user/course/' . $c->slug_mapel) ?>">
                                     <?php } else { ?>
-                                        <a class="disabled" href="#">
+                                        <a id="notizin" class="disabled" href="#">
                                         <?php } ?>
                                         <div class="card shadow bg-white mx-auto p-4 buat-text text-center mb-3" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
                                             <h2><?php if ($c->status == 0 && $c->kunci == 0) { ?>
@@ -56,7 +56,11 @@
                                                 <h5 class="card-title" style="color: black;"><?= $c->nama_mapel ?></h5>
                                                 <p class="card-text" style="color: black;"><?= substr($c->desk, 0, 20) ?></p>
                                             </div>
-                                            <a class="btn btn-block card-footer" href="<?= base_url('user/course/' . $c->slug_mapel) ?>">Pilih Course</a>
+                                            <?php if ($c->kunci == 1) { ?>
+                                                <a class="btn btn-block card-footer" href="<?= base_url('user/course/' . $c->slug_mapel) ?>">Pilih Course</a>
+                                            <?php } else { ?>
+                                                <a id="notizin" class="btn btn-block card-footer" href="#">Pilih Course</a>
+                                            <?php } ?>
                                         </div>
                                         </a>
                             </div>
@@ -132,6 +136,16 @@
                     .removeClass("fa-arrow-up")
                     .addClass("fa-arrow-down");
             });
+    });
+
+    $(document).ready(function() {
+        $(document).on('click', '#notizin', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Course masih terkunci!'
+            })
+        });
     });
 </script>
 <!-- End Class Card -->

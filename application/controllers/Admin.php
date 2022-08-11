@@ -1727,24 +1727,24 @@ class Admin extends CI_Controller
         $this->load->view('admin/tugas/list_tugas_user', $data);
     }
 
-    public function approve_tugas($id_file, $id_materi, $id_user)
+    public function approve_tugas()
     {
-        $check_slug = $this->m_materi->where_tampil_materi($id_materi)->row();
+        $check_slug = $this->m_materi->where_tampil_materi($this->input->post('id_materi', true))->row();
         $id_mapel = $check_slug->id_mapel;
         $urutan = $check_slug->urutan + 1;
 
         $data = [
-            'approve' => 1
+            'approve' => $this->input->post('status', true)
         ];
         $where = array(
-            'id_file' => $id_file,
-            'id_materi' => $id_materi,
-            'id_user' => $id_user,
+            'id_file' => $this->input->post('id_file', true),
+            'id_materi' => $this->input->post('id_materi', true),
+            'id_user' => $this->input->post('id_user', true),
         );
         $this->m_materi->approve_tugas($where, $data, 'file');
 
-        $check_file = $this->m_materi->check_file_user($id_materi, $id_user);
-        $check_file_done = $this->m_materi->check_file_user_done($id_materi, $id_user);
+        $check_file = $this->m_materi->check_file_user($this->input->post('id_materi', true), $this->input->post('id_user', true));
+        $check_file_done = $this->m_materi->check_file_user_done($this->input->post('id_materi', true), $this->input->post('id_user', true));
 
         // var_dump($check_file_done);
         // die;
@@ -1754,8 +1754,8 @@ class Admin extends CI_Controller
                 'status' => 1
             ];
             $where_status = [
-                'id_materi' => $id_materi,
-                'id_user' => $id_user,
+                'id_materi' => $this->input->post('id_materi', true),
+                'id_user' => $this->input->post('id_user', true),
             ];
             $this->m_materi->approve_tugas($where_status, $data_status, 'status_materi');
 
@@ -1763,7 +1763,7 @@ class Admin extends CI_Controller
 
             $where_kunci = [
                 'id_materi' => $get_urutan_materi->id_materi,
-                'id_user' => $id_user
+                'id_user' => $this->input->post('id_user', true)
             ];
 
             $data_kunci = [
@@ -1773,14 +1773,14 @@ class Admin extends CI_Controller
             $this->db->update('status_materi', $data_kunci);
         }
 
-        $total_materi = $this->m_siswa->total_status($id_user, $id_mapel);
-        $done_materi = $this->m_siswa->done_status($id_user, $id_mapel);
+        $total_materi = $this->m_siswa->total_status($this->input->post('id_user', true), $id_mapel);
+        $done_materi = $this->m_siswa->done_status($this->input->post('id_user', true), $id_mapel);
 
         if ($total_materi == $done_materi) {
-            $this->mark_mapel($id_mapel, $id_user);
+            $this->mark_mapel($id_mapel, $this->input->post('id_user', true));
         }
 
-        $this->session->set_flashdata('success-approve', 'Tugas telah disetujui');
+        $this->session->set_flashdata('success-approve', 'Status Tugas berhasil diubah');
         redirect('admin/list_tugas_user');
     }
     public function delete_approve_tugas($id_file, $id_materi, $id_user)

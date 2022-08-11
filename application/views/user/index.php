@@ -140,6 +140,28 @@
             </div>
         </div>
 
+        <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af)">
+            <div class="card-header">
+                <h6 style="color: white;">Kelas yang telah diselesaikan</h6>
+            </div>
+            <div class="card-body">
+                <?php foreach ($kelas_selesai as $ks) : ?>
+                    <div class="alert bg-light">
+                        <span class="badge badge-success">Selesai</span>
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <?= $ks->nama_mapel ?>
+                            </span>
+                            <span>
+                                <a class="btn btn-info" href="<?= base_url('user/course/') . $ks->slug_mapel ?>">Lihat Course</a>
+                            </span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <a class="btn btn-dark float-right" href="<?= base_url('user/kelas_selesai') ?>">Selengkapnya</a>
+        </div>
+
         <div class="card shadow bg-white mx-auto p-4 buat-text item" style="width: 100%; border-radius:20px;">
             <div class="card-header" style="border-radius:20px;background-image: linear-gradient(to right, #2c3e50, #4ca1af);
 ">

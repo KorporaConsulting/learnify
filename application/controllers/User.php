@@ -73,6 +73,8 @@ class User extends CI_Controller
             ->group_by('nama_activity')
             ->get('activity')->result();
 
+        $data['kelas_selesai'] = $this->m_siswa->tampil_kelas_selesai_limit($this->session->userdata('id_user'))->result();
+
 
         $tgl = date_create(date("Y-m-d"));
         $tgl_start = date_format($tgl, "Y-m-d H:i:s");
@@ -94,6 +96,16 @@ class User extends CI_Controller
     }
 
 
+    public function kelas_selesai()
+    {
+        $data['kelas_selesai'] = $this->m_siswa->tampil_kelas_selesai($this->session->userdata('id_user'))->result();
+
+        // var_dump($data['zoom']);
+        // die;
+
+        $this->load->view('user/kelas_selesai', $data);
+        $this->load->view('template/footer');
+    }
 
 
     public function test()
@@ -599,6 +611,7 @@ class User extends CI_Controller
             }
         }
         if ($this->db->insert_batch('file', $files_batch)) {
+
             $this->session->set_flashdata('sukses-tugas', 'File berhasil di upload');
             redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
         } else {
@@ -624,6 +637,13 @@ class User extends CI_Controller
             $this->session->set_flashdata('sukses-tugas', 'File berhasil dihapus');
             redirect('user/materi/' . $id_mapel . '/' . $slug_materi);
         }
+    }
+
+
+    public function tugas_detail($id_file)
+    {
+        $data = $this->db->get_where('file', ['id_file' => $id_file])->row();
+        echo json_encode($data);
     }
 
     public function download_file($nama_file)

@@ -239,19 +239,22 @@
                                                                  <td><?= $t->desk_file ?></td>
                                                                  <td><a target="_blank" class="btn btn-primary" href="<?= base_url('user/download_file/') . $t->nama_file ?>" role="button">File</a></td>
                                                                  <td>
-                                                                     <?php
-                                                                        if ($t->approve == 0) { ?>
-                                                                         <span class="badge badge-warning">Menunggu diperiksa</span>
-                                                                     <?php } else { ?>
-                                                                         <span class="badge badge-success">Telah Diperiksa</span>
-                                                                     <?php  } ?>
+                                                                     <?php if ($t->approve == 0) { ?>
+                                                                         <span class="badge badge-warning">Menunggu Disetujui</span>
+                                                                     <?php } elseif ($t->approve == 1) { ?>
+                                                                         <span class="badge badge-info">Approve</span>
+                                                                     <?php } elseif ($t->approve == 2) { ?>
+                                                                         <span class="badge badge-success">Periksa Kembali</span>
+                                                                     <?php } elseif ($t->approve == 3) { ?>
+                                                                         <span class="badge badge-danger">Ditolak</span>
+                                                                     <?php } ?>
                                                                  </td>
                                                                  <td>
                                                                      <?php
                                                                         if ($t->approve == 0) { ?>
                                                                          <a href="#" class="btn btn-danger" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
                                                                      <?php } else { ?>
-                                                                         <a href="#" class="btn btn-danger disabled" onclick="confirm('<?= base_url('user/hapus_tugas/' . $t->id_file . '/' . $this->uri->segment(3) . '/' . $this->uri->segment(4)) ?>')">Hapus</a>
+                                                                         <button name="get" id="<?= $t->id_file ?>" class="btn btn-block btn-secondary btn-sm get" data-toggle="modal" data-target=".bd-example-modal-lg"> View Details </button>
                                                                      <?php  } ?>
                                                                  </td>
                                                              </tr>
@@ -309,76 +312,51 @@
                          </div>
                      <?php } ?>
                  <?php  } elseif ($tugas_row != null) { ?>
-                     <?php if ($tugas_row->kunci == 0) { ?>
-                         <div class="jumbotron mt-5 mb-5 pt-5 pb-5">
-                             <img src="<?= base_url('assets/') ?>img/denied.svg" width="300px" class="img-fluid" alt="Responsive image">
-                             <h1 class="display-4">Tidak Diizinkan</h1>
-                             <p class="lead">Mohon maaf materi yang anda akses tidak diizinkan</p>
-                             <!-- <p class="lead">Silahkan selesaikan materi sebelumnya</p> -->
-                             <hr class="my-4">
-                             <p></p>
+
+                     <?php
+                        $no = 1;
+                        foreach ($tugas as $t) { ?>
+                         <div class="card shadow bg-white mx-auto p-4 buat-text mt-3" data-aos-duration="400" style="width: 100%; border-radius:20px;">
+                             <div class="container">
+                                 <h1 class="display-5" style="color: black ;"><?= $t->nama_tugas ?></h1>
+                                 <p class="lead"><?= $t->desk_tugas ?></p>
+                             </div>
+                             <div class="container">
+                                 <h4 style="color: black ;">Silahkan download template tugas disini</h4>
+                                 <a target="_blank" class="btn btn-info" href="<?= $t->link_template ?>"><i class="fa fa-download"></i> Download Template Tugas</a>
+                             </div>
+                             <div class="row mt-5 justify-content-center">
+                                 <div class="col-md-10">
+                                     <form method="post" action="<?= base_url('user/upload_tugas') ?>" enctype="multipart/form-data">
+                                         <input type="hidden" name="id_mapel" value="<?= $t->id_mapel ?>">
+                                         <input type="hidden" name="slug_materi" value="<?= $t->slug_materi ?>">
+                                         <div class="form-group files">
+                                             <label>Upload Your File (Max 2 Mb)</label>
+                                             <input type="file" required name="tugas[]" class="form-control" multiple>
+                                         </div>
+                                         <div class="form-group">
+                                             <label for="notes">Notes</label>
+                                             <textarea class="form-control" required name="notes" id="notes" rows="3"></textarea>
+                                         </div>
+                                         <button type="submit" class="btn btn-primary btn btn-info float-right">Submit</button>
+                                     </form>
+                                 </div>
+                             </div>
                          </div>
-                         <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
-                             <div class="row">
-                                 <div class="col-6">
-                                     <?php if (isset($previous)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="btn btn-info float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
-                                     <?php } ?>
-                                 </div>
-                                 <div class="col-6">
-                                     <?php if (isset($next)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="btn btn-info float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
-                                     <?php } ?>
-                                 </div>
+                     <?php  }  ?>
+                     <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
+                         <div class="row">
+                             <div class="col-6">
+                                 <?php if (isset($previous)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="btn btn-info float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
+                                 <?php } ?>
                              </div>
-                         <?php } ?>
-                     <?php } else {
-                        ?>
-                         <?php
-                            $no = 1;
-                            foreach ($tugas as $t) { ?>
-                             <div class="card shadow bg-white mx-auto p-4 buat-text mt-3" data-aos-duration="400" style="width: 100%; border-radius:20px;">
-                                 <div class="container">
-                                     <h1 class="display-5" style="color: black ;"><?= $t->nama_tugas ?></h1>
-                                     <p class="lead"><?= $t->desk_tugas ?></p>
-                                 </div>
-                                 <div class="container">
-                                     <h4 style="color: black ;">Silahkan download template tugas disini</h4>
-                                     <a target="_blank" class="btn btn-info" href="<?= $t->link_template ?>"><i class="fa fa-download"></i> Download Template Tugas</a>
-                                 </div>
-                                 <div class="row mt-5 justify-content-center">
-                                     <div class="col-md-10">
-                                         <form method="post" action="<?= base_url('user/upload_tugas') ?>" enctype="multipart/form-data">
-                                             <input type="hidden" name="id_mapel" value="<?= $t->id_mapel ?>">
-                                             <input type="hidden" name="slug_materi" value="<?= $t->slug_materi ?>">
-                                             <div class="form-group files">
-                                                 <label>Upload Your File (Max 2 Mb)</label>
-                                                 <input type="file" name="tugas[]" class="form-control" multiple>
-                                             </div>
-                                             <div class="form-group">
-                                                 <label for="notes">Notes</label>
-                                                 <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
-                                             </div>
-                                             <button type="submit" class="btn btn-primary btn btn-info float-right">Submit</button>
-                                         </form>
-                                     </div>
-                                 </div>
+                             <div class="col-6">
+                                 <?php if (isset($next)) { ?>
+                                     <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="btn btn-info float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
+                                 <?php } ?>
                              </div>
-                         <?php  }  ?>
-                         <?php if ($urutan_materi->urutan != 0 || $urutan_materi->urutan != 1) { ?>
-                             <div class="row">
-                                 <div class="col-6">
-                                     <?php if (isset($previous)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $previous->slug_materi) ?>" class="btn btn-info float-left"> <i class="fa fa-arrow-left"></i> Sebelumnya</a>
-                                     <?php } ?>
-                                 </div>
-                                 <div class="col-6">
-                                     <?php if (isset($next)) { ?>
-                                         <a href="<?= base_url('user/materi/' . $this->uri->segment(3) . '/' . $next->slug_materi) ?>" class="btn btn-info float-right">Berikutnya <i class="fa fa-arrow-right"></i></a>
-                                     <?php } ?>
-                                 </div>
-                             </div>
-                         <?php } ?>
+                         </div>
                      <?php } ?>
                  <?php } ?>
              </div>
@@ -386,6 +364,73 @@
          </div>
      </div>
  </div>
+
+ <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria- labelledby="myLargeModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h3 class="modal-title" style="text-align: left;">Detail</h3>
+             </div>
+             <div class="card" style="width: auto; height: auto;">
+                 <div class="card-body">
+                     <div class="modal-body">
+                         <div class="form-group">
+                             <label for="nilai">Status</label>
+                             <input readonly type="text" class="form-control" name="status" id="status">
+                         </div>
+
+                         <div class="form-group">
+                             <label for="nilai">Nilai</label>
+                             <input readonly required min="0" max="100" type="number" class="form-control" name="nilai" id="nilai">
+                         </div>
+
+                         <div class="form-group">
+                             <label for="message-text" class="col-form-label">Feedback</label>
+                             <textarea readonly required name="feedback" id="feedback" class="form-control"></textarea>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                             <!-- <button name="get" id="" class="btn  btn-secondary get" data-toggle="modal" data-target=".bd-example-modal-lg"> Edit Tugas </button> -->
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+
+
+ </div><!-- /.modal-content -->
+
+ <script>
+     $(document).ready(function() {
+         $(document).on('click', '.get', function() {
+             var event_id = $(this).attr("id");
+             $.ajax({
+                 url: "<?php echo base_url() ?>User/tugas_detail/" + event_id,
+                 method: "POST",
+                 dataType: "json",
+                 success: function(data) {
+                     //  console.log(data)
+                     $('#userModal').modal('show');
+                     $('#feedback').val(data.feedback);
+                     $('#nilai').val(data.nilai);
+                     if (data.approve == 0) {
+                         $('#status').val('Menunggu diperiksa');
+                     } else if (data.approve == 1) {
+                         $('#status').val('Approve');
+                     } else if (data.approve == 2) {
+                         $('#status').val('Periksa Kembali');
+                     } else if (data.approve == 3) {
+                         $('#status').val('Ditolak');
+                     }
+                     $('[name="get"]').attr('id', data.id_file);
+                 }
+             })
+         });
+     });
+ </script>
+
  <script>
      <?php if ($this->session->flashdata('success-mark')) : ?>
          Swal.fire({

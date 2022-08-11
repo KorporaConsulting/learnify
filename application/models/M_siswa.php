@@ -63,6 +63,40 @@ class M_siswa extends CI_Model
         $this->db->order_by("mapel.urutan", "asc");
         return  $this->db->get();
     }
+
+    public function tampil_kelas_selesai_limit($id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('status_mapel', 'status_mapel.id_mapel = mapel.id_mapel');
+        $this->db->where('status_mapel.id_user', $id_user);
+        $this->db->where('status_mapel.status', 1);
+        $this->db->where('status_mapel.kunci', 1);
+        $this->db->where('mapel.is_zoom', 0);
+        $this->db->group_by("mapel.id_mapel");
+        $this->db->limit(5);
+        $this->db->order_by("mapel.urutan", "desc");
+        return  $this->db->get();
+    }
+
+    public function tampil_kelas_selesai($id_user)
+    {
+        $this->db->select('*');
+        $this->db->from('enroll');
+        $this->db->join('semester', 'semester.id_semester = enroll.id_semester');
+        $this->db->join('user', 'user.id_user = enroll.id_user');
+        $this->db->join('mapel', 'mapel.id_semester = semester.id_semester');
+        $this->db->join('status_mapel', 'status_mapel.id_mapel = mapel.id_mapel');
+        $this->db->where('status_mapel.id_user', $id_user);
+        $this->db->where('mapel.is_zoom', 0);
+        $this->db->group_by("mapel.id_mapel");
+        $this->db->order_by("mapel.urutan", "asc");
+        return  $this->db->get();
+    }
+
     public function tampil_data_semester_zoom($semester, $id_user)
     {
         $this->db->select('*');

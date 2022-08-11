@@ -57,21 +57,21 @@ $this->load->view('admin/template_admin/sidebar');
                                             <?php echo $u->nama_tugas ?>
                                         </td>
                                         <td>
-                                            <?php if ($u->approve == 1) { ?>
-                                                <span class="badge badge-info">Disetujui</span>
-                                            <?php } else { ?>
+                                            <?php if ($u->approve == 0) { ?>
                                                 <span class="badge badge-warning">Menunggu Disetujui</span>
+                                            <?php } elseif ($u->approve == 1) { ?>
+                                                <span class="badge badge-info">Approve</span>
+                                            <?php } elseif ($u->approve == 2) { ?>
+                                                <span class="badge badge-success">Diperiksa Kembali</span>
+                                            <?php } elseif ($u->approve == 3) { ?>
+                                                <span class="badge badge-danger">Ditolak</span>
                                             <?php } ?>
                                         </td>
                                         <td>
                                             <a target="_blank" class="btn btn-primary" href="<?= $u->link ?>" role="button">File</a>
                                         </td>
                                         <td class="text-center">
-                                            <?php if ($u->approve == 1) { ?>
-                                                <a onclick="tolak('<?php echo site_url('admin/delete_approve_tugas/' . $u->id_file . '/' . $u->id_materi . '/' . $u->id_user) ?>')" href="#" class="btn btn-danger">Delete Approve ⭢</a>
-                                            <?php } else { ?>
-                                                <a onclick="terima('<?php echo site_url('admin/approve_tugas/' . $u->id_file . '/' . $u->id_materi . '/' . $u->id_user) ?>')" href="#" class="btn btn-info">Approve ⭢</a>
-                                            <?php } ?>
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal" data-nama_tugas="<?php echo $u->nama_tugas ?>" data-id_file="<?= $u->id_file ?>" data-id_materi="<?= $u->id_materi ?>" data-id_user="<?= $u->id_user ?>">Tindak Lanjuti</button>
                                         </td>
                                     </tr>
                                 <?php
@@ -79,7 +79,6 @@ $this->load->view('admin/template_admin/sidebar');
                                 ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -89,6 +88,67 @@ $this->load->view('admin/template_admin/sidebar');
 </div>
 </div>
 <!-- End Main Content -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="<?= base_url("admin/approve_tugas") ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id_materi" id="id_materi">
+                    <input type="hidden" name="id_user" id="id_user">
+                    <input type="hidden" name="id_file" id="id_file">
+                    <div class="form-group">
+                        <label for="">Status</label>
+                        <select required class="form-control" name="status" id="status">
+                            <option disabled selected value="">Pilih Status Tugas</option>
+                            <option value="1">Approve</option>
+                            <option value="2">Periksa Kembali</option>
+                            <option value="3">Tolak</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nilai">Nilai</label>
+                        <input required min="0" max="100" type="number" class="form-control" name="nilai" id="nilai">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Feedback</label>
+                        <textarea required name="feedback" id="feedback" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#exampleModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        var id_materi = button.data('id_materi') // Extract info from data-* attributes
+        var id_user = button.data('id_user') // Extract info from data-* attributes
+        var id_file = button.data('id_file') // Extract info from data-* attributes
+        var nama_tugas = button.data('nama_tugas') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('Penilaian ' + nama_tugas)
+        modal.find('#id_file').val(id_file)
+        modal.find('#id_user').val(id_user)
+        modal.find('#id_materi').val(id_materi)
+    })
+</script>
 
 <!-- Start Sweetalert -->
 <?php if ($this->session->flashdata('success-approve')) : ?>
